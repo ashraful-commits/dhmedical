@@ -42,23 +42,83 @@ function Upload({ f, val, set }) {
       setErr(x.message || "আপলোড ব্যর্থ হয়েছে");
     }
     setBusy(false);
+    e.target.value = "";
   }
 
   return (
     <div>
       <Label f={f} />
-      <div className="relative">
-        {val ? (
-          <div className="flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 p-3">
-            <img src={val} alt="" className="h-16 w-16 rounded-lg object-cover border border-slate-300" />
-            <div className="flex-1 min-w-0">
-              <span className="inline-flex items-center gap-1 text-xs font-bold text-green-700">
-                <CheckCircle2 size={14} /> ছবি যুক্ত হয়েছে
-              </span>
-              <p className="text-xs text-slate-500 truncate mt-0.5">{val}</p>
-              <div className="mt-1 flex items-center gap-2">
-                <label className="cursor-pointer text-xs font-bold text-blue hover:underline">
-                  পরিবর্তন করুন
+      {val ? (
+        <div className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 p-3 shadow-sm">
+          <img src={val} alt="" className="h-20 w-20 rounded-xl object-cover border border-slate-300 shadow-inner shrink-0" />
+          <div className="flex-1 min-w-0">
+            <span className="inline-flex items-center gap-1 text-xs font-bold text-emerald-700 bg-emerald-100/80 px-2.5 py-0.5 rounded-full">
+              <CheckCircle2 size={13} /> ছবি সফলভাবে যুক্ত হয়েছে
+            </span>
+            <p className="text-[11px] text-slate-500 truncate mt-1">লিংক: {val}</p>
+            <div className="mt-2 flex flex-wrap items-center gap-2">
+              <label className="btn btn-navy !min-h-[30px] !px-2.5 !py-1 text-xs cursor-pointer flex items-center gap-1 font-bold">
+                <Camera size={13} className="text-gold" /> রি-শট নিন
+                <input
+                  type="file"
+                  accept="image/*"
+                  capture="environment"
+                  className="sr-only"
+                  onChange={pick}
+                  disabled={busy}
+                />
+              </label>
+              <label className="btn btn-line !min-h-[30px] !px-2.5 !py-1 text-xs cursor-pointer flex items-center gap-1 font-bold">
+                <UploadCloud size={13} className="text-blue" /> গ্যালারি
+                <input
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp"
+                  className="sr-only"
+                  onChange={pick}
+                  disabled={busy}
+                />
+              </label>
+              <button
+                type="button"
+                onClick={() => set(f.name, "")}
+                className="text-xs font-bold text-rose-600 hover:underline px-1"
+              >
+                মুছুন
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="rounded-2xl border-2 border-dashed border-blue/30 bg-blue-soft/20 p-4 transition-all hover:bg-blue-soft/30">
+          {busy ? (
+            <div className="flex flex-col items-center justify-center py-4 gap-2 text-center">
+              <Loader2 className="animate-spin text-blue" size={30} />
+              <p className="text-xs font-bold text-navy">ছবি ক্লাউডিনারিতে আপলোড হচ্ছে, অপেক্ষা করুন…</p>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              <p className="text-xs font-medium text-slate-600 text-center">
+                নিচের যেকোনো একটি বেছে নিন (ক্যামেরা দিয়ে সরাসরি ছবি তুলুন অথবা গ্যালারি থেকে সিলেক্ট করুন):
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                {/* 1. Camera Option */}
+                <label className="flex items-center justify-center gap-2 rounded-xl bg-navy px-4 py-3 text-xs font-bold text-white shadow-md hover:bg-navy-dark cursor-pointer transition-transform active:scale-95">
+                  <Camera size={18} className="text-gold" />
+                  <span>ক্যামেরা দিয়ে ছবি তুলুন</span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    capture="environment"
+                    className="sr-only"
+                    onChange={pick}
+                    disabled={busy}
+                  />
+                </label>
+
+                {/* 2. Gallery / File Upload Option */}
+                <label className="flex items-center justify-center gap-2 rounded-xl border-2 border-blue/30 bg-white px-4 py-3 text-xs font-bold text-navy shadow-sm hover:bg-blue-soft/40 cursor-pointer transition-transform active:scale-95">
+                  <UploadCloud size={18} className="text-blue" />
+                  <span>গ্যালারি থেকে আপলোড</span>
                   <input
                     type="file"
                     accept="image/jpeg,image/png,image/webp"
@@ -67,35 +127,14 @@ function Upload({ f, val, set }) {
                     disabled={busy}
                   />
                 </label>
-                <button
-                  type="button"
-                  onClick={() => set(f.name, "")}
-                  className="text-xs font-semibold text-red hover:underline"
-                >
-                  মুছুন
-                </button>
               </div>
+              <p className="text-[11px] text-slate-500 text-center">
+                JPG, PNG বা WEBP (সর্বোচ্চ ৫ MB)
+              </p>
             </div>
-          </div>
-        ) : (
-          <label className="flex min-h-[96px] cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-blue/40 bg-blue-soft/30 p-4 text-center transition-colors hover:bg-blue-soft/50">
-            <span className="grid h-12 w-12 place-items-center rounded-full bg-white text-blue shadow-sm">
-              {busy ? <Loader2 className="animate-spin" size={24} /> : <Camera size={24} />}
-            </span>
-            <span className="text-xs font-bold text-navy">
-              {busy ? "ক্লাউডিনারিতে আপলোড হচ্ছে…" : "ক্যামেরা দিয়ে ছবি তুলুন বা ফাইল বেছে নিন"}
-            </span>
-            <span className="text-[11px] text-slate-500">JPG, PNG বা WEBP (সর্বোচ্চ ৫ MB)</span>
-            <input
-              type="file"
-              accept="image/jpeg,image/png,image/webp"
-              className="sr-only"
-              onChange={pick}
-              disabled={busy}
-            />
-          </label>
-        )}
-      </div>
+          )}
+        </div>
+      )}
       {err && <p role="alert" className="mt-1.5 text-xs font-semibold text-red">{err}</p>}
     </div>
   );
