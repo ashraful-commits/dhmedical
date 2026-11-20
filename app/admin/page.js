@@ -482,12 +482,31 @@ export default function Admin() {
                     />
                   </div>
                   <div>
+                    <label className="block font-bold text-navy">মোট বেড সংখ্যা (কত বেডের মেডিকেল)</label>
+                    <input
+                      className="input mt-1 w-full"
+                      placeholder="যেমন: ৪২৫ বেড (৪০টি ICU, ৮৫টি কেবিন)"
+                      value={editingItem.totalBeds || ""}
+                      onChange={(e) => setEditingItem({ ...editingItem, totalBeds: e.target.value })}
+                    />
+                  </div>
+                  <div>
                     <label className="block font-bold text-navy">সেবাসমূহ</label>
                     <textarea
-                      rows={3}
+                      rows={2}
                       className="input mt-1 w-full"
                       value={editingItem.services || ""}
                       onChange={(e) => setEditingItem({ ...editingItem, services: e.target.value })}
+                    />
+                  </div>
+                  <div>
+                    <label className="block font-bold text-navy">কয়তলায় কোন রুম আছে (ফ্লোর ও রুম ডিরেক্টরি)</label>
+                    <textarea
+                      rows={3}
+                      className="input mt-1 w-full"
+                      placeholder="নিচতলা: জরুরি ও ফার্মেসি&#10;২য় তলা: ওপিডি চেম্বার ও ল্যাব&#10;৩য় তলা: রেডিওলজি ও সিটি স্ক্যান"
+                      value={Array.isArray(editingItem.floorGuide) ? editingItem.floorGuide.join("\n") : editingItem.floorGuide || ""}
+                      onChange={(e) => setEditingItem({ ...editingItem, floorGuide: e.target.value })}
                     />
                   </div>
                   <div>
@@ -740,6 +759,20 @@ export default function Admin() {
                       <div className="flex justify-between">
                         <span className="font-semibold text-navy">যানবাহন:</span>
                         <span>{item.vehicleTypes.join(", ")}</span>
+                      </div>
+                    )}
+                    {item.totalBeds && (
+                      <div className="flex justify-between">
+                        <span className="font-semibold text-navy">বেড সংখ্যা:</span>
+                        <span className="font-bold text-emerald-700">{item.totalBeds}</span>
+                      </div>
+                    )}
+                    {item.floorGuide && (
+                      <div className="rounded-lg bg-blue-soft/30 p-2 border border-blue/20">
+                        <span className="font-bold text-navy block mb-1">কয়তলায় কোন রুম আছে:</span>
+                        <p className="text-[11px] text-slate-700 whitespace-pre-line leading-relaxed">
+                          {Array.isArray(item.floorGuide) ? item.floorGuide.join("\n") : item.floorGuide}
+                        </p>
                       </div>
                     )}
                     {item.services && (
