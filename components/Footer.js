@@ -19,7 +19,12 @@ export default function Footer() {
           D H Medical Support একটি চিকিৎসা সহায়তা ও সমন্বয় সেবা। আমরা নিজে চিকিৎসা প্রদান করি না; ডাক্তার, হাসপাতাল, অ্যাম্বুলেন্স ও বীমা বিষয়ে সমন্বয় ও তথ্য-সহায়তা দিই। জরুরি অবস্থায় সরাসরি কল করুন।
         </p>
       </div>
-      <div className="border-t border-white/10 py-4 text-center text-xs">© {new Date().getFullYear()} D H Medical Support · Together for a Secure Family, Anywhere in the World</div>
+      <div className="border-t border-white/10 py-4 text-center text-xs text-white/70">
+        © {new Date().getFullYear()} D H Medical Support · Together for a Secure Family, Anywhere in the World ·{" "}
+        <Link href="/admin" className="text-white/50 hover:text-white underline">
+          অ্যাডমিন পোর্টাল
+        </Link>
+      </div>
     </footer>
   );
 }
