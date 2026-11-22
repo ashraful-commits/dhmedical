@@ -190,10 +190,10 @@ export default function Catalog({ kind, q0 = "", sp0 = "" }) {
 
       {/* TOP SERVICE MATCH BANNER (Displays first when matching any healthcare service) */}
       {topMatch && (
-        <div className={`mt-5 rounded-2xl bg-gradient-to-r ${topMatch.color} p-5 text-white shadow-lg animate-fadeIn`}>
+        <div className="mt-5 rounded-2xl bg-brand p-5 text-white shadow-card animate-fadeIn">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-white/20 px-3 py-1 text-xs font-bold text-gold">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-white/20 px-3 py-1 text-xs font-bold text-white">
                 <Sparkles size={14} /> {topMatch.badge}
               </span>
               <h3 className="text-xl sm:text-2xl font-black !text-white mt-1.5">
@@ -206,14 +206,14 @@ export default function Catalog({ kind, q0 = "", sp0 = "" }) {
             <div className="flex flex-wrap items-center gap-2 shrink-0">
               <Link
                 href={topMatch.ctaLink}
-                className="btn bg-white text-navy font-black !min-h-[40px] !px-4 text-xs shadow-md hover:bg-slate-50 flex items-center gap-1.5"
+                className="btn bg-white text-brand font-black !min-h-[40px] !px-4 text-xs shadow-sm hover:bg-slate-50 flex items-center gap-1.5"
               >
                 {topMatch.ctaText} <ArrowRight size={14} />
               </Link>
               {topMatch.hotline && (
                 <a
                   href={SITE.tel}
-                  className="btn btn-gold font-black !min-h-[40px] !px-4 text-xs shadow-md flex items-center gap-1.5"
+                  className="btn bg-white/10 text-white font-black !min-h-[40px] !px-4 text-xs border border-white/20 hover:bg-white/20 flex items-center gap-1.5"
                 >
                   <Phone size={14} /> {SITE.phone}
                 </a>
@@ -376,7 +376,7 @@ export default function Catalog({ kind, q0 = "", sp0 = "" }) {
                     )}&hospital=${encodeURIComponent(d.hospital || "")}&sp=${encodeURIComponent(
                       d.specialty || ""
                     )}`}
-                    className="btn btn-red flex-1 !min-h-[38px] !px-3 text-xs font-bold"
+                    className="btn-primary flex-1 !min-h-[38px] !px-3 text-xs font-bold"
                   >
                     অ্যাপয়েন্টমেন্ট নিন
                   </Link>
@@ -384,14 +384,14 @@ export default function Catalog({ kind, q0 = "", sp0 = "" }) {
                 {!doc && (
                   <Link
                     href={`/appointment?hospital=${encodeURIComponent(d.name)}`}
-                    className="btn btn-red flex-1 !min-h-[38px] !px-3 text-xs font-bold"
+                    className="btn-primary flex-1 !min-h-[38px] !px-3 text-xs font-bold"
                   >
                     ভর্তি ও সমন্বয় চাই
                   </Link>
                 )}
                 <a
                   href={d.phone ? `tel:${d.phone}` : SITE.tel}
-                  className="btn btn-line !min-h-[38px] !px-3.5"
+                  className="btn-outline !min-h-[38px] !px-3.5 !text-brand"
                   aria-label="কল করুন"
                   title="কল করুন"
                 >
@@ -405,19 +405,19 @@ export default function Catalog({ kind, q0 = "", sp0 = "" }) {
 
       {items?.length === 0 && (
         <div className="card mt-6 text-center py-10">
-          <p className="text-lg font-bold text-navy">সরাসরি কোনো রেকর্ড মেলেনি।</p>
+          <p className="text-lg font-bold text-ink-dark">সরাসরি কোনো রেকর্ড মেলেনি।</p>
           <p className="mt-1 text-sm text-slate-600">
             আমাদের কাছে আপনার কাঙ্ক্ষিত ডাক্তার বা সেবা তাৎক্ষণিক রয়েছে। সরাসরি কল করুন:
           </p>
           <div className="mt-4 flex flex-wrap justify-center gap-3">
-            <a href={SITE.tel} className="btn btn-red inline-flex items-center gap-2">
+            <a href={SITE.tel} className="btn-primary inline-flex items-center gap-2">
               <Phone size={18} />
               জরুরি হটলাইন {SITE.phone}
             </a>
-            <Link href="/ambulance" className="btn btn-navy">
+            <Link href="/ambulance" className="btn-outline !border-brand/40 !text-brand hover:!bg-brand-50">
               অ্যাম্বুলেন্স বুকিং
             </Link>
-            <Link href="/appointment" className="btn bg-white text-navy border border-slate-300">
+            <Link href="/appointment" className="btn-outline">
               ডাক্তার অ্যাপয়েন্টমেন্ট
             </Link>
           </div>

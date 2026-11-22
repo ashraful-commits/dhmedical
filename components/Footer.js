@@ -1,94 +1,153 @@
 import Link from "next/link";
-import { Phone, MapPin, Ambulance, Stethoscope, HeartPulse, ShieldCheck } from "lucide-react";
+import { Phone, MapPin, Ambulance, Stethoscope, ShieldCheck, HeartPulse, ExternalLink } from "lucide-react";
 import Logo from "./Logo";
-import { NAV, SITE, SPECIALTIES, DISTRICTS } from "@/lib/site";
+import { SITE, SPECIALTIES, DISTRICTS } from "@/lib/site";
 
 export default function Footer() {
   return (
-    <footer className="mt-16 bg-navy-dark text-blue-soft border-t-2 border-gold/40">
-      <div className="wrap grid gap-8 py-10 md:grid-cols-4">
-        {/* Brand & Hotline */}
-        <div className="md:col-span-1">
-          <Logo light />
-          <p className="mt-3 font-head text-base text-white">{SITE.tagline}</p>
-          <div className="mt-4 rounded-xl bg-white/10 p-3 border border-white/15">
-            <span className="text-[11px] text-gold font-bold block uppercase tracking-wider">২৪ ঘণ্টা জরুরি হটলাইন</span>
-            <a href={SITE.tel} className="mt-1 inline-flex items-center gap-2 text-xl font-black text-white hover:text-gold transition-colors">
-              <Phone size={20} className="text-red animate-pulse" />
-              {SITE.phone}
+    <footer className="mt-20 border-t border-slate-200 bg-[#F8FAFC] text-ink-light">
+      {/* Upper Main Footer Grid */}
+      <div className="wrap grid gap-10 py-12 md:grid-cols-12">
+        {/* Brand & Hotline Column */}
+        <div className="space-y-4 md:col-span-4">
+          <Logo />
+          <p className="text-sm font-medium text-slate-600 leading-relaxed max-w-sm">
+            {SITE.tagline}. ২৪ ঘণ্টা জরুরি অ্যাম্বুলেন্স ডিসপ্যাচ, বিশেষজ্ঞ ডাক্তার সিরিয়াল ও হোম ডায়াগনস্টিক সাপোর্ট।
+          </p>
+
+          <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-clean space-y-1">
+            <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">
+              ২৪ ঘণ্টা সেন্ট্রাল জরুরি হটলাইন
+            </span>
+            <a
+              href={SITE.tel}
+              className="inline-flex items-center gap-2 text-xl font-black text-brand hover:text-brand-dark transition-colors"
+            >
+              <Phone size={20} className="text-brand shrink-0" />
+              <span>{SITE.phone}</span>
             </a>
           </div>
-          <p className="mt-3 text-xs text-white/70">
-            প্রবাসে থাকা পরিবারের নির্ভরযোগ্য মেডিকেল কো-অর্ডিনেশন পার্টনার।
-          </p>
+
+          <div className="flex items-center gap-2 text-xs font-semibold text-slate-500">
+            <ShieldCheck size={16} className="text-brand" />
+            <span>BMDC অনুমোদিত ডাক্তার ও অনুমোদিত এম্বুলেন্স বহর</span>
+          </div>
         </div>
 
-        {/* Quick Menu */}
-        <div>
-          <h4 className="font-bold text-white text-sm mb-3 border-b border-white/15 pb-1">প্রধান পেজসমূহ</h4>
-          <ul className="space-y-1.5 text-xs">
-            {NAV.map((n) => (
-              <li key={n.href}>
-                <Link href={n.href} className="hover:text-white hover:underline transition-colors block py-0.5">
-                  {n.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* Specialist Doctor Search Links for SEO */}
-        <div>
-          <h4 className="font-bold text-white text-sm mb-3 border-b border-white/15 pb-1">ডাক্তার বিশেষজ্ঞ বিভাগ</h4>
-          <ul className="grid grid-cols-1 gap-1 text-xs">
-            {SPECIALTIES.map((s) => (
-              <li key={s.key}>
-                <Link
-                  href={`/doctors?sp=${encodeURIComponent(s.key)}`}
-                  className="hover:text-white hover:underline transition-colors block py-0.5 text-white/80"
-                >
-                  {s.bn} বিশেষজ্ঞ
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* 64 Districts Ambulance & Medical Coverage for SEO */}
-        <div>
-          <h4 className="font-bold text-white text-sm mb-3 border-b border-white/15 pb-1 flex items-center gap-1.5">
-            <MapPin size={14} className="text-red" /> জেলা কভারেজ নেটওয়ার্ক
+        {/* Quick Links Column */}
+        <div className="space-y-3 md:col-span-2">
+          <h4 className="text-xs font-black uppercase tracking-wider text-ink-dark">
+            প্রধান সেবা
           </h4>
-          <p className="text-[11px] text-white/70 mb-2">
-            ঢাকা, চট্টগ্রাম, সিলেট, কুমিল্লা সহ বাংলাদেশের সকল জেলায় জরুরি অ্যাম্বুলেন্স ও রোগী স্থানান্তর সেবা চালু আছে।
-          </p>
-          <div className="flex flex-wrap gap-1 text-[11px]">
-            {DISTRICTS.map((d) => (
+          <ul className="space-y-2 text-xs font-medium text-slate-600">
+            <li>
+              <Link href="/appointment" className="hover:text-brand transition-colors block py-0.5">
+                ডাক্তার কনসালটেশন
+              </Link>
+            </li>
+            <li>
+              <Link href="/ambulance" className="hover:text-brand transition-colors block py-0.5">
+                জরুরি অ্যাম্বুলেন্স ২৪/৭
+              </Link>
+            </li>
+            <li>
+              <Link href="/appointment#diagnostic" className="hover:text-brand transition-colors block py-0.5">
+                হোম ডায়াগনস্টিক টেস্ট
+              </Link>
+            </li>
+            <li>
+              <Link href="/family-care" className="hover:text-brand transition-colors block py-0.5">
+                ফ্যামিলি হেলথ প্ল্যান
+              </Link>
+            </li>
+            <li>
+              <Link href="/track" className="hover:text-brand font-bold text-brand transition-colors block py-0.5">
+                লাইভ বুকিং ট্র্যাকিং
+              </Link>
+            </li>
+            <li>
+              <Link href="/hospitals" className="hover:text-brand transition-colors block py-0.5">
+                হাসপাতাল ও ICU বেড
+              </Link>
+            </li>
+          </ul>
+        </div>
+
+        {/* Clinical Specialties Column */}
+        <div className="space-y-3 md:col-span-3">
+          <h4 className="text-xs font-black uppercase tracking-wider text-ink-dark">
+            বিশেষজ্ঞ ডাক্তার বিভাগ
+          </h4>
+          <div className="grid grid-cols-2 gap-x-2 gap-y-1.5 text-xs font-medium text-slate-600">
+            {SPECIALTIES.map((s) => (
               <Link
-                key={d}
-                href={`/hospitals?district=${encodeURIComponent(d)}`}
-                className="rounded bg-white/10 hover:bg-white/20 px-1.5 py-0.5 text-white/90 transition-colors"
+                key={s.key}
+                href={`/doctors?sp=${encodeURIComponent(s.key)}`}
+                className="hover:text-brand transition-colors truncate py-0.5"
               >
-                {d}
+                {s.bn}
               </Link>
             ))}
           </div>
         </div>
+
+        {/* For Partners & App Column */}
+        <div className="space-y-3 md:col-span-3">
+          <h4 className="text-xs font-black uppercase tracking-wider text-ink-dark">
+            পার্টনার ও হেল্পডেস্ক
+          </h4>
+          <ul className="space-y-2 text-xs font-medium text-slate-600">
+            <li>
+              <Link href="/partner" className="hover:text-brand transition-colors block py-0.5">
+                ডাক্তার হিসেবে যুক্ত হোন (Join as Doctor)
+              </Link>
+            </li>
+            <li>
+              <Link href="/partner#ambulance" className="hover:text-brand transition-colors block py-0.5">
+                অ্যাম্বুলেন্স পার্টনার রেজিস্ট্রেশন
+              </Link>
+            </li>
+            <li>
+              <Link href="/feedback" className="hover:text-brand transition-colors block py-0.5">
+                মতামত ও অভিযোগ (Feedback)
+              </Link>
+            </li>
+            <li>
+              <Link href="/admin" className="text-slate-400 hover:text-brand transition-colors block py-0.5">
+                অ্যাডমিন লগইন পোর্টাল
+              </Link>
+            </li>
+          </ul>
+
+          <div className="pt-2">
+            <span className="text-[11px] font-bold text-slate-400 block mb-1.5">
+              সারাদেশে ৬৪ জেলায় কভারেজ
+            </span>
+            <div className="flex flex-wrap gap-1 text-[10.5px]">
+              {DISTRICTS.slice(0, 8).map((d) => (
+                <span key={d} className="rounded-md bg-white border border-slate-200 px-1.5 py-0.5 text-slate-600">
+                  {d}
+                </span>
+              ))}
+              <span className="rounded-md bg-brand-50 text-brand px-1.5 py-0.5 font-bold">
+                +৫৬ জেলা
+              </span>
+            </div>
+          </div>
+        </div>
       </div>
 
-      {/* Bangladesh Nationwide Disclaimer & Legal */}
-      <div className="border-t border-white/10 bg-navy-dark/80 py-4">
-        <div className="wrap flex flex-col sm:flex-row items-center justify-between gap-2 text-center sm:text-left text-xs text-white/60">
+      {/* Bottom Copyright Strip */}
+      <div className="border-t border-slate-200/80 bg-white py-4">
+        <div className="wrap flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left text-xs text-slate-500">
           <p>
-            © {new Date().getFullYear()} D H Medical Support · Bangladesh Central Healthcare Coordination Platform.
+            © {new Date().getFullYear()} D H Medical Support. Central Healthcare & Ambulance Coordination Platform Bangladesh.
           </p>
-          <div className="flex items-center gap-4">
-            <Link href="/ambulance" className="hover:text-white">জরুরি এম্বুলেন্স</Link>
-            <Link href="/doctors" className="hover:text-white">ডাক্তার সিরিয়াল</Link>
-            <Link href="/hospitals" className="hover:text-white">হাসপাতাল বেড</Link>
-            <Link href="/admin" className="text-white/40 hover:text-white underline">
-              অ্যাডমিন পোর্টাল
-            </Link>
+          <div className="flex items-center gap-4 text-xs font-semibold">
+            <Link href="/ambulance" className="hover:text-brand transition-colors">অ্যাম্বুলেন্স</Link>
+            <Link href="/appointment" className="hover:text-brand transition-colors">ডাক্তার</Link>
+            <Link href="/family-care" className="hover:text-brand transition-colors">ফ্যামিলি কেয়ার</Link>
+            <Link href="/track" className="hover:text-brand transition-colors text-brand font-bold">ট্র্যাক করুন</Link>
           </div>
         </div>
       </div>

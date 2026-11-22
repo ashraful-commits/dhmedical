@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 import Link from "next/link";
 import {
   Phone,
@@ -6,597 +7,851 @@ import {
   Ambulance,
   Stethoscope,
   Building2,
-  FileText,
   Users,
   ShieldCheck,
   HeartPulse,
   Brain,
-  Scissors,
   Baby,
   Bone,
   Eye as EyeIcon,
   Pill,
   Activity,
-  Clock,
-  BadgeCheck,
-  Handshake,
-  Star,
-  Quote,
-  CalendarCheck,
-  Sparkles,
-  ArrowRight,
-  MapPin,
   CheckCircle2,
-  Award,
+  ArrowRight,
+  Clock,
+  Sparkles,
+  MapPin,
+  Video,
+  FileSpreadsheet,
+  Check,
+  ChevronRight,
+  Star,
   ShieldAlert,
 } from "lucide-react";
 import { motion } from "framer-motion";
-import Ecg from "@/components/Ecg";
 import { GsapFadeIn, GsapStagger } from "@/components/GsapAnimation";
-import { SITE, SPECIALTIES, spBn } from "@/lib/site";
+import PartnerHospitalsCarousel from "@/components/PartnerHospitalsCarousel";
+import { SITE, AMBULANCE_TYPES_DATA } from "@/lib/site";
 
-const SP_ICON = {
-  "Neuro Medicine": Brain,
-  Cardiology: HeartPulse,
-  Surgery: Scissors,
-  Medicine: Pill,
-  Gynecology: Activity,
-  Orthopedics: Bone,
-  Pediatrics: Baby,
-  Eye: EyeIcon,
-};
+// DocTime 15-Specialty Clinical Area Definitions
+const SPECIALTIES_15 = [
+  { name: "General Physician", sub: "Primary Care Physician", bn: "সাধারণ স্বাস্থ্য ও মেডিসিন", query: "Medicine", icon: Stethoscope },
+  { name: "Pediatrics", sub: "Child Health Care", bn: "শিশুরোগ বিশেষজ্ঞ", query: "Pediatrics", icon: Baby },
+  { name: "Gynae & Obs", sub: "Women's Health Care", bn: "মহিলা ও প্রসূতিরোগ", query: "Gynecology", icon: Activity },
+  { name: "Dermatology", sub: "Skin, Hair & Sexual Health", bn: "চর্ম, যৌন ও এলার্জি", query: "Medicine", icon: Sparkles },
+  { name: "Internal Medicine", sub: "General Health & Medicine", bn: "ইন্টারনাল মেডিসিন", query: "Medicine", icon: Pill },
+  { name: "Endocrinology", sub: "Diabetes, Thyroid & Hormone", bn: "ডায়াবেটিস ও হরমোন", query: "Medicine", icon: Activity },
+  { name: "Neurology", sub: "Brain, Spine & Nerve", bn: "ব্রেইন ও নিউরোলজি", query: "Neuro Medicine", icon: Brain },
+  { name: "Gastroenterology", sub: "Stomach, Liver & Gut", bn: "গ্যাস্ট্রো ও পরিপাকতন্ত্র", query: "Medicine", icon: HeartPulse },
+  { name: "Cardiology", sub: "Heart Disease & Vascular", bn: "হৃদরোগ ও কার্ডিওলজি", query: "Cardiology", icon: HeartPulse },
+  { name: "Urology", sub: "Urinary Bladder & Kidney", bn: "কিডনি ও ইউরোলজি", query: "Surgery", icon: Activity },
+  { name: "Food & Nutrition", sub: "Healthy Diet Guidance", bn: "পুষ্টি ও ডায়েট চার্ট", query: "Medicine", icon: Pill },
+  { name: "Dentistry", sub: "Teeth, Gum & Oral Care", bn: "দাঁত ও মুখগহ্বর", query: "Surgery", icon: Sparkles },
+  { name: "Psychiatry", sub: "Mental & Emotional Health", bn: "মানসিক রোগ ও বিষণ্নতা", query: "Neuro Medicine", icon: Brain },
+  { name: "Psychology", sub: "Counseling & Therapy", bn: "কাউন্সেলিং ও সাইকোলজি", query: "Neuro Medicine", icon: Users },
+  { name: "Orthopedics", sub: "Bone, Muscle & Joint Care", bn: "হাড়, বাতব্যথা ও জয়েন্ট", query: "Orthopedics", icon: Bone },
+];
 
-const SERVICES = [
+// DocTime Common Health Concerns (Symptom Finder)
+const HEALTH_CONCERNS = [
+  { title: "Fever, Cold/Flu, Allergy", bn: "জ্বর, সর্দি, কাশি ও অ্যালার্জি", count: "48 Doctors", query: "Medicine" },
+  { title: "Child Health & Diseases", bn: "শিশুর জ্বর, পেটব্যথা ও বমি", count: "32 Doctors", query: "Pediatrics" },
+  { title: "Period & Gyne Issues", bn: "মাসিকের সমস্যা ও গর্ভকালীন যত্ন", count: "36 Doctors", query: "Gynecology" },
+  { title: "Skin, Acne & Hair Fall", bn: "ব্রণ, চুল পড়া ও চুলকানি", count: "29 Doctors", query: "Medicine" },
+  { title: "Acidity, Gas & Diarrhea", bn: "গ্যাস, বুকজ্বালা ও বদহজম", count: "41 Doctors", query: "Medicine" },
+  { title: "Diabetes & High BP", bn: "ডায়াবেটিস, প্রেসার ও থাইরয়েড", count: "35 Doctors", query: "Cardiology" },
+  { title: "Urine Infection or Pain", bn: "প্রস্রাবে জ্বালাপোড়া ও ইনফেকশন", count: "22 Doctors", query: "Medicine" },
+  { title: "Back Pain & Joint Ache", bn: "কোমর, হাঁটু ও জয়েন্ট ব্যথা", count: "25 Doctors", query: "Orthopedics" },
+];
+
+// DocTime Featured Verified Specialist Doctors
+const DOCTORS_FEATURED = [
   {
-    href: "/ambulance",
-    Icon: Ambulance,
-    t: "জরুরি অ্যাম্বুলেন্স সার্ভিস",
-    d: "সাধারণ এসি, অক্সিজেন, ICU ও নবজাতক (NICU) অ্যাম্বুলেন্স ১৫-২৫ মিনিটে পৌঁছায়।",
-    badge: "২৪/৭ জরুরি",
-    badgeColor: "bg-red-50 text-red border-red-200",
-    img: "https://images.unsplash.com/photo-1587745416684-47953f16f02f?w=600&auto=format&fit=crop&q=80",
+    name: "Asst. Prof. Dr. Md. Zahidul Islam",
+    degree: "MBBS, BCS (Health), MD (Pediatrics)",
+    specialty: "Child Specialist",
+    bmdc: "BMDC Reg: A-48291",
+    exp: "12+ Yrs Experience",
+    fee: "500",
+    oldFee: "700",
+    img: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=400&auto=format&fit=crop&q=80",
   },
   {
-    href: "/appointment",
-    Icon: Stethoscope,
-    t: "বিশেষজ্ঞ ডাক্তার সিরিয়াল",
-    d: "মেডিসিন, হৃদরোগ, নিউরো, সার্জারি ও শীর্ষ অধ্যাপকদের দ্রুত চেম্বার সিরিয়াল।",
-    badge: "জনপ্রিয়",
-    badgeColor: "bg-blue-50 text-blue border-blue-200",
-    img: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=600&auto=format&fit=crop&q=80",
+    name: "Dr. Tahmina Hoque Pinki",
+    degree: "MBBS, MCPS (Gynae & Obs), FCPS",
+    specialty: "Gynecologist & Obstetrician",
+    bmdc: "BMDC Reg: A-52114",
+    exp: "10+ Yrs Experience",
+    fee: "1,050",
+    oldFee: "1,200",
+    img: "https://images.unsplash.com/photo-1594824813583-4a1c1d8ff895?w=400&auto=format&fit=crop&q=80",
   },
   {
-    href: "/hospitals",
-    Icon: Building2,
-    t: "হাসপাতাল ভর্তি ও বেড সমন্বয়",
-    d: "স্কয়ার, এভারকেয়ার, ল্যাবএইড ও জাতীয় হাসপাতালে কেবিন ও আইসিইউ সমন্বয়।",
-    badge: "সমন্বয়",
-    badgeColor: "bg-emerald-50 text-emerald-700 border-emerald-200",
-    img: "https://images.unsplash.com/photo-1586773860418-d37222d8fce3?w=600&auto=format&fit=crop&q=80",
+    name: "Dr. Maria Seraj",
+    degree: "MBBS, BCS (Health), MCPS (Dermatology)",
+    specialty: "Dermatologist & Skin Specialist",
+    bmdc: "BMDC Reg: A-61340",
+    exp: "9+ Yrs Experience",
+    fee: "550",
+    oldFee: "750",
+    img: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=400&auto=format&fit=crop&q=80",
   },
   {
-    href: "/family-care",
-    Icon: Users,
-    t: "প্রবাসী ফ্যামিলি কেয়ার",
-    d: "প্রবাসে থাকা ভাইয়ের দেশে অসুস্থ পরিবারের সার্বক্ষণিক চিকিৎসা তত্ত্বাবধান।",
-    badge: "প্রবাসী বিশেষ",
-    badgeColor: "bg-amber-50 text-amber-800 border-amber-200",
-    img: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=600&auto=format&fit=crop&q=80",
-  },
-  {
-    href: "/appointment",
-    Icon: FileText,
-    t: "ল্যাব টেস্ট ও রিপোর্ট সংগ্রহ",
-    d: "বাসায় এসে রক্তের নমুনা সংগ্রহ এবং দ্রুত রিপোর্ট পরিবারের কাছে পৌঁছে দেওয়া।",
-    badge: "হোম কেয়ার",
-    badgeColor: "bg-purple-50 text-purple-700 border-purple-200",
-    img: "https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=600&auto=format&fit=crop&q=80",
-  },
-  {
-    href: "/family-care#insurance",
-    Icon: ShieldCheck,
-    t: "স্বাস্থ্য সুরক্ষা ও বীমা সহায়তা",
-    d: "জরুরি চিকিৎসার ব্যয় নির্বাহে অনুমোদিত বীমা পলিসির তথ্য ও আবেদন সমন্বয়।",
-    badge: "সুরক্ষা",
-    badgeColor: "bg-indigo-50 text-indigo-700 border-indigo-200",
-    img: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=600&auto=format&fit=crop&q=80",
+    name: "Assoc. Prof. Dr. Md. Zillur Rahman",
+    degree: "MBBS, BCS (Health), FCPS (Psychiatry)",
+    specialty: "Psychiatrist & Neuro Specialist",
+    bmdc: "BMDC Reg: A-39201",
+    exp: "15+ Yrs Experience",
+    fee: "1,050",
+    oldFee: "1,500",
+    img: "https://images.unsplash.com/photo-1537368910025-700350fe46c7?w=400&auto=format&fit=crop&q=80",
   },
 ];
 
-export default function HomeClient({ initialDoctors, initialHospitals, initialReviews }) {
+// DocTime Health Care & Protect Plans
+const HEALTH_PLANS = [
+  {
+    name: "Jotno (যত্ন)",
+    price: "99",
+    period: "/monthly",
+    target: "1 Person",
+    features: [
+      "Free 4 consultations with BMDC General Physician",
+      "10% discount on any Specialist Doctor consultation",
+      "24/7 Central Emergency Hotline Priority",
+    ],
+  },
+  {
+    name: "Astha (আস্থা)",
+    price: "175",
+    period: "/monthly",
+    target: "1 Person",
+    popular: true,
+    features: [
+      "Free 8 consultations with BMDC General Physician",
+      "10% discount on any Specialist Doctor consultation",
+      "Free Home Diagnostic sample collection coordination",
+      "Digital Health Record & Prescription Vault",
+    ],
+  },
+  {
+    name: "Aponjon (আপনজন)",
+    price: "249",
+    period: "/monthly",
+    target: "For 4 persons (Family)",
+    features: [
+      "Free 8 consultations with BMDC General Physician",
+      "10% discount on any Specialist Doctor consultation",
+      "Priority Emergency Ambulance Dispatch Guarantee",
+      "Full family coverage under 1 single subscription",
+    ],
+  },
+  {
+    name: "Momota (মমতা - প্রবাসী ও মা-বাবা কেয়ার)",
+    price: "449",
+    period: "/monthly",
+    target: "For Parents & Elders",
+    features: [
+      "Free 8 consultations with BMDC General Physician",
+      "Monthly 2 scheduled online health screening calls for parents",
+      "Doorstep Medicine & Lab Test Coordination",
+      "Dedicated Care Officer for Expatriate Families",
+    ],
+  },
+];
+
+export default function HomeClient() {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [sampleLocation, setSampleLocation] = useState("");
+  const [locationSaved, setLocationSaved] = useState(false);
+
   return (
-    <>
-      {/* Handcrafted Hero Section with GSAP Fade-In */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-navy-deep via-navy to-navy-dark text-white pt-8 sm:pt-14 pb-16 sm:pb-24">
-        {/* Subtle decorative glow */}
-        <div className="absolute top-0 right-1/4 w-96 h-96 bg-blue/20 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-10 w-80 h-80 bg-red/10 rounded-full blur-3xl pointer-events-none" />
+    <div className="bg-white min-h-screen">
+      {/* 1. TOP CENTERED SEARCH BAR (DocTime Benchmark) */}
+      <section className="pt-6 pb-4 border-b border-slate-100 bg-white">
+        <div className="wrap max-w-4xl">
+          <form action="/doctors" method="GET" className="relative">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
+            <input
+              name="q"
+              type="search"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search by doctor name/code, specialty, ambulance type or diagnostic test..."
+              aria-label="Search Medical Services"
+              className="search-input !h-14 !pl-12 !pr-28 !text-base !rounded-2xl shadow-sm"
+            />
+            <button
+              type="submit"
+              className="btn-primary absolute right-2 top-2 !min-h-[40px] !px-5 text-sm"
+            >
+              Search
+            </button>
+          </form>
 
-        <div className="wrap relative z-10">
-          <div className="grid gap-10 lg:grid-cols-12 lg:items-center">
-            
-            {/* Left Column: Mission, Search & Primary Actions */}
-            <GsapFadeIn className="lg:col-span-7 space-y-5" delay={0.1} y={30}>
-              <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3.5 py-1 text-xs font-bold text-white border border-white/15 backdrop-blur-md shadow-sm">
-                <span className="h-2 w-2 rounded-full bg-gold animate-ping" />
-                <span>Care Beyond Borders</span>
-                <span className="text-white/40">•</span>
-                <span className="text-gold">প্রবাসে আপনি, দেশে পরিবারের পাশে আমরা</span>
-              </div>
+          {/* Quick Search Tag Pills */}
+          <div className="mt-3 flex flex-wrap items-center gap-2 text-xs text-slate-500">
+            <span className="font-semibold text-slate-700">Popular:</span>
+            {["General Physician", "Pediatrics", "Gynae & Obs", "ICU Ambulance", "Oxygen", "Dermatology", "Blood Test"].map((tag) => (
+              <Link
+                key={tag}
+                href={`/doctors?q=${encodeURIComponent(tag)}`}
+                className="rounded-full bg-slate-100 hover:bg-brand-50 hover:text-brand px-3 py-1 font-medium text-slate-600 transition-colors"
+              >
+                {tag}
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
 
-              <h1 className="text-3xl sm:text-5xl font-black leading-[1.18] !text-white tracking-tight">
-                সারাদেশে দ্রুততম <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-amber-200 to-white">মেডিকেল সহায়তা</span> ও জরুরি অ্যাম্বুলেন্স সমন্বয়
-              </h1>
+      {/* 2. DOCTIME-STYLE HERO BANNER CAROUSEL */}
+      <section className="py-6 sm:py-8">
+        <div className="wrap">
+          <div className="relative overflow-hidden rounded-3xl border border-[#D0E2F9] bg-gradient-to-r from-[#EEF4FC] via-[#F4F8FD] to-[#E5F0FA] p-6 sm:p-10 lg:p-12 shadow-clean">
+            {/* Subtle decorative medical cross watermark */}
+            <div className="absolute right-4 bottom-0 opacity-10 pointer-events-none text-brand">
+              <svg width="340" height="340" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M19 10.5h-5.5V5c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v5.5H5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5h5.5V19c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5v-5.5H19c.83 0 1.5-.67 1.5-1.5s-.67-1.5-1.5-1.5z" />
+              </svg>
+            </div>
 
-              <p className="text-base sm:text-lg text-blue-100/90 leading-relaxed max-w-xl">
-                জরুরি অসুস্থতায় ১৫-২৫ মিনিটে অ্যাম্বুলেন্স, আইসিইউ বেড কিংবা বিশেষজ্ঞ ডাক্তারের সিরিয়াল—প্রবাসে থাকা ভাইয়ের পরিবার ও দেশের সাধারণ মানুষের নির্ভরযোগ্য সেন্ট্রাল হেলথকেয়ার প্ল্যাটফর্ম।
-              </p>
+            <div className="grid gap-8 lg:grid-cols-12 lg:items-center relative z-10">
+              {/* Left Column: Heading, Trust Badges, and Action Button */}
+              <div className="lg:col-span-7 space-y-5">
+                <div className="inline-flex items-center gap-2 rounded-full bg-white px-3.5 py-1 text-xs font-bold text-brand shadow-sm border border-brand-100">
+                  <span className="h-2 w-2 rounded-full bg-brand animate-ping" />
+                  <span>No. 1 Healthcare & Ambulance Coordination App in Bangladesh</span>
+                </div>
 
-              {/* Smart Search Form */}
-              <form action="/doctors" className="max-w-xl pt-1">
-                <div className="flex gap-2 p-1.5 rounded-2xl bg-white/10 border border-white/20 backdrop-blur-md shadow-lg transition-all focus-within:border-gold/60 focus-within:ring-2 focus-within:ring-gold/20">
-                  <div className="relative flex-1">
-                    <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
-                    <input
-                      name="q"
-                      type="search"
-                      placeholder="ডাক্তার, এম্বুলেন্স, মেডিসিন বা হাসপাতাল (যেমন: medicin, ambolence)"
-                      aria-label="মেডিকেল সেবা খুঁজুন"
-                      className="w-full bg-white text-navy font-medium text-xs sm:text-sm pl-10 pr-3 py-3 rounded-xl focus:outline-none placeholder:text-slate-400"
-                    />
+                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-ink-dark leading-[1.2] tracking-tight">
+                  1800+ Specialist And Experienced Doctors & Emergency Ambulance
+                </h1>
+
+                <p className="text-sm sm:text-base text-slate-600 leading-relaxed max-w-xl">
+                  প্রবাসে আপনি, দেশে পরিবারের পাশে আমরা। ঘরে বসেই ১০ মিনিটে BMDC রেজিস্টার্ড ডাক্তারের ভিডিও পরামর্শ এবং জরুরি মুহূর্তে ১৫-২৫ মিনিটে দ্রুততম এম্বুলেন্স সেবা।
+                </p>
+
+                {/* DocTime Trust Bullet Points */}
+                <div className="space-y-2.5 text-xs sm:text-sm font-semibold text-ink-dark pt-1">
+                  <div className="flex items-center gap-2.5">
+                    <div className="grid h-5 w-5 place-items-center rounded-full bg-brand text-white shrink-0">
+                      <Check size={12} strokeWidth={3} />
+                    </div>
+                    <span>All Doctors are BMDC Verified & Reputed Specialists</span>
                   </div>
-                  <motion.button
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="btn btn-gold !min-h-[44px] !px-5 text-xs sm:text-sm font-black shadow-md shrink-0"
-                  >
-                    খুঁজুন
-                  </motion.button>
+
+                  <div className="flex items-center gap-2.5">
+                    <div className="grid h-5 w-5 place-items-center rounded-full bg-brand text-white shrink-0">
+                      <Check size={12} strokeWidth={3} />
+                    </div>
+                    <span>Our doctors are rated 4.9 on average across 82,000+ consults</span>
+                  </div>
+
+                  <div className="flex items-center gap-2.5">
+                    <div className="grid h-5 w-5 place-items-center rounded-full bg-brand text-white shrink-0">
+                      <Check size={12} strokeWidth={3} />
+                    </div>
+                    <span>Providing Care Across 37+ Clinical Departments nationwide</span>
+                  </div>
+
+                  <div className="flex items-center gap-2.5">
+                    <div className="grid h-5 w-5 place-items-center rounded-full bg-brand text-white shrink-0">
+                      <Check size={12} strokeWidth={3} />
+                    </div>
+                    <span>Fastest Emergency Ambulance Dispatch in 64 Districts</span>
+                  </div>
                 </div>
 
-                {/* Popular Hashtags */}
-                <div className="mt-2.5 flex flex-wrap items-center gap-1.5 text-xs text-blue-soft">
-                  <span className="font-semibold text-white/70">জনপ্রিয় সার্চ:</span>
-                  <Link href="/doctors?q=medicin" className="rounded-full bg-white/10 px-2.5 py-0.5 hover:bg-white/25 text-white/95 transition-colors">#medicin</Link>
-                  <Link href="/doctors?q=ambolence" className="rounded-full bg-white/10 px-2.5 py-0.5 hover:bg-white/25 text-white/95 transition-colors">#ambolence</Link>
-                  <Link href="/doctors?q=dockter" className="rounded-full bg-white/10 px-2.5 py-0.5 hover:bg-white/25 text-white/95 transition-colors">#dockter</Link>
-                  <Link href="/doctors?q=icu" className="rounded-full bg-white/10 px-2.5 py-0.5 hover:bg-white/25 text-white/95 transition-colors">#ICU</Link>
-                  <Link href="/doctors?q=oxygen" className="rounded-full bg-white/10 px-2.5 py-0.5 hover:bg-white/25 text-white/95 transition-colors">#oxygen</Link>
-                </div>
-              </form>
-
-              {/* 3 Primary Actions */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 max-w-xl">
-                <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-                  <Link
-                    href="/ambulance"
-                    className="btn btn-red w-full !min-h-[48px] font-black flex items-center justify-center gap-2 shadow-emergency text-sm"
-                  >
-                    <Ambulance size={19} /> অ্যাম্বুলেন্স বুকিং
-                  </Link>
-                </motion.div>
-                <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+                {/* Primary CTA Buttons */}
+                <div className="flex flex-wrap items-center gap-3 pt-3">
                   <Link
                     href="/appointment"
-                    className="btn bg-white text-navy hover:bg-slate-100 w-full !min-h-[48px] font-black flex items-center justify-center gap-2 shadow-card text-sm"
+                    className="btn-primary !min-h-[48px] !px-7 text-sm font-bold shadow-md"
                   >
-                    <Stethoscope size={19} className="text-blue" /> ডাক্তার সিরিয়াল
+                    <span>Consult a Doctor Now</span>
+                    <ArrowRight size={16} />
                   </Link>
-                </motion.div>
-                <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+
                   <Link
-                    href="/family-care"
-                    className="btn btn-green w-full !min-h-[48px] font-black flex items-center justify-center gap-2 shadow-sm text-sm"
+                    href="/ambulance"
+                    className="btn-outline !min-h-[48px] !px-6 text-sm font-bold !border-brand/40 !text-brand hover:!bg-brand-50"
                   >
-                    <Users size={19} /> ফ্যামিলি কেয়ার
+                    <Ambulance size={18} />
+                    <span>Book Ambulance 24/7</span>
                   </Link>
-                </motion.div>
+                </div>
               </div>
-            </GsapFadeIn>
 
-            {/* Right Column: Hero Visual & Live Emergency Coordination Monitor */}
-            <GsapFadeIn className="lg:col-span-5" delay={0.25} y={40}>
-              <div className="relative">
-                {/* Hero Doctor & Ambulance Visual Background */}
-                <div className="relative rounded-3xl overflow-hidden shadow-2xl border border-white/20">
+              {/* Right Column: High Trust Verified Doctor Visual */}
+              <div className="lg:col-span-5 relative">
+                <div className="relative mx-auto max-w-md overflow-hidden rounded-2xl border border-slate-200/90 bg-white p-3 shadow-card">
                   <img
-                    src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=800&auto=format&fit=crop&q=80"
-                    alt="DH Medical Support Bangladesh"
-                    className="h-56 sm:h-64 w-full object-cover brightness-[0.78]"
+                    src="https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=800&auto=format&fit=crop&q=80"
+                    alt="DH Medical Support BMDC Doctors Team"
+                    className="h-72 sm:h-80 w-full object-cover rounded-xl"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-navy-deep via-navy/60 to-transparent" />
-                  
-                  {/* Floating Doctor Badge on Hero Image */}
-                  <div className="absolute top-3.5 left-3.5 flex items-center gap-2 rounded-xl bg-navy/80 px-3 py-1.5 backdrop-blur-md border border-white/20 text-xs font-bold text-white shadow-lg">
-                    <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-                    <span>২৪/৭ সেন্ট্রাল কন্ট্রোল রুম</span>
-                  </div>
 
-                  {/* Floating Hotline Pill on Image */}
-                  <a
-                    href={SITE.tel}
-                    className="absolute bottom-3.5 right-3.5 inline-flex items-center gap-1.5 rounded-xl bg-red px-3.5 py-1.5 text-xs font-black text-white shadow-emergency hover:bg-red-dark transition-colors"
-                  >
-                    <Phone size={14} className="animate-pulse" /> {SITE.phone}
-                  </a>
-                </div>
-
-                {/* Overlapping Command Status Card */}
-                <div className="-mt-8 relative z-20 mx-3 rounded-2xl border border-white/20 bg-navy/95 p-5 backdrop-blur-xl shadow-2xl space-y-3.5 text-xs">
-                  <div className="flex items-center justify-between border-b border-white/10 pb-2.5">
-                    <div className="flex items-center gap-2">
-                      <Award size={15} className="text-gold" />
-                      <span className="font-bold text-white uppercase tracking-wider text-[11px]">
-                        লাইভ ডিসপ্যাচ ও নেটওয়ার্ক
-                      </span>
+                  {/* Overlaid Trust Floating Pill */}
+                  <div className="absolute bottom-6 left-6 right-6 rounded-xl bg-white/95 p-3.5 shadow-lg backdrop-blur-md border border-slate-100 flex items-center justify-between">
+                    <div>
+                      <span className="text-[11px] font-bold text-slate-400 block uppercase">Trusted Network</span>
+                      <p className="text-sm font-black text-ink-dark">820,000+ Patients Served</p>
                     </div>
-                    <span className="rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-2 py-0.5 text-[10px] font-bold">
-                      সক্রিয়
+                    <span className="inline-flex items-center gap-1 rounded-lg bg-brand-50 px-2.5 py-1 text-xs font-bold text-brand">
+                      <ShieldCheck size={14} /> BMDC Verified
                     </span>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-2.5">
-                    <div className="rounded-xl bg-white/5 p-2.5 border border-white/10">
-                      <span className="text-white/70 block text-[10px]">গড় পৌঁছানোর সময়</span>
-                      <b className="text-white text-sm font-black mt-0.5 block">১৫-২৫ মিনিট</b>
-                      <span className="text-emerald-400 text-[9.5px]">ঢাকা ও জেলা শহর</span>
-                    </div>
-
-                    <div className="rounded-xl bg-white/5 p-2.5 border border-white/10">
-                      <span className="text-white/70 block text-[10px]">প্রস্তুত অ্যাম্বুলেন্স বহর</span>
-                      <b className="text-white text-sm font-black mt-0.5 block">১০০+ গাড়ি</b>
-                      <span className="text-gold text-[9.5px]">ICU, NICU, অক্সিজেন</span>
-                    </div>
-
-                    <div className="rounded-xl bg-white/5 p-2.5 border border-white/10">
-                      <span className="text-white/70 block text-[10px]">বিশেষজ্ঞ ডাক্তার নেটওয়ার্ক</span>
-                      <b className="text-white text-sm font-black mt-0.5 block">১৪+ বিভাগ</b>
-                      <span className="text-blue-200 text-[9.5px]">মেডিসিন, হৃদরোগ, নিউরো</span>
-                    </div>
-
-                    <div className="rounded-xl bg-white/5 p-2.5 border border-white/10">
-                      <span className="text-white/70 block text-[10px]">পার্টনার হাসপাতাল</span>
-                      <b className="text-white text-sm font-black mt-0.5 block">৮+ শীর্ষ হাসপাতাল</b>
-                      <span className="text-emerald-400 text-[9.5px]">স্কয়ার, এভারকেয়ার, ল্যাবএইড</span>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center justify-between text-[11px] text-white/70 pt-1">
-                    <span className="flex items-center gap-1">
-                      <ShieldCheck size={13} className="text-emerald-400" /> সরকারি ও BMDC অনুমোদিত
-                    </span>
-                    <Link href="/track" className="text-gold hover:underline font-bold">
-                      বুকিং ট্র্যাক করুন →
-                    </Link>
                   </div>
                 </div>
               </div>
-            </GsapFadeIn>
-
+            </div>
           </div>
         </div>
-        <Ecg className="absolute inset-x-0 bottom-0 h-10 w-full opacity-60 pointer-events-none" />
       </section>
 
-      {/* Emergency Strip (High-Conversion Floating Bar) */}
-      <div className="wrap -mt-7 relative z-20">
-        <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.3 }}
-          className="rounded-2xl bg-white border border-slate-200/90 p-4 sm:p-5 shadow-hover flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
-        >
-          <div className="flex items-center gap-3.5">
-            <span className="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-red-50 text-red border border-red-100">
-              <Ambulance size={26} />
+      {/* 3. 4 CORE SERVICE PILLARS (DocTime Layout) */}
+      <section className="py-6">
+        <div className="wrap">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {/* Pillar 1: Live Video Consultation */}
+            <Link
+              href="/appointment"
+              className="group rounded-2xl border border-slate-200 bg-white p-6 shadow-clean hover:border-brand/50 hover:shadow-hover transition-all"
+            >
+              <div className="grid h-12 w-12 place-items-center rounded-xl bg-brand-50 text-brand group-hover:bg-brand group-hover:text-white transition-colors mb-4">
+                <Video size={24} />
+              </div>
+              <h3 className="text-base font-bold text-ink-dark group-hover:text-brand transition-colors">
+                Live Video Consultation
+              </h3>
+              <p className="mt-1.5 text-xs text-slate-500 leading-relaxed">
+                Get instant video consultation with top specialists or schedule your appointment.
+              </p>
+            </Link>
+
+            {/* Pillar 2: Emergency Ambulance */}
+            <Link
+              href="/ambulance"
+              className="group rounded-2xl border border-slate-200 bg-white p-6 shadow-clean hover:border-brand/50 hover:shadow-hover transition-all"
+            >
+              <div className="grid h-12 w-12 place-items-center rounded-xl bg-brand-50 text-brand group-hover:bg-brand group-hover:text-white transition-colors mb-4">
+                <Ambulance size={24} />
+              </div>
+              <h3 className="text-base font-bold text-ink-dark group-hover:text-brand transition-colors">
+                Emergency Ambulance 24/7
+              </h3>
+              <p className="mt-1.5 text-xs text-slate-500 leading-relaxed">
+                Oxygen, ICU, NICU & AC fleet dispatched across 64 districts in 15-25 minutes.
+              </p>
+            </Link>
+
+            {/* Pillar 3: Diagnostic Tests */}
+            <Link
+              href="/appointment#diagnostic"
+              className="group rounded-2xl border border-slate-200 bg-white p-6 shadow-clean hover:border-brand/50 hover:shadow-hover transition-all"
+            >
+              <div className="grid h-12 w-12 place-items-center rounded-xl bg-brand-50 text-brand group-hover:bg-brand group-hover:text-white transition-colors mb-4">
+                <FileSpreadsheet size={24} />
+              </div>
+              <h3 className="text-base font-bold text-ink-dark group-hover:text-brand transition-colors">
+                Home Diagnostic Tests
+              </h3>
+              <p className="mt-1.5 text-xs text-slate-500 leading-relaxed">
+                Certified phlebotomists collect blood/urine sample from your doorstep. Fast reports.
+              </p>
+            </Link>
+
+            {/* Pillar 4: Corporate & Expat Healthcare */}
+            <Link
+              href="/family-care"
+              className="group rounded-2xl border border-slate-200 bg-white p-6 shadow-clean hover:border-brand/50 hover:shadow-hover transition-all"
+            >
+              <div className="grid h-12 w-12 place-items-center rounded-xl bg-brand-50 text-brand group-hover:bg-brand group-hover:text-white transition-colors mb-4">
+                <Users size={24} />
+              </div>
+              <h3 className="text-base font-bold text-ink-dark group-hover:text-brand transition-colors">
+                Expatriate & Family Care
+              </h3>
+              <p className="mt-1.5 text-xs text-slate-500 leading-relaxed">
+                Complete health and emergency protection solutions for your family back home.
+              </p>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* 4. AVAILABLE SPECIALTIES GRID (DocTime 15-Specialty Grid from Screenshot) */}
+      <section className="py-12 bg-[#F8FAFC]">
+        <div className="wrap">
+          <div className="text-center sm:text-left mb-8">
+            <span className="text-xs font-bold text-brand uppercase tracking-wider block mb-1">
+              Available specialties
             </span>
+            <h2 className="text-2xl sm:text-3xl font-black text-ink-dark">
+              Explore Doctors from 36+ clinical areas
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-500 mt-1">
+              যে কোনো স্বাস্থ্য সমস্যায় অভিজ্ঞ বিশেষজ্ঞ ডাক্তারের সরাসরি পরামর্শ নিন
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3.5">
+            {SPECIALTIES_15.map((sp) => {
+              const IconComponent = sp.icon;
+              return (
+                <Link
+                  key={sp.name}
+                  href={`/doctors?sp=${encodeURIComponent(sp.query)}`}
+                  className="category-card group flex flex-col items-center justify-center min-h-[140px]"
+                >
+                  <div className="grid h-11 w-11 place-items-center rounded-xl bg-brand-50 text-brand group-hover:bg-brand group-hover:text-white transition-colors mb-2.5">
+                    <IconComponent size={22} />
+                  </div>
+                  <h4 className="text-sm font-bold text-ink-dark group-hover:text-brand transition-colors">
+                    {sp.name}
+                  </h4>
+                  <p className="text-[11px] text-slate-400 mt-0.5">{sp.sub}</p>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* 5. COMMON HEALTH CONCERNS (Symptom Finder from Screenshot) */}
+      <section className="py-12 bg-white">
+        <div className="wrap">
+          <div className="flex items-center justify-between mb-8">
+            <div>
+              <h2 className="text-2xl sm:text-3xl font-black text-ink-dark">
+                Common Health Concerns
+              </h2>
+              <p className="text-xs sm:text-sm text-slate-500 mt-1">
+                আপনার সমস্যা অনুযায়ী উপযুক্ত বিশেষজ্ঞ ডাক্তার খুঁজে নিন
+              </p>
+            </div>
+            <Link
+              href="/doctors"
+              className="inline-flex items-center gap-1 text-xs sm:text-sm font-bold text-brand hover:underline"
+            >
+              <span>View All</span>
+              <ChevronRight size={16} />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            {HEALTH_CONCERNS.map((item) => (
+              <Link
+                key={item.title}
+                href={`/doctors?q=${encodeURIComponent(item.query)}`}
+                className="group rounded-2xl border border-slate-200 bg-white p-4 hover:border-brand/50 hover:shadow-hover transition-all"
+              >
+                <div className="h-24 w-full rounded-xl bg-gradient-to-br from-brand-50 to-slate-100 flex items-center justify-center p-3 mb-3 text-brand">
+                  <HeartPulse size={32} className="group-hover:scale-110 transition-transform" />
+                </div>
+                <h4 className="text-sm font-bold text-ink-dark group-hover:text-brand transition-colors leading-snug">
+                  {item.title}
+                </h4>
+                <p className="text-[11px] text-slate-500 mt-1">{item.bn}</p>
+                <span className="text-[10px] font-bold text-brand mt-2 inline-block">
+                  {item.count} available &gt;
+                </span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 6. AVAILABLE SPECIALIST DOCTORS (DocTime Doctor Cards from Screenshot) */}
+      <section className="py-12 bg-[#F8FAFC]">
+        <div className="wrap">
+          <div className="flex items-center justify-between mb-8">
             <div>
               <div className="flex items-center gap-2">
-                <span className="inline-block h-2.5 w-2.5 rounded-full bg-red animate-ping" />
-                <b className="font-head text-base sm:text-lg text-navy-dark">খুব বেশি জরুরি অবস্থায় আছেন?</b>
+                <h2 className="text-2xl sm:text-3xl font-black text-ink-dark">
+                  Available Doctors
+                </h2>
+                <span className="rounded-full bg-brand-50 px-2.5 py-0.5 text-xs font-bold text-brand">
+                  380 Doctors Online Now
+                </span>
               </div>
-              <p className="text-xs text-slate-600 mt-0.5">
-                দেরি না করে সরাসরি আমাদের জরুরি হটলাইনে কল দিন — কোঅর্ডিনেটর সাথে সাথে গাড়ি পাঠাবে।
+              <p className="text-xs sm:text-sm text-slate-500 mt-1">
+                BMDC অনুমোদিত অভিজ্ঞ চিকিৎসকদের সিরিয়াল ও তাত্ক্ষণিক ভিডিও কল
               </p>
             </div>
-          </div>
-
-          <motion.a
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.97 }}
-            href={SITE.tel}
-            className="btn btn-red shrink-0 !min-h-[44px] !px-5 text-sm font-black flex items-center gap-2 shadow-emergency w-full sm:w-auto justify-center"
-          >
-            <Phone size={16} className="animate-pulse" />
-            কল করুন {SITE.phone}
-          </motion.a>
-        </motion.div>
-      </div>
-
-      {/* Comprehensive Services Section with Images and Motion */}
-      <section className="wrap mt-16" aria-labelledby="svc">
-        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-2">
-          <div>
-            <span className="pill">আমাদের সমন্বিত সেবা</span>
-            <h2 id="svc" className="text-2xl sm:text-3xl font-black text-navy-dark mt-1.5">
-              আপনার পরিবারের স্বাস্থ্য সুরক্ষায় নির্ভরযোগ্য সমাধান
-            </h2>
-          </div>
-          <p className="text-xs text-slate-500 max-w-xs">
-            প্রবাসে থাকা ভাইয়ের পরিবার এবং দেশের প্রত্যন্ত এলাকার রোগীদের পাশে সার্বক্ষণিক মেডিকেল সমন্বয়।
-          </p>
-        </div>
-
-        <GsapStagger className="mt-7 grid gap-5 sm:grid-cols-2 lg:grid-cols-3" delay={0.15}>
-          {SERVICES.map(({ href, Icon, t, d, badge, badgeColor, img }) => (
             <Link
-              key={t}
-              href={href}
-              className="card card-hover flex flex-col justify-between group overflow-hidden !p-0 border border-slate-200"
+              href="/doctors"
+              className="inline-flex items-center gap-1 text-xs sm:text-sm font-bold text-brand hover:underline"
             >
-              <div className="relative h-44 w-full overflow-hidden bg-slate-100">
-                <img
-                  src={img}
-                  alt={t}
-                  className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/70 via-transparent to-transparent" />
-                <span className={`absolute top-3 right-3 rounded-full px-2.5 py-0.5 text-[10px] font-bold border backdrop-blur-md bg-white/90 shadow-sm ${badgeColor}`}>
-                  {badge}
-                </span>
-                <span className="absolute bottom-3 left-3 grid h-10 w-10 place-items-center rounded-xl bg-white text-navy shadow-md">
-                  <Icon size={20} className="text-blue" />
-                </span>
-              </div>
-
-              <div className="p-5 flex-1 flex flex-col justify-between">
-                <div>
-                  <h3 className="font-head text-lg font-bold text-navy-dark group-hover:text-blue transition-colors">
-                    {t}
-                  </h3>
-                  <p className="mt-1.5 text-xs text-slate-600 leading-relaxed">
-                    {d}
-                  </p>
-                </div>
-
-                <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-blue">
-                  <span>বিস্তারিত ও বুকিং</span>
-                  <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
-                </div>
-              </div>
+              <span>View All</span>
+              <ChevronRight size={16} />
             </Link>
-          ))}
-        </GsapStagger>
-      </section>
-
-      {/* Specialist Doctor Departments Grid */}
-      <section className="wrap mt-16" aria-labelledby="sp">
-        <div className="flex items-end justify-between">
-          <div>
-            <span className="pill">ডাক্তার বিভাগ</span>
-            <h2 id="sp" className="text-2xl sm:text-3xl font-black text-navy-dark mt-1.5">
-              বিশেষজ্ঞ কনসালট্যান্ট বিভাগ
-            </h2>
           </div>
-          <Link href="/doctors" className="font-bold text-xs text-blue hover:underline flex items-center gap-1">
-            সব বিভাগ দেখুন <ArrowRight size={13} />
-          </Link>
-        </div>
 
-        <GsapStagger className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4" delay={0.1}>
-          {SPECIALTIES.map((s) => {
-            const I = SP_ICON[s.key] || Stethoscope;
-            return (
-              <Link
-                key={s.key}
-                href={`/doctors?sp=${encodeURIComponent(s.key)}`}
-                className="card card-hover flex flex-col items-center gap-2.5 !p-4 text-center group border border-slate-200"
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {DOCTORS_FEATURED.map((doc) => (
+              <div
+                key={doc.name}
+                className="rounded-2xl border border-slate-200 bg-white p-5 shadow-clean hover:shadow-card hover:border-brand/40 transition-all flex flex-col justify-between"
               >
-                <span className="grid h-13 w-13 place-items-center rounded-2xl bg-slate-50 text-navy group-hover:bg-blue-50 group-hover:text-blue transition-colors">
-                  <I size={26} />
-                </span>
                 <div>
-                  <b className="text-sm font-bold text-navy-dark block group-hover:text-blue transition-colors">
-                    {s.bn}
-                  </b>
-                  <span className="text-[11px] text-slate-500 block mt-0.5">{s.key}</span>
+                  <div className="overflow-hidden rounded-xl bg-slate-100 aspect-square mb-4">
+                    <img
+                      src={doc.img}
+                      alt={doc.name}
+                      className="h-full w-full object-cover"
+                    />
+                  </div>
+
+                  <h3 className="text-sm font-bold text-ink-dark line-clamp-1">{doc.name}</h3>
+                  <p className="text-[11px] text-slate-500 mt-0.5 line-clamp-1">{doc.degree}</p>
+
+                  <div className="mt-2.5 inline-block rounded-md bg-brand-50 px-2 py-0.5 text-[11px] font-bold text-brand">
+                    {doc.specialty}
+                  </div>
+
+                  <div className="mt-2 flex items-center justify-between text-xs text-slate-500 border-t border-slate-100 pt-2">
+                    <span className="text-[10.5px]">{doc.bmdc}</span>
+                    <span className="font-semibold text-slate-700">{doc.exp}</span>
+                  </div>
                 </div>
-              </Link>
-            );
-          })}
-        </GsapStagger>
-      </section>
 
-      {/* Featured Doctors Section */}
-      {initialDoctors.length > 0 && (
-        <section className="wrap mt-16" aria-labelledby="feat-doc">
-          <div className="flex items-end justify-between">
-            <div>
-              <span className="pill">স্পেশালিস্ট কনসালট্যান্ট</span>
-              <h2 id="feat-doc" className="text-2xl sm:text-3xl font-black text-navy-dark mt-1.5">
-                জনপ্রিয় বিশেষজ্ঞ ডাক্তার
-              </h2>
-            </div>
-            <Link href="/doctors" className="font-bold text-xs text-blue hover:underline flex items-center gap-1">
-              সব ডাক্তার ({initialDoctors.length}+) <ArrowRight size={13} />
-            </Link>
-          </div>
-
-          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {initialDoctors.map((d) => (
-              <article key={d._id} className="card card-hover flex flex-col justify-between !p-4 border border-slate-200">
-                <div>
-                  <div className="flex items-center gap-3">
-                    {d.photo ? (
-                      <img src={d.photo} alt={d.name} className="h-16 w-16 rounded-xl object-cover border border-slate-200 shadow-sm" />
-                    ) : (
-                      <span className="grid h-16 w-16 place-items-center rounded-xl bg-blue-50 text-blue">
-                        <Stethoscope size={24} />
-                      </span>
-                    )}
-                    <div className="min-w-0">
-                      <h3 className="font-head text-base font-bold leading-tight text-navy truncate">{d.name}</h3>
-                      <p className="text-xs text-blue font-semibold mt-0.5">{spBn(d.specialty)}</p>
+                <div className="mt-4 pt-3 border-t border-slate-100">
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-xs text-slate-400">Consultation Fee</span>
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-xs text-slate-400 line-through">৳{doc.oldFee}</span>
+                      <span className="text-base font-black text-ink-dark">৳{doc.fee}</span>
                     </div>
                   </div>
-                  <p className="mt-3 text-xs text-slate-600 line-clamp-2 leading-relaxed">{d.degree}</p>
-                  <p className="mt-1 text-xs font-medium text-slate-700 line-clamp-1">{d.hospital}</p>
-                  {d.fee && <p className="mt-1.5 text-xs font-black text-red">ফি: {d.fee}</p>}
+
+                  <Link
+                    href={`/appointment?doctor=${encodeURIComponent(doc.name)}`}
+                    className="btn-outline w-full !min-h-[40px] text-xs font-bold !border-brand/40 !text-brand hover:!bg-brand hover:!text-white transition-all flex items-center justify-center gap-1.5"
+                  >
+                    <Video size={15} />
+                    <span>See Doctor Now</span>
+                  </Link>
                 </div>
-                <Link
-                  href={`/appointment?doctor=${encodeURIComponent(d.name)}&hospital=${encodeURIComponent(d.hospital || "")}&sp=${encodeURIComponent(d.specialty || "")}`}
-                  className="btn btn-red mt-4 w-full !min-h-[36px] !py-1 text-xs font-bold shadow-sm"
-                >
-                  <CalendarCheck size={14} /> সিরিয়াল নিন
-                </Link>
-              </article>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* Expatriate Family Care Banner */}
-      <section className="mt-16 bg-gradient-to-br from-emerald-800 via-emerald-700 to-navy-dark text-white relative overflow-hidden">
-        <div className="wrap grid gap-8 py-12 md:grid-cols-12 md:items-center relative z-10">
-          <div className="md:col-span-7 space-y-4">
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-white/20 px-3 py-1 text-xs font-bold text-gold backdrop-blur-md">
-              <Sparkles size={13} /> DH FAMILY CARE
-            </span>
-            <h2 className="!text-white text-3xl sm:text-4xl font-black leading-tight">
-              প্রবাসে আপনি, দেশে আপনার পরিবারের পাশে আমরা
-            </h2>
-            <p className="text-sm sm:text-base text-white/90 leading-relaxed max-w-lg">
-              বিদেশে কর্মরত অবস্থায় পরিবারের চিকিৎসার চিন্তা থেকে মুক্তি পেতে ফ্যামিলি কেয়ার মেম্বারশিপ ও স্বাস্থ্য বীমা সমন্বয় সহায়তা।
-            </p>
-            <div className="pt-2">
-              <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} className="inline-block">
-                <Link href="/family-care" className="btn btn-gold text-sm font-black shadow-md">
-                  আজই মেম্বারশিপ নিন →
-                </Link>
-              </motion.div>
-            </div>
-          </div>
-
-          <div className="md:col-span-5 rounded-2xl bg-white/10 p-6 border border-white/15 backdrop-blur-md space-y-3 text-xs sm:text-sm">
-            {[
-              "২৪ ঘণ্টার জরুরি কল সাপোর্ট ও কেয়ার ম্যানেজার",
-              "জরুরি অ্যাম্বুলেন্স প্রেরণ ও ট্র্যাকিং সমন্বয়",
-              "হাসপাতালে কেবিন, আইসিইউ ও ভর্তি সহায়তা",
-              "ল্যাব পরীক্ষা, প্রেসক্রিপশন ও পরিবারের সঙ্গে নিয়মিত ফলোআপ",
-            ].map((t) => (
-              <div key={t} className="flex items-center gap-3">
-                <CheckCircle2 size={18} className="shrink-0 text-gold" />
-                <span className="text-white/95">{t}</span>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Partner Hospitals Showcase with Bed Counts */}
-      {initialHospitals.length > 0 && (
-        <section className="wrap mt-16" aria-labelledby="hs">
-          <div className="flex items-end justify-between">
-            <div>
-              <span className="pill">হাসপাতাল নেটওয়ার্ক</span>
-              <h2 id="hs" className="text-2xl sm:text-3xl font-black text-navy-dark mt-1.5">
-                আমাদের পার্টনার হাসপাতাল ও ক্লিনিক
-              </h2>
-            </div>
-            <Link href="/hospitals" className="font-bold text-xs text-blue hover:underline flex items-center gap-1">
-              সব হাসপাতাল <ArrowRight size={13} />
-            </Link>
-          </div>
-
-          <div className="-mx-4 mt-6 flex gap-3 overflow-x-auto px-4 pb-2">
-            {initialHospitals.map((h) => (
-              <Link
-                key={h._id}
-                href={`/hospitals?q=${encodeURIComponent(h.name)}`}
-                className="card card-hover flex w-48 shrink-0 flex-col items-center gap-2.5 !p-4 text-center group border border-slate-200"
-              >
-                {h.logo ? (
-                  <img src={h.logo} alt={h.name} className="h-14 w-14 rounded-xl object-contain border border-slate-100 p-1" />
-                ) : (
-                  <span className="grid h-14 w-14 place-items-center rounded-xl bg-blue-50 text-blue">
-                    <Building2 size={28} />
-                  </span>
-                )}
-                <b className="text-xs font-bold leading-tight text-navy line-clamp-2 group-hover:text-blue transition-colors">
-                  {h.name}
-                </b>
-                {h.totalBeds && (
-                  <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-800 border border-emerald-200">
-                    {h.totalBeds.slice(0, 15)}
-                  </span>
-                )}
-              </Link>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* Real Patient & Expatriate Testimonials */}
-      {initialReviews.length > 0 && (
-        <section className="wrap mt-16" aria-labelledby="reviews-sec">
-          <div className="flex items-end justify-between">
-            <div>
-              <span className="pill">প্রবাসীদের পর্যালোচনা</span>
-              <h2 id="reviews-sec" className="text-2xl sm:text-3xl font-black text-navy-dark mt-1.5">
-                সেবাগ্রহীতাদের বাস্তব অভিজ্ঞতা
-              </h2>
-            </div>
-            <Link href="/feedback" className="font-bold text-xs text-blue hover:underline flex items-center gap-1">
-              সব রিভিউ ({initialReviews.length}+) <ArrowRight size={13} />
-            </Link>
-          </div>
-
-          <div className="mt-6 grid gap-4 sm:grid-cols-3">
-            {initialReviews.map((r) => (
-              <article key={r._id} className="card flex flex-col justify-between !p-5 border border-slate-200">
-                <div>
-                  <div className="flex text-gold mb-2">
-                    {Array.from({ length: 5 }).map((_, i) => (
-                      <Star key={i} size={15} className={i < (r.rating || 5) ? "fill-gold text-gold" : "text-slate-300"} />
-                    ))}
-                  </div>
-                  <p className="text-xs text-slate-700 leading-relaxed italic line-clamp-4">
-                    &quot;{r.comment}&quot;
-                  </p>
-                </div>
-                <div className="mt-4 pt-2.5 border-t border-slate-100 flex items-center justify-between text-xs">
-                  <b className="font-bold text-navy-dark">{r.name}</b>
-                  <span className="rounded-full bg-blue-50 px-2 py-0.5 text-[10px] font-bold text-blue">
-                    {r.service}
-                  </span>
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* Ambulance Partner Banner */}
-      <section className="wrap mt-16 pb-12">
-        <div className="card border-red/20 bg-gradient-to-r from-red-50/50 via-white to-white flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 !p-6 shadow-card">
-          <div className="flex items-center gap-4">
-            <span className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-red text-white shadow-emergency">
-              <Ambulance size={28} />
+      {/* 7. HEALTH CARE AND PROTECT PLANS (DocTime Plans from Screenshot) */}
+      <section className="py-14 bg-white">
+        <div className="wrap">
+          <div className="text-center max-w-2xl mx-auto mb-10">
+            <span className="text-xs font-bold text-brand uppercase tracking-wider block mb-1">
+              Healthcare Subscription
             </span>
-            <div>
-              <h3 className="font-head text-lg sm:text-xl font-bold text-navy-dark">
-                অ্যাম্বুলেন্স ড্রাইভার বা গাড়ির মালিক?
-              </h3>
-              <p className="text-xs sm:text-sm text-slate-600 mt-0.5">
-                আমাদের নেটওয়ার্কে যুক্ত হয়ে নিয়মিত ট্রিপ পান। মোবাইল ক্যামেরা দিয়ে NID ও লাইসেন্স আপলোড করুন।
-              </p>
-            </div>
+            <h2 className="text-2xl sm:text-4xl font-black text-ink-dark">
+              DH Medical Health Care and Protect Plans
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-500 mt-2">
+              প্রবাসে থাকা ভাইদের পরিবারের জন্য ও বয়োবৃদ্ধ মা-বাবার জন্য মাসিক নিশ্চিন্ত স্বাস্থ্য সুরক্ষা
+            </p>
           </div>
-          <Link href="/partner" className="btn btn-navy shrink-0 text-xs sm:text-sm font-bold">
-            পার্টনার নিবন্ধন করুন →
-          </Link>
+
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {HEALTH_PLANS.map((plan) => (
+              <div
+                key={plan.name}
+                className={`relative rounded-3xl border p-6 flex flex-col justify-between transition-all ${
+                  plan.popular
+                    ? "border-brand bg-white shadow-card ring-2 ring-brand/10"
+                    : "border-slate-200 bg-white shadow-clean hover:border-slate-300"
+                }`}
+              >
+                {plan.popular && (
+                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-brand px-3 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white shadow-sm">
+                    Most Popular
+                  </span>
+                )}
+
+                <div>
+                  <h3 className="text-lg font-bold text-ink-dark">{plan.name}</h3>
+                  <div className="mt-2 flex items-baseline gap-1">
+                    <span className="text-3xl font-black text-ink-dark">৳{plan.price}</span>
+                    <span className="text-xs text-slate-500">{plan.period}</span>
+                  </div>
+                  <span className="text-xs font-semibold text-brand block mt-0.5">{plan.target}</span>
+
+                  <div className="my-5 border-t border-slate-100" />
+
+                  <ul className="space-y-2.5 text-xs text-slate-600">
+                    {plan.features.map((feat, i) => (
+                      <li key={i} className="flex items-start gap-2">
+                        <Check size={14} className="text-brand shrink-0 mt-0.5" strokeWidth={2.5} />
+                        <span>{feat}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="mt-6 pt-4 border-t border-slate-100">
+                  <Link
+                    href={`/family-care?plan=${encodeURIComponent(plan.name)}`}
+                    className={`w-full text-xs font-bold justify-center ${
+                      plan.popular ? "btn-primary" : "btn-primary !bg-brand hover:!bg-brand-dark"
+                    }`}
+                  >
+                    Subscribe Now
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-8 text-center">
+            <Link
+              href="/family-care"
+              className="btn-outline !min-h-[42px] !px-8 text-xs font-bold !border-brand/30 !text-brand hover:!bg-brand-50"
+            >
+              See comparison with all packages &gt;
+            </Link>
+          </div>
         </div>
       </section>
-    </>
+
+      {/* 8. HOME DIAGNOSTIC SERVICE (Doorstep Sample Collection from Screenshot) */}
+      <section className="py-14 bg-[#F8FAFC]">
+        <div className="wrap">
+          <div className="rounded-3xl border border-slate-200 bg-white p-6 sm:p-10 shadow-clean">
+            <div className="grid gap-8 lg:grid-cols-12 lg:items-center">
+              {/* Left Column: Features and Location Input */}
+              <div className="lg:col-span-7 space-y-5">
+                <span className="text-xs font-bold text-brand uppercase tracking-wider block">
+                  Home Diagnostic Service
+                </span>
+                <h2 className="text-2xl sm:text-3xl font-black text-ink-dark">
+                  Sample collection at your Doorstep
+                </h2>
+                <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
+                  বাসায় বসেই রক্ত ও প্রস্রাব টেস্টের নমুনা দিন। ল্যাব টেকনোলজিস্ট এসে স্যাম্পল সংগ্রহ করবেন এবং ১২-২৪ ঘণ্টার ভেতর ডিজিটাল রিপোর্ট আপনার ফোনে পৌঁছে দেওয়া হবে।
+                </p>
+
+                <div className="space-y-3 pt-2">
+                  <div className="flex items-center gap-3 text-xs sm:text-sm font-semibold text-slate-700">
+                    <div className="grid h-7 w-7 place-items-center rounded-lg bg-brand-50 text-brand shrink-0">
+                      <Clock size={16} />
+                    </div>
+                    <span>Faster and convenient tests booking from home or office</span>
+                  </div>
+
+                  <div className="flex items-center gap-3 text-xs sm:text-sm font-semibold text-slate-700">
+                    <div className="grid h-7 w-7 place-items-center rounded-lg bg-brand-50 text-brand shrink-0">
+                      <ShieldCheck size={16} />
+                    </div>
+                    <span>Certified healthcare professionals will safely collect samples</span>
+                  </div>
+
+                  <div className="flex items-center gap-3 text-xs sm:text-sm font-semibold text-slate-700">
+                    <div className="grid h-7 w-7 place-items-center rounded-lg bg-brand-50 text-brand shrink-0">
+                      <FileSpreadsheet size={16} />
+                    </div>
+                    <span>Get digital report on DH Medical app & WhatsApp within 24 hours</span>
+                  </div>
+                </div>
+
+                {/* Interactive Location Finder */}
+                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 space-y-3 mt-4">
+                  <div className="flex items-center gap-2 text-xs font-bold text-ink-dark">
+                    <MapPin size={15} className="text-brand" />
+                    <span>Sample Collection Location Checker</span>
+                  </div>
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={sampleLocation}
+                      onChange={(e) => {
+                        setSampleLocation(e.target.value);
+                        setLocationSaved(false);
+                      }}
+                      placeholder="Enter your area (e.g. Dhanmondi, Uttara, Mirpur, Sylhet...)"
+                      className="search-input !h-11 !text-xs !bg-white"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (sampleLocation.trim()) setLocationSaved(true);
+                      }}
+                      className="btn-primary !min-h-[44px] !px-4 text-xs shrink-0"
+                    >
+                      Confirm Location &rarr;
+                    </button>
+                  </div>
+                  {locationSaved && (
+                    <p className="text-xs font-bold text-brand bg-brand-50 rounded-lg p-2 flex items-center gap-1.5">
+                      <CheckCircle2 size={15} />
+                      <span>সেবা উপলব্ধ! আমাদের টিম {sampleLocation}-এ নমুনা সংগ্রহ করতে প্রস্তুত।</span>
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              {/* Right Column: Lab Tech Photo Visual */}
+              <div className="lg:col-span-5">
+                <div className="overflow-hidden rounded-2xl border border-slate-200 shadow-sm">
+                  <img
+                    src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=800&auto=format&fit=crop&q=80"
+                    alt="Doorstep Sample Collection DH Medical"
+                    className="h-64 sm:h-72 w-full object-cover"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 9. EMERGENCY AMBULANCE DISPATCH QUICK BOOKING (DH Medical's Core Superpower) */}
+      <section className="py-14 bg-white border-t border-slate-100">
+        <div className="wrap">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
+            <div>
+              <span className="text-xs font-bold text-brand uppercase tracking-wider block mb-1">
+                24/7 Nationwide Emergency
+              </span>
+              <h2 className="text-2xl sm:text-3xl font-black text-ink-dark">
+                Fastest Emergency Ambulance Fleet
+              </h2>
+              <p className="text-xs sm:text-sm text-slate-500 mt-1">
+                ১৫-২৫ মিনিটে পৌঁছায় সাধারণ এসি, অক্সিজেন, ICU ও নবজাতক (NICU) লাইফ সাপোর্ট গাড়ি
+              </p>
+            </div>
+            <Link
+              href="/ambulance"
+              className="btn-primary !min-h-[42px] !px-6 text-xs font-bold self-start sm:self-auto"
+            >
+              <Ambulance size={16} />
+              <span>Full Ambulance Fleet &gt;</span>
+            </Link>
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {AMBULANCE_TYPES_DATA.slice(0, 4).map((amb) => (
+              <div
+                key={amb.key}
+                className="rounded-2xl border border-slate-200 bg-white p-5 shadow-clean hover:border-brand/40 hover:shadow-card transition-all flex flex-col justify-between"
+              >
+                <div>
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="rounded-md bg-brand-50 px-2 py-0.5 text-[10.5px] font-bold text-brand">
+                      {amb.badge}
+                    </span>
+                    <span className="text-[11px] font-bold text-slate-500">{amb.eta}</span>
+                  </div>
+
+                  <h3 className="text-base font-bold text-ink-dark">{amb.title}</h3>
+                  <p className="text-xs text-slate-500 mt-1 leading-relaxed">{amb.desc}</p>
+                </div>
+
+                <div className="mt-5 pt-3 border-t border-slate-100 flex items-center justify-between">
+                  <div>
+                    <span className="text-[10px] text-slate-400 block uppercase">বেস ভাড়া</span>
+                    <b className="text-sm font-black text-ink-dark">৳{amb.baseFare.toLocaleString("bn-BD")}</b>
+                  </div>
+                  <Link
+                    href={`/ambulance?type=${encodeURIComponent(amb.key)}`}
+                    className="btn-primary !min-h-[36px] !px-3.5 !py-1 text-xs font-bold"
+                  >
+                    বুক করুন
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 10. PARTNER HOSPITALS & CLINICS DEDICATED CONTROLLED CAROUSEL (NOT SCROLL EVERYWHERE) */}
+      <PartnerHospitalsCarousel />
+
+      {/* 11. ARE YOU A QUALIFIED DOCTOR OR AMBULANCE OWNER? (DocTime Style from Screenshot) */}
+      <section className="py-14 bg-[#F8FAFC]">
+        <div className="wrap">
+          <div className="rounded-3xl border border-slate-200 bg-white p-6 sm:p-10 shadow-clean">
+            <div className="grid gap-8 lg:grid-cols-12 lg:items-center">
+              {/* Doctor Visual */}
+              <div className="lg:col-span-5">
+                <div className="overflow-hidden rounded-2xl border border-slate-200">
+                  <img
+                    src="https://images.unsplash.com/photo-1537368910025-700350fe46c7?w=800&auto=format&fit=crop&q=80"
+                    alt="Join DH Medical Doctor Network"
+                    className="h-72 w-full object-cover"
+                  />
+                </div>
+              </div>
+
+              {/* Text & Action */}
+              <div className="lg:col-span-7 space-y-4">
+                <span className="text-xs font-bold text-brand uppercase tracking-wider block">
+                  Join The Healthcare Network
+                </span>
+                <h2 className="text-2xl sm:text-3xl font-black text-ink-dark">
+                  Are You A Qualified Doctor or Ambulance Partner?
+                </h2>
+                <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
+                  Join Bangladesh's premier healthcare and emergency platform. Create your virtual chamber, manage chamber appointments, or connect your ambulance fleet to serve thousands of patients nationwide.
+                </p>
+
+                <div className="space-y-2 text-xs font-medium text-slate-600 pt-1">
+                  <div className="flex items-center gap-2">
+                    <Check size={14} className="text-brand shrink-0" strokeWidth={2.5} />
+                    <span>BMDC verified onboarding process with autonomous medical consultation</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Check size={14} className="text-brand shrink-0" strokeWidth={2.5} />
+                    <span>24/7 dedicated technical coordination desk for doctors and ambulance drivers</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Check size={14} className="text-brand shrink-0" strokeWidth={2.5} />
+                    <span>Timely verified settlements directly to your bank account</span>
+                  </div>
+                </div>
+
+                <div className="pt-3 flex flex-wrap gap-3">
+                  <Link
+                    href="/partner"
+                    className="btn-primary !min-h-[44px] !px-6 text-xs font-bold"
+                  >
+                    Join as Doctor &gt;
+                  </Link>
+                  <Link
+                    href="/partner#ambulance"
+                    className="btn-outline !min-h-[44px] !px-6 text-xs font-bold !border-brand/30 !text-brand hover:!bg-brand-50"
+                  >
+                    Ambulance Partner &gt;
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 11. 24/7 HOTLINE EMERGENCY BAR */}
+      <section className="py-8 bg-brand text-white">
+        <div className="wrap flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+          <div>
+            <h3 className="text-lg sm:text-xl font-black">
+              জরুরি প্রয়োজনে আমাদের মেডিকেল টিম ২৪ ঘণ্টা প্রস্তুত
+            </h3>
+            <p className="text-xs text-brand-100 mt-0.5">
+              অ্যাম্বুলেন্স, আইসিইউ বেড বা বিশেষজ্ঞ ডাক্তার সিরিয়ালের যে কোনো জরুরি সহায়তায় কল করুন
+            </p>
+          </div>
+          <a
+            href={SITE.tel}
+            className="btn bg-white text-brand hover:bg-slate-100 !min-h-[46px] !px-7 font-black text-sm shrink-0 shadow-lg inline-flex items-center gap-2"
+          >
+            <Phone size={18} />
+            <span>কল করুন {SITE.phone}</span>
+          </a>
+        </div>
+      </section>
+    </div>
   );
 }

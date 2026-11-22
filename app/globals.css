@@ -7,15 +7,28 @@
     scroll-behavior: smooth;
     -webkit-tap-highlight-color: transparent;
   }
+
   body {
-    @apply bg-surface text-slate-800 font-body antialiased;
-    background-color: #F8FAFC;
+    background-color: #FFFFFF;
+    color: #1E293B;
+    font-family: var(--font-body), "Hind Siliguri", sans-serif;
+    -webkit-font-smoothing: antialiased;
   }
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-head text-navy-dark tracking-tight;
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-head), "Anek Bangla", sans-serif;
+    color: #0F172A;
+    font-weight: 800;
+    letter-spacing: -0.015em;
   }
+
   :focus-visible {
-    outline: 2px solid #1D5CD8;
+    outline: 2px solid #0F52BA;
     outline-offset: 2px;
   }
 }
@@ -24,82 +37,29 @@
   .wrap {
     @apply mx-auto w-full max-w-6xl px-4 sm:px-6;
   }
-  
-  .btn {
-    @apply inline-flex min-h-[46px] items-center justify-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold transition-all duration-200 active:scale-[0.98] select-none;
-  }
-  
-  .btn-red {
-    @apply bg-red text-white hover:bg-red-dark shadow-sm hover:shadow-emergency;
-  }
-  
-  .btn-navy {
-    @apply bg-navy text-white hover:bg-navy-dark shadow-sm hover:shadow-card;
-  }
-  
-  .btn-green {
-    @apply bg-emerald text-white hover:bg-emerald-dark shadow-sm;
-  }
-  
-  .btn-gold {
-    @apply bg-gold text-navy-dark hover:brightness-95 shadow-sm font-black;
-  }
-  
-  .btn-line {
-    @apply border border-slate-300 bg-white text-navy hover:bg-slate-50 hover:border-slate-400 shadow-subtle;
-  }
-  
-  .card {
-    @apply rounded-2xl border border-slate-200/80 bg-white p-5 shadow-card transition-all duration-200;
-  }
-  
-  .card-hover {
-    @apply hover:border-blue/40 hover:shadow-hover hover:-translate-y-0.5;
+
+  /* Primary Solid Brand Button */
+  .btn-primary {
+    @apply inline-flex min-h-[44px] items-center justify-center gap-2 rounded-xl bg-brand px-5 py-2.5 text-sm font-bold text-white shadow-sm transition-all duration-150 hover:bg-brand-dark active:scale-[0.98];
   }
 
-  .pill {
-    @apply inline-flex items-center gap-1.5 rounded-full bg-blue-50 px-3 py-1 text-xs font-bold text-blue uppercase tracking-wider border border-blue-100;
+  /* Clean Outline Button */
+  .btn-outline {
+    @apply inline-flex min-h-[44px] items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-5 py-2.5 text-sm font-bold text-ink-dark transition-all duration-150 hover:bg-slate-50 hover:border-slate-400 active:scale-[0.98];
   }
-  
-  .input {
-    @apply min-h-[46px] w-full rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 transition-colors focus:border-blue focus:ring-4 focus:ring-blue/10 focus:outline-none;
-  }
-  
-  .chip {
-    @apply min-h-[38px] rounded-xl border border-slate-200 bg-white px-3.5 py-1.5 text-xs font-bold text-slate-700 transition-all hover:bg-slate-50 hover:border-slate-300;
-  }
-  
-  .chip-on {
-    @apply border-navy bg-navy text-white shadow-sm hover:bg-navy-dark hover:border-navy-dark;
-  }
-}
 
-/* Authentic subtle ECG animation */
-.ecg path {
-  stroke-dasharray: 1400;
-  stroke-dashoffset: 1400;
-  animation: ecg 2.5s ease-out 0.2s forwards;
-}
-@keyframes ecg {
-  to {
-    stroke-dashoffset: 0;
+  /* Clean Soft Button */
+  .btn-soft {
+    @apply inline-flex min-h-[44px] items-center justify-center gap-2 rounded-xl bg-brand-50 px-5 py-2.5 text-sm font-bold text-brand transition-all duration-150 hover:bg-brand-100 active:scale-[0.98];
   }
-}
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(4px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-.animate-fadeIn {
-  animation: fadeIn 0.25s ease-out forwards;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .ecg path {
-    animation: none;
-    stroke-dashoffset: 0;
+  /* DocTime-style Specialty / Category Card */
+  .category-card {
+    @apply rounded-2xl border border-slate-200/80 bg-white p-5 text-center transition-all duration-200 hover:border-brand/40 hover:shadow-hover hover:-translate-y-0.5;
   }
-  html {
-    scroll-behavior: auto;
+
+  /* DocTime Search Input */
+  .search-input {
+    @apply h-12 w-full rounded-xl border border-slate-200 bg-white pl-11 pr-4 text-sm text-ink-dark placeholder:text-slate-400 transition-all focus:border-brand focus:outline-none focus:ring-4 focus:ring-brand/10;
   }
 }

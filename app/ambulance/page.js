@@ -39,7 +39,7 @@ const AMBULANCE_TYPES = [
     tag: "ক্রিটিক্যাল লাইফ সাপোর্ট",
     desc: "ভেন্টিলেটর, ডিফিব্রিলেটর, সাকশন ও সার্বক্ষণিক দক্ষ প্যারামেডিক স্টাফ সহ।",
     badge: "জরুরি",
-    badgeColor: "bg-red-50 text-red border-red-200",
+    badgeColor: "bg-brand-50 text-brand border-brand-200",
     fare: "৳৮,০০০ থেকে",
     eta: "২০-৩০ মিনিট",
   },
@@ -48,7 +48,7 @@ const AMBULANCE_TYPES = [
     tag: "শ্বাসকষ্ট ও হৃদরোগ",
     desc: "উচ্চ ক্ষমতাসম্পন্ন সেন্ট্রাল অক্সিজেন সিলিন্ডার, ফ্লোমিটার ও মাস্ক সুবিধা।",
     badge: "জনপ্রিয়",
-    badgeColor: "bg-blue-50 text-blue border-blue-200",
+    badgeColor: "bg-brand-50 text-brand border-brand-200",
     fare: "৳২,৫০০ থেকে",
     eta: "১৫-২০ মিনিট",
   },
@@ -57,7 +57,7 @@ const AMBULANCE_TYPES = [
     tag: "হাসপাতাল স্থানান্তর",
     desc: "আরামদায়ক পেশেন্ট স্ট্রেচার, এসি সুবিধা ও রোগীর পরিবারের বসার সুব্যবস্থা।",
     badge: "সাশ্রয়ী",
-    badgeColor: "bg-emerald-50 text-emerald-800 border-emerald-200",
+    badgeColor: "bg-brand-50 text-brand border-brand-200",
     fare: "৳১,৫০০ থেকে",
     eta: "১৫-২৫ মিনিট",
   },
@@ -66,7 +66,7 @@ const AMBULANCE_TYPES = [
     tag: "শিশু ও নবজাতক",
     desc: "বিশেষায়িত ইনকিউবেটর, বেবি ওয়ার্মার ও শিশু সুরক্ষা টেকনিশিয়ান টিম সহ।",
     badge: "বিশেষায়িত",
-    badgeColor: "bg-amber-50 text-amber-800 border-amber-200",
+    badgeColor: "bg-brand-50 text-brand border-brand-200",
     fare: "৳৯,৫০০ থেকে",
     eta: "২০-৩০ মিনিট",
   },
@@ -109,7 +109,7 @@ export default function AmbulancePage() {
 
       <div className="wrap max-w-4xl space-y-8 py-8">
         {/* Authoritative Emergency Dispatch Callout */}
-        <div className="rounded-2xl bg-gradient-to-r from-red via-rose-600 to-red-dark p-6 text-white shadow-emergency flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5 border border-red-400/30">
+        <div className="rounded-2xl bg-brand p-6 text-white shadow-card flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5 border border-brand-dark/20">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
               <span className="h-2 w-2 rounded-full bg-white animate-ping" />
@@ -127,9 +127,9 @@ export default function AmbulancePage() {
 
           <a
             href={SITE.tel}
-            className="btn bg-white text-red font-black text-base sm:text-lg !py-3 !px-6 shadow-md hover:bg-slate-50 shrink-0 flex items-center justify-center gap-2 transition-all active:scale-95"
+            className="btn bg-white text-brand font-black text-base sm:text-lg !py-3 !px-6 shadow-md hover:bg-slate-50 shrink-0 flex items-center justify-center gap-2 transition-all active:scale-95"
           >
-            <Phone size={22} className="animate-pulse" />
+            <Phone size={22} />
             <span>{SITE.phone}</span>
           </a>
         </div>

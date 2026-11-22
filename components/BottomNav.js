@@ -6,8 +6,8 @@ import { SITE } from "@/lib/site";
 
 const items = [
   { href: "/", label: "হোম", Icon: Home },
-  { href: "/ambulance", label: "অ্যাম্বুলেন্স", Icon: Ambulance, highlight: true },
-  { href: "/doctors", label: "ডাক্তার", Icon: Stethoscope },
+  { href: "/ambulance", label: "অ্যাম্বুলেন্স", Icon: Ambulance },
+  { href: "/appointment", label: "ডাক্তার", Icon: Stethoscope },
   { href: "/track", label: "ট্র্যাকিং", Icon: Navigation },
 ];
 
@@ -16,10 +16,10 @@ export default function BottomNav() {
 
   return (
     <nav
-      className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-5 border-t border-slate-200/90 bg-white/95 backdrop-blur-md pb-[env(safe-area-inset-bottom)] md:hidden shadow-[0_-4px_16px_rgba(0,0,0,0.06)]"
-      aria-label="মোবাইল দ্রুত মেনু"
+      className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-5 border-t border-slate-200/90 bg-white/95 backdrop-blur-md pb-[env(safe-area-inset-bottom)] md:hidden shadow-[0_-4px_16px_rgba(15,82,186,0.06)]"
+      aria-label="Mobile Navigation"
     >
-      {items.map(({ href, label, Icon, highlight }) => {
+      {items.map(({ href, label, Icon }) => {
         const isActive = href === "/" ? pathname === "/" : pathname.startsWith(href);
         return (
           <Link
@@ -27,14 +27,12 @@ export default function BottomNav() {
             href={href}
             className={`flex min-h-[58px] flex-col items-center justify-center gap-0.5 text-[11px] font-bold transition-colors select-none ${
               isActive
-                ? "text-blue"
-                : highlight
-                ? "text-red"
-                : "text-slate-600 hover:text-navy"
+                ? "text-brand"
+                : "text-slate-600 hover:text-brand"
             }`}
           >
             <div className={`grid h-7 w-7 place-items-center rounded-lg ${
-              isActive ? "bg-blue-50 text-blue" : ""
+              isActive ? "bg-brand-50 text-brand" : ""
             }`}>
               <Icon size={20} strokeWidth={isActive ? 2.5 : 2} />
             </div>
@@ -46,9 +44,9 @@ export default function BottomNav() {
       {/* Direct Emergency Call Button */}
       <a
         href={SITE.tel}
-        className="flex min-h-[58px] flex-col items-center justify-center gap-0.5 bg-red text-white text-[11px] font-black transition-all active:brightness-90 select-none shadow-inner"
+        className="flex min-h-[58px] flex-col items-center justify-center gap-0.5 bg-brand text-white text-[11px] font-black transition-all active:brightness-90 select-none shadow-inner"
       >
-        <Phone size={20} className="animate-pulse" />
+        <Phone size={20} />
         <span>জরুরি কল</span>
       </a>
     </nav>
