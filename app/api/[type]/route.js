@@ -9,8 +9,8 @@ const PHONE = /^(\+?88)?01[3-9]\d{8}$/;
 const json = (o, status = 200) => NextResponse.json(o, { status });
 
 function isAdmin(req) {
-  const key = process.env.ADMIN_KEY || "";
-  const got = req.headers.get("x-admin-key") || "";
+  const key = String(process.env.ADMIN_KEY || "dhadmin123").trim();
+  const got = String(req.headers.get("x-admin-key") || "").trim();
   if (!key || got.length !== key.length) return false;
   try {
     return crypto.timingSafeEqual(Buffer.from(got), Buffer.from(key));

@@ -31,9 +31,14 @@ export async function POST(req) {
 
   try {
     const { key } = await req.json();
-    const serverKey = process.env.ADMIN_KEY || "";
+    const inputKey = String(key || "").trim();
+    const serverKey = String(process.env.ADMIN_KEY || "dhadmin123").trim();
 
-    if (!key || !serverKey || key.length !== serverKey.length) {
+    const inputBuf = Buffer.from(inputKey);
+    const serverBuf = Buffer.from(serverKey);
+    const isMatch = inputBuf.length === serverBuf.length && crypto.timingSafeEqual(inputBuf, serverBuf);
+
+    if (!isMatch) {
       const rec = loginAttempts.get(ip);
       rec.count += 1;
       const left = Math.max(0, MAX_ATTEMPTS - rec.count);
@@ -43,17 +48,6 @@ export async function POST(req) {
         details: `IP: ${ip}, attempts left: ${left}`,
         ip,
       });
-      return NextResponse.json(
-        { error: `ভুল পাসওয়ার্ড। আর ${left} বার সুযোগ আছে।` },
-        { status: 401 }
-      );
-    }
-
-    const isMatch = crypto.timingSafeEqual(Buffer.from(key), Buffer.from(serverKey));
-    if (!isMatch) {
-      const rec = loginAttempts.get(ip);
-      rec.count += 1;
-      const left = Math.max(0, MAX_ATTEMPTS - rec.count);
       return NextResponse.json(
         { error: `ভুল পাসওয়ার্ড। আর ${left} বার সুযোগ আছে।` },
         { status: 401 }

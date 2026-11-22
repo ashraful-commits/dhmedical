@@ -346,11 +346,10 @@ export default function Admin() {
                 setEditingItem(null);
                 setAssigningBooking(null);
               }}
-              className={`flex shrink-0 items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-bold transition-all ${
-                on
-                  ? "bg-navy text-white shadow-md"
-                  : "bg-white text-slate-700 hover:bg-blue-soft/50 border border-slate-200"
-              }`}
+              className={`flex shrink-0 items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-bold transition-all ${on
+                ? "bg-navy text-white shadow-md"
+                : "bg-white text-slate-700 hover:bg-blue-soft/50 border border-slate-200"
+                }`}
             >
               <I size={16} className={on ? "text-gold" : "text-blue"} />
               {t.label}
@@ -692,11 +691,10 @@ export default function Admin() {
                         {typeof item.active === "boolean" && (
                           <button
                             onClick={() => toggleActive(item)}
-                            className={`rounded-full px-2 py-0.5 text-[11px] font-bold ${
-                              item.active
-                                ? "bg-emerald-100 text-emerald-800 hover:bg-emerald-200"
-                                : "bg-slate-200 text-slate-600 hover:bg-slate-300"
-                            }`}
+                            className={`rounded-full px-2 py-0.5 text-[11px] font-bold ${item.active
+                              ? "bg-emerald-100 text-emerald-800 hover:bg-emerald-200"
+                              : "bg-slate-200 text-slate-600 hover:bg-slate-300"
+                              }`}
                           >
                             {item.active ? "✓ সক্রিয়" : "✗ নিষ্ক্রিয়"}
                           </button>

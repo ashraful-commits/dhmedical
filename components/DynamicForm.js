@@ -440,24 +440,24 @@ export default function DynamicForm({
                 {v.ambulanceType === "ICU"
                   ? "৳৮,০০০"
                   : v.ambulanceType === "NICU"
-                  ? "৳৯,৫০০"
-                  : v.ambulanceType === "Cardiac"
-                  ? "৳৮,৫০০"
-                  : v.ambulanceType === "Oxygen"
-                  ? "৳২,৫০০"
-                  : v.ambulanceType === "Long Distance"
-                  ? "৳৪,০০০ (প্রতি কিমি ৳৬৫)"
-                  : "৳১,৫০০"}
+                    ? "৳৯,৫০০"
+                    : v.ambulanceType === "Cardiac"
+                      ? "৳৮,৫০০"
+                      : v.ambulanceType === "Oxygen"
+                        ? "৳২,৫০০"
+                        : v.ambulanceType === "Long Distance"
+                          ? "৳৪,০০০ (প্রতি কিমি ৳৬৫)"
+                          : "৳১,৫০০"}
               </b>
             </span>
             <span className="text-slate-500 block mt-0.5">
               {v.ambulanceType === "ICU"
                 ? "ভেন্টিলেটর, মনিটর ও প্যারামেডিক সহ"
                 : v.ambulanceType === "NICU"
-                ? "ইনকিউবেটর ও বেবি সাপোর্ট ট্রলি সহ"
-                : v.ambulanceType === "Oxygen"
-                ? "সেন্ট্রাল অক্সিজেন ও মাস্ক সহ"
-                : "সাশ্রয়ী এসি অ্যাম্বুলেন্স"}
+                  ? "ইনকিউবেটর ও বেবি সাপোর্ট ট্রলি সহ"
+                  : v.ambulanceType === "Oxygen"
+                    ? "সেন্ট্রাল অক্সিজেন ও মাস্ক সহ"
+                    : "সাশ্রয়ী এসি অ্যাম্বুলেন্স"}
             </span>
           </div>
           <div className="sm:text-right">

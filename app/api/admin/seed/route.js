@@ -1,13 +1,13 @@
 import { NextResponse } from "next/server";
 import crypto from "crypto";
-import { db } from "@/lib/mongodb";
-import { models } from "@/lib/models";
+import { seedDatabase } from "@/lib/seedData";
+import { logActivity } from "@/lib/bookingHelper";
 
 export const dynamic = "force-dynamic";
 
 function isAdmin(req) {
-  const key = process.env.ADMIN_KEY || "";
-  const got = req.headers.get("x-admin-key") || "";
+  const key = (process.env.ADMIN_KEY || "dhadmin123").trim();
+  const got = (req.headers.get("x-admin-key") || "").trim();
   if (!key || got.length !== key.length) return false;
   try {
     return crypto.timingSafeEqual(Buffer.from(got), Buffer.from(key));
@@ -22,20 +22,20 @@ export async function POST(req) {
   }
 
   try {
-    await db();
-    // Dynamically run the seed
-    const { exec } = await import("child_process");
-    await new Promise((resolve, reject) => {
-      exec("node scripts/seed.cjs", (err, stdout, stderr) => {
-        if (err) return reject(new Error(stderr || err.message));
-        resolve(stdout);
-      });
+    const counts = await seedDatabase();
+    await logActivity({
+      adminUser: "Super Admin",
+      action: "Seeded Database",
+      details: `Seeded ${counts.doctors} doctors, ${counts.hospitals} hospitals, ${counts.ambulance} ambulance, ${counts.appointments} appointments`,
     });
 
-    return NextResponse.json({ ok: true, message: "Sample data seeded successfully!" });
+    return NextResponse.json({
+      ok: true,
+      message: `সফলভাবে ${counts.doctors} জন ডাক্তার ও ${counts.hospitals} টি হাসপাতাল সিড করা হয়েছে!`,
+      counts,
+    });
   } catch (err) {
     console.error("Seed API error:", err);
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    return NextResponse.json({ error: "সিড করতে সমস্যা হয়েছে: " + err.message }, { status: 500 });
   }
 }
-
