@@ -14,6 +14,7 @@ import {
   Car,
   Navigation,
   MessageCircle,
+  Sparkles,
 } from "lucide-react";
 import PageHead from "@/components/PageHead";
 import { SITE } from "@/lib/site";
@@ -25,6 +26,13 @@ const TRACKING_STEPS_AMB = [
   { key: "on_the_way", title: "চালক রওনা হয়েছেন", desc: "চালক আপনার পিকআপ ঠিকানার উদ্দেশ্যে রওনা দিয়েছেন।" },
   { key: "picked_up", title: "রোগী তোলা হয়েছে", desc: "রোগীকে গাড়িতে তোলা হয়েছে এবং হাসপাতালের পথে যাত্রা শুরু।" },
   { key: "completed", title: "যাত্রা সম্পন্ন", desc: "রোগীকে নিরাপদে গন্তব্য হাসপাতালে পৌঁছে দেওয়া হয়েছে।" },
+];
+
+const SAMPLE_IDS = [
+  { id: "DH-AMB-20261120-001", label: "ICU অ্যাম্বুলেন্স (নিশ্চিত)" },
+  { id: "DH-AMB-20261119-003", label: "সাধারণ অ্যাম্বুলেন্স (সম্পন্ন)" },
+  { id: "DH-APT-20261122-001", label: "ডাক্তার সিরিয়াল (গাইনি)" },
+  { id: "01712345678", label: "মোবাইল নম্বর দ্বারা ট্র্যাক" },
 ];
 
 export default function TrackPage({ searchParams }) {
@@ -72,7 +80,7 @@ export default function TrackPage({ searchParams }) {
 
       <div className="wrap max-w-3xl py-8 space-y-6">
         {/* Search Box */}
-        <div className="card border border-blue/30 shadow-md p-5">
+        <div className="card border border-slate-200/90 shadow-card p-6 bg-white rounded-2xl">
           <form
             onSubmit={(e) => {
               e.preventDefault();
@@ -85,7 +93,7 @@ export default function TrackPage({ searchParams }) {
               <input
                 type="text"
                 className="input !pl-10 w-full"
-                placeholder="বুকিং আইডি (যেমন: DH-AMB-10023) বা মোবাইল নম্বর লিখুন"
+                placeholder="বুকিং আইডি (যেমন: DH-AMB-20261120-001) বা মোবাইল নম্বর লিখুন"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 required
@@ -95,6 +103,30 @@ export default function TrackPage({ searchParams }) {
               {loading ? "খোঁজা হচ্ছে…" : "ট্র্যাক করুন"}
             </button>
           </form>
+
+          {/* Quick Clickable Sample IDs for Testing */}
+          <div className="mt-4 pt-3 border-t border-slate-100">
+            <span className="text-xs text-slate-500 font-semibold block mb-2">
+              💡 টেস্ট করার জন্য নিচের যেকোনো আইডিতে ক্লিক করুন:
+            </span>
+            <div className="flex flex-wrap gap-2 text-xs">
+              {SAMPLE_IDS.map((sample) => (
+                <button
+                  key={sample.id}
+                  type="button"
+                  onClick={() => {
+                    setQuery(sample.id);
+                    searchBooking(sample.id);
+                  }}
+                  className="rounded-lg border border-blue-200 bg-blue-50/70 hover:bg-blue-100 text-blue-900 px-2.5 py-1 font-bold transition-colors flex items-center gap-1.5"
+                >
+                  <Sparkles size={12} className="text-blue-600" />
+                  <span>{sample.id}</span>
+                  <span className="text-[10px] text-slate-500 font-normal">({sample.label})</span>
+                </button>
+              ))}
+            </div>
+          </div>
 
           {error && (
             <p role="alert" className="mt-3 flex items-center gap-1.5 text-xs font-bold text-red">
@@ -181,13 +213,13 @@ export default function TrackPage({ searchParams }) {
 
             {/* Driver & Ambulance Details (if assigned) */}
             {data.type === "ambulance" && (data.booking.driverName || data.booking.vehicleRegNo) && (
-              <div className="card border-2 border-green/30 bg-green-50/20 p-5">
-                <div className="flex items-center gap-3 border-b border-green/20 pb-3">
-                  <span className="grid h-12 w-12 place-items-center rounded-xl bg-green text-white">
+              <div className="card border-2 border-emerald-500/30 bg-emerald-50/20 p-5">
+                <div className="flex items-center gap-3 border-b border-emerald-200 pb-3">
+                  <span className="grid h-12 w-12 place-items-center rounded-xl bg-emerald-600 text-white">
                     <Car size={24} />
                   </span>
                   <div>
-                    <span className="text-xs font-bold text-green-700">বরাদ্দকৃত গাড়ি ও চালক</span>
+                    <span className="text-xs font-bold text-emerald-800">বরাদ্দকৃত গাড়ি ও চালক</span>
                     <h4 className="text-base font-black text-navy">{data.booking.driverName || "নির্ধারিত চালক"}</h4>
                   </div>
                 </div>
