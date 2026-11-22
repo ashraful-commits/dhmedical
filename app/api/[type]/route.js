@@ -3,6 +3,7 @@ import crypto from "crypto";
 import { db } from "@/lib/mongodb";
 import { models, REQUIRED, CATALOG } from "@/lib/models";
 import { generateBookingId, AMBULANCE_PRICING, logActivity } from "@/lib/bookingHelper";
+import { expandSearchQuery } from "@/lib/seoHelper";
 
 export const dynamic = "force-dynamic";
 const PHONE = /^(\+?88)?01[3-9]\d{8}$/;
@@ -41,20 +42,33 @@ export async function GET(req, { params }) {
 
     const q = sp.get("q")?.trim();
     if (q) {
-      const rx = new RegExp(esc(q.slice(0, 60)), "i");
-      filter.$or = [
-        { bookingId: rx },
-        { name: rx },
-        { patientName: rx },
-        { mobile: rx },
-        { hospital: rx },
-        { hospitalName: rx },
-        { address: rx },
-        { specialty: rx },
-        { destination: rx },
-        { regNo: rx },
-        { district: rx },
+      const terms = expandSearchQuery(q);
+      const orClauses = [];
+      const fields = [
+        "bookingId",
+        "name",
+        "patientName",
+        "mobile",
+        "hospital",
+        "hospitalName",
+        "address",
+        "specialty",
+        "destination",
+        "regNo",
+        "district",
+        "degree",
+        "services",
+        "totalBeds",
       ];
+      for (const term of terms) {
+        const rx = new RegExp(esc(term.slice(0, 60)), "i");
+        for (const f of fields) {
+          orClauses.push({ [f]: rx });
+        }
+      }
+      if (orClauses.length > 0) {
+        filter.$or = orClauses;
+      }
     }
 
     if (sp.get("district") && sp.get("district") !== "all") filter.district = String(sp.get("district"));

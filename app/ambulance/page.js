@@ -1,10 +1,37 @@
-import { Ambulance, Phone, MapPin, HeartPulse, ShieldAlert, Sparkles, Clock, CheckCircle2 } from "lucide-react";
+import { Ambulance, Phone, MapPin, HeartPulse, ShieldAlert, Sparkles, Clock, CheckCircle2, HelpCircle } from "lucide-react";
 import PageHead from "@/components/PageHead";
 import DynamicForm from "@/components/DynamicForm";
 import { ambulanceFields } from "@/lib/forms";
 import { SITE } from "@/lib/site";
+import { BASE_URL, getFaqSchema } from "@/lib/seoHelper";
 
-export const metadata = { title: "জরুরি অ্যাম্বুলেন্স বুকিং | D H Medical Support" };
+export const metadata = {
+  title: "জরুরি অ্যাম্বুলেন্স বুকিং ও ভাড়া | ICU, অক্সিজেন ও এসি অ্যাম্বুলেন্স সার্ভিস বাংলাদেশ",
+  description:
+    "ঢাকা ও সারা দেশে ২৪ ঘণ্টা জরুরি এম্বুলেন্স সেবা। সাধারণ এসি, অক্সিজেন, আইসিইউ (ICU), নবজাতক (NICU) ও দূরপাল্লার অ্যাম্বুলেন্স বুকিং। লাইভ জিপিএস লোকেশন ও সম্ভাব্য ভাড়া। হটলাইন: 01625-268462।",
+  keywords: [
+    "ambulance service bangladesh",
+    "ambulance service dhaka",
+    "জরুরি এম্বুলেন্স ঢাকা",
+    "icu ambulance bd",
+    "oxygen ambulance rent",
+    "ambolence",
+    "ambulence",
+    "এম্বুলেন্স ভাড়া",
+    "emergency ambulance 24/7",
+    "24 hour ambulance hotline",
+    "ambulance near me",
+  ],
+  alternates: {
+    canonical: `${BASE_URL}/ambulance`,
+  },
+  openGraph: {
+    title: "জরুরি অ্যাম্বুলেন্স বুকিং — D H Medical Support",
+    description: "১৫-২৫ মিনিটের মধ্যে দ্রুততম সময়ে অ্যাম্বুলেন্স পৌঁছাবে। হটলাইন: 01625-268462।",
+    url: `${BASE_URL}/ambulance`,
+    images: [{ url: "https://images.unsplash.com/photo-1587745416684-47953f16f02f?w=1200&h=630&fit=crop" }],
+  },
+};
 
 const AMBULANCE_TYPES = [
   {
@@ -33,9 +60,35 @@ const AMBULANCE_TYPES = [
   },
 ];
 
+const FAQS = [
+  {
+    q: "জরুরি অ্যাম্বুলেন্স কত দ্রুত রোগীর কাছে পৌঁছাবে?",
+    a: "অনলাইন বুকিং বা হটলাইনে (01625-268462) কল করার সাথে সাথে আমাদের নিকটতম অ্যাম্বুলেন্স রওনা হয় এবং ১৫ থেকে ২৫ মিনিটের মধ্যে পৌঁছে যায়।",
+  },
+  {
+    q: "অ্যাম্বুলেন্সের প্রাথমিক ভাড়া কত?",
+    a: "ঢাকার ভেতরে সাধারণ এসি অ্যাম্বুলেন্স ১৫০০ টাকা, অক্সিজেন অ্যাম্বুলেন্স ২৫০০ টাকা এবং আইসিইউ (ICU) লাইফ সাপোর্ট অ্যাম্বুলেন্স ৮০০০ টাকা থেকে শুরু। দূরপাল্লার ক্ষেত্রে প্রতি কিমি ৬৫ টাকা হারে নির্ধারিত হয়।",
+  },
+  {
+    q: "আইসিইউ অ্যাম্বুলেন্সে কি ডাক্তার বা প্যারামেডিক থাকে?",
+    a: "হ্যাঁ, আমাদের প্রতিটি ICU ও কার্ডিয়াক অ্যাম্বুলেন্সে ভেন্টিলেটর, সাকশন, মনিটর সহ প্রশিক্ষিত জরুরি প্যারামেডিক উপস্থিত থাকে।",
+  },
+  {
+    q: "ঢাকার বাইরে জেলা পর্যায়ে কি দূরপাল্লার অ্যাম্বুলেন্স পাওয়া যায়?",
+    a: "হ্যাঁ, ঢাকা থেকে চট্টগ্রাম, সিলেট, রাজশাহী, খুলনা, কুমিল্লা, বরিশাল সহ বাংলাদেশের ৬৪ জেলাতেই দূরপাল্লার রোগী পরিবহনে আমাদের অ্যাম্বুলেন্স ২৪ ঘণ্টা নিয়োজিত।",
+  },
+];
+
 export default function AmbulancePage() {
+  const faqSchema = getFaqSchema(FAQS);
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+
       <PageHead
         Icon={Ambulance}
         title="জরুরি অ্যাম্বুলেন্স বুকিং"
@@ -104,6 +157,24 @@ export default function AmbulancePage() {
             submit="অ্যাম্বুলেন্স বুকিং অনুরোধ পাঠান"
             success="আপনার অ্যাম্বুলেন্স বুকিং অনুরোধ পেয়েছি! আমাদের জরুরি সমন্বয় টিম কয়েক মিনিটের মধ্যে আপনার নম্বরে কল করে ড্রাইভার পাঠিয়ে দেবে।"
           />
+        </section>
+
+        {/* SEO FAQs Accordion Section */}
+        <section className="card p-6 border border-slate-200 space-y-4">
+          <h2 className="text-xl font-black text-navy flex items-center gap-2">
+            <HelpCircle size={22} className="text-blue" /> সাধারণ জিজ্ঞাসাবলী (FAQ) — অ্যাম্বুলেন্স সার্ভিস
+          </h2>
+          <div className="space-y-3">
+            {FAQS.map((faq, i) => (
+              <details key={i} className="group rounded-xl border border-slate-200 bg-slate-50/50 p-4 transition-all open:bg-white open:shadow-sm">
+                <summary className="font-bold text-navy cursor-pointer list-none flex items-center justify-between">
+                  <span>{faq.q}</span>
+                  <span className="text-blue font-black transition-transform group-open:rotate-180">▼</span>
+                </summary>
+                <p className="mt-2 text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-2">{faq.a}</p>
+              </details>
+            ))}
+          </div>
         </section>
       </div>
     </>

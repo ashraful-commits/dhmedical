@@ -2,7 +2,23 @@ import { Users, ShieldCheck, AlertCircle, CheckCircle2, Handshake, Clock, Buildi
 import PageHead from "@/components/PageHead";
 import DynamicForm from "@/components/DynamicForm";
 import { membershipFields } from "@/lib/forms";
-export const metadata = { title: "DH Family Care – প্রবাসীর পরিবারের সুরক্ষা | D H Medical Support" };
+import { BASE_URL } from "@/lib/seoHelper";
+
+export const metadata = {
+  title: "DH Family Care – প্রবাসীর পরিবারের চিকিৎসা ও স্বাস্থ্য সুরক্ষা | D H Medical Support",
+  description:
+    "প্রবাসে আপনি, দেশে আপনার পরিবারের পাশে আমরা। প্রবাসীদের মা-বাবা ও পরিবারের সার্বক্ষণিক চিকিৎসা সমন্বয়, জরুরি অ্যাম্বুলেন্স, ওষুধ সংগ্রহ ও বীমা সহায়তা।",
+  keywords: [
+    "প্রবাসী পরিবার সেবা",
+    "probashi medical support",
+    "probashi family health bangladesh",
+    "dh family care",
+    "প্রবাসী ভাইদের জন্য চিকিৎসা সেবা",
+  ],
+  alternates: {
+    canonical: `${BASE_URL}/family-care`,
+  },
+};
 
 const PROBLEMS = ["দেশে থাকা পরিবারের কেউ অসুস্থ হলে কী করবেন?", "নিজে অসুস্থ হয়ে দেশে ফিরলেও গ্রহণ করার মতো কেউ নেই!", "হাসপাতালে নিতে চায় না পরিবার, কী করবেন?", "জরুরি সময়ে অ্যাম্বুলেন্স, হাসপাতাল ও চিকিৎসা সমন্বয় নেই!"];
 const SOLUTION = ["জরুরি যোগাযোগ ও অ্যাম্বুলেন্স বুকিংয়ে সহায়তা", "হাসপাতালের সঙ্গে সমন্বয় ও কেস ফলোআপ", "পরিবারের মনোনীত সদস্যদের সঙ্গে যোগাযোগ", "অনুমোদিত বীমা পলিসি সম্পর্কে তথ্য ও আবেদন সহায়তা", "প্রবাস ফেরত অসহায় ব্যক্তির জন্য সরকারি সহায়তার সঙ্গে যোগাযোগ"];

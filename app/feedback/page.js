@@ -4,8 +4,16 @@ import DynamicForm from "@/components/DynamicForm";
 import { feedbackFields } from "@/lib/forms";
 import { getList } from "@/lib/data";
 
+import { BASE_URL } from "@/lib/seoHelper";
+
 export const dynamic = "force-dynamic";
-export const metadata = { title: "গ্রাহক মতামত ও প্রতিক্রিয়া | D H Medical Support" };
+export const metadata = {
+  title: "গ্রাহক মতামত ও পর্যালোচনা | D H Medical Support",
+  description: "রোগী ও প্রবাসীর পরিবারের বাস্তব মতামত, রেটিং ও অভিজ্ঞতা।",
+  alternates: {
+    canonical: `${BASE_URL}/feedback`,
+  },
+};
 
 export default async function Feedback() {
   const reviews = await getList("feedback", 20);

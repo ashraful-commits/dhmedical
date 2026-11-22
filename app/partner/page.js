@@ -3,7 +3,16 @@ import PageHead from "@/components/PageHead";
 import DynamicForm from "@/components/DynamicForm";
 import { partnerFields } from "@/lib/forms";
 
-export const metadata = { title: "অ্যাম্বুলেন্স ড্রাইভার ও মালিক পার্টনার নিবন্ধন | D H Medical Support" };
+import { BASE_URL } from "@/lib/seoHelper";
+
+export const metadata = {
+  title: "অ্যাম্বুলেন্স ড্রাইভার ও মালিক পার্টনার নিবন্ধন | D H Medical Support",
+  description:
+    "আপনার অ্যাম্বুলেন্স গাড়ি যুক্ত করে নিয়মিত ট্রিপ ও আয় নিশ্চিত করুন। ক্যামেরা দিয়ে NID ও লাইসেন্স আপলোড করে সহজ পার্টনার নিবন্ধন।",
+  alternates: {
+    canonical: `${BASE_URL}/partner`,
+  },
+};
 
 const STEPS = [
   {

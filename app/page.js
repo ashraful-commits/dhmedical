@@ -68,18 +68,28 @@ export default async function Home() {
           <p className="mt-3 max-w-xl text-lg text-blue-soft">
             দেশে পরিবারের কেউ অসুস্থ হলে ডাক্তার, হাসপাতাল ও অ্যাম্বুলেন্স — সব সমন্বয় আমরা করি। আপনি নিশ্চিন্তে থাকুন।
           </p>
-          <form action="/doctors" className="mt-6 flex max-w-xl gap-2">
-            <div className="relative flex-1">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-blue" size={20} />
-              <input
-                name="q"
-                type="search"
-                placeholder="ডাক্তার / হাসপাতাল খুঁজুন"
-                aria-label="খুঁজুন"
-                className="input !rounded-full !pl-12"
-              />
+          <form action="/doctors" className="mt-6 max-w-xl">
+            <div className="flex gap-2">
+              <div className="relative flex-1">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-blue" size={20} />
+                <input
+                  name="q"
+                  type="search"
+                  placeholder="ডাক্তার, এম্বুলেন্স বা মেডিসিন খুঁজুন (যেমন: medicin, ambolence, icu)"
+                  aria-label="খুঁজুন"
+                  className="input !rounded-full !pl-12 !text-navy placeholder:text-slate-400"
+                />
+              </div>
+              <button className="btn btn-gold !px-6 font-bold shadow-md">খুঁজুন</button>
             </div>
-            <button className="btn btn-gold !px-5">খুঁজুন</button>
+            <div className="mt-2.5 flex flex-wrap items-center gap-1.5 text-xs text-blue-soft">
+              <span className="font-semibold text-white/80">জনপ্রিয় সার্চ:</span>
+              <Link href="/doctors?q=medicin" className="rounded-full bg-white/15 px-2.5 py-0.5 hover:bg-white/30 text-white transition-colors">#medicin</Link>
+              <Link href="/doctors?q=ambolence" className="rounded-full bg-white/15 px-2.5 py-0.5 hover:bg-white/30 text-white transition-colors">#ambolence</Link>
+              <Link href="/doctors?q=dockter" className="rounded-full bg-white/15 px-2.5 py-0.5 hover:bg-white/30 text-white transition-colors">#dockter</Link>
+              <Link href="/doctors?q=icu" className="rounded-full bg-white/15 px-2.5 py-0.5 hover:bg-white/30 text-white transition-colors">#ICU</Link>
+              <Link href="/doctors?q=oxygen" className="rounded-full bg-white/15 px-2.5 py-0.5 hover:bg-white/30 text-white transition-colors">#oxygen</Link>
+            </div>
           </form>
           <div className="mt-5 grid max-w-xl grid-cols-1 gap-3 sm:grid-cols-3">
             <Link href="/ambulance" className="btn btn-red">

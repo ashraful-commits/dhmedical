@@ -12,8 +12,108 @@ import {
   ChevronDown,
   ChevronUp,
   ExternalLink,
+  Sparkles,
+  Ambulance,
+  CalendarCheck,
+  Stethoscope,
+  ArrowRight,
 } from "lucide-react";
 import { SITE, SPECIALTIES, spBn } from "@/lib/site";
+
+const POPULAR_SEARCH_TAGS = [
+  { label: "মেডিসিন", val: "medicin" },
+  { label: "অ্যাম্বুলেন্স", val: "ambolence" },
+  { label: "ডাক্তার সিরিয়াল", val: "dockter" },
+  { label: "ICU কেয়ার", val: "icu" },
+  { label: "অক্সিজেন", val: "oxygen" },
+  { label: "হৃদরোগ", val: "cardio" },
+  { label: "হাসপাতাল বেড", val: "hospatal" },
+];
+
+function getTopServiceMatch(query) {
+  if (!query) return null;
+  const s = String(query).trim().toLowerCase();
+
+  if (/ambolence|ambulence|ambulance|এম্বুলেন্স|অ্যাম্বুলেন্স|gari|গাড়ি|জরুরি গাড়ি/i.test(s)) {
+    return {
+      type: "ambulance",
+      title: "🚨 জরুরি অ্যাম্বুলেন্স সার্ভিস (AC, অক্সিজেন, ICU, NICU)",
+      desc: "সারা দেশে ১৫-২৫ মিনিটের মধ্যে দ্রুততম সময়ে অ্যাম্বুলেন্স প্রেরণ। লাইভ জিপিএস ট্র্যাকিং ও সাশ্রয়ী ভাড়া।",
+      ctaText: "অনলাইনে অ্যাম্বুলেন্স বুক করুন",
+      ctaLink: "/ambulance",
+      hotline: true,
+      color: "from-red-600 via-rose-600 to-red-700",
+      badge: "জরুরি সেবা শীর্ষ ম্যাচ",
+    };
+  }
+
+  if (/medicin|medicine|ঔষধ|মেডিসিন|অভ্যন্তরীণ রোগ|প্রেসক্রিপশন/i.test(s)) {
+    return {
+      type: "medicine",
+      title: "💊 মেডিসিন ও স্পেশালিস্ট কনসালটেশন সার্ভিস",
+      desc: "একুশে পদকপ্রাপ্ত অধ্যাপক ও সিনিয়র মেডিসিন কনসালট্যান্টদের চেম্বার সিরিয়াল, প্রেসক্রিপশন ও ফলোআপ সহায়তা।",
+      ctaText: "মেডিসিন ডাক্তার সিরিয়াল নিন",
+      ctaLink: "/appointment?sp=Medicine",
+      hotline: false,
+      color: "from-blue-700 via-indigo-600 to-navy",
+      badge: "মেডিসিন সেবা শীর্ষ ম্যাচ",
+    };
+  }
+
+  if (/dockter|dakdar|doctor|ডাক্তার|daktar|সিরিয়াল|চেম্বার/i.test(s)) {
+    return {
+      type: "doctor",
+      title: "🩺 বিশেষজ্ঞ ডাক্তার অ্যাপয়েন্টমেন্ট ও সিরিয়াল বুকিং",
+      desc: "নিউরো, হৃদরোগ, মেডিসিন, সার্জারি, শিশু ও গাইনি বিভাগের শীর্ষ অধ্যাপকদের নিশ্চিত সিরিয়াল ও রুম তথ্য।",
+      ctaText: "সরাসরি সিরিয়াল বুক করুন",
+      ctaLink: "/appointment",
+      hotline: false,
+      color: "from-emerald-700 via-teal-700 to-navy",
+      badge: "ডাক্তার সেবা শীর্ষ ম্যাচ",
+    };
+  }
+
+  if (/hospatal|aspatal|hospital|হাসপাতাল|bed|বেড|কেবিন|ভর্তি/i.test(s)) {
+    return {
+      type: "hospital",
+      title: "🏥 হাসপাতাল ভর্তি, কেবিন ও আইসিইউ (ICU) সমন্বয়",
+      desc: "এভারকেয়ার, স্কয়ার, ল্যাবএইড, ইউনাইটেড সহ শীর্ষ হাসপাতালের খালি বেড অনুসন্ধান ও কয়তলায় কোন রুম আছে গাইড।",
+      ctaText: "হাসপাতাল তালিকা ও বেড দেখুন",
+      ctaLink: "/hospitals",
+      hotline: true,
+      color: "from-navy via-slate-800 to-blue-900",
+      badge: "হাসপাতাল শীর্ষ ম্যাচ",
+    };
+  }
+
+  if (/icu|আইসিইউ|লাইফ সাপোর্ট|ভেন্টিলেটর/i.test(s)) {
+    return {
+      type: "icu",
+      title: "⚡ জরুরি ICU লাইফ সাপোর্ট অ্যাম্বুলেন্স ও বেড সমন্বয়",
+      desc: "ভেন্টিলেটর ও সার্বক্ষণিক প্যারামেডিক সহ ক্রিটিক্যাল কেয়ার অ্যাম্বুলেন্স এবং হাসপাতালে সরাসরি ICU কেবিন বুকিং।",
+      ctaText: "ICU অ্যাম্বুলেন্স বুক করুন",
+      ctaLink: "/ambulance",
+      hotline: true,
+      color: "from-red-700 via-rose-700 to-navy",
+      badge: "ICU লাইফ সাপোর্ট ম্যাচ",
+    };
+  }
+
+  if (/oxygen|অক্সিজেন|oxigen|oxyzen|শ্বাসকষ্ট/i.test(s)) {
+    return {
+      type: "oxygen",
+      title: "💨 সেন্ট্রাল অক্সিজেন অ্যাম্বুলেন্স ও শ্বাসকষ্ট জরুরি কেয়ার",
+      desc: "হাই-ফ্লো সেন্ট্রাল অক্সিজেন সিলিন্ডার, ফ্লোমিটার ও মাস্ক সহ দ্রুততম অ্যাম্বুলেন্স সেবা।",
+      ctaText: "অক্সিজেন অ্যাম্বুলেন্স নিন",
+      ctaLink: "/ambulance",
+      hotline: true,
+      color: "from-cyan-700 via-blue-700 to-navy",
+      badge: "অক্সিজেন সেবা ম্যাচ",
+    };
+  }
+
+  return null;
+}
 
 export default function Catalog({ kind, q0 = "", sp0 = "" }) {
   const [q, setQ] = useState(q0);
@@ -35,6 +135,7 @@ export default function Catalog({ kind, q0 = "", sp0 = "" }) {
   }, [q, sp, kind]);
 
   const doc = kind === "doctors";
+  const topMatch = getTopServiceMatch(q);
 
   function toggleFloor(id) {
     setOpenFloorId((prev) => (prev === id ? null : id));
@@ -51,11 +152,26 @@ export default function Catalog({ kind, q0 = "", sp0 = "" }) {
           onChange={(e) => setQ(e.target.value)}
           placeholder={
             doc
-              ? "ডাক্তার বা হাসপাতালের নাম লিখুন"
-              : "হাসপাতালের নাম, এলাকা বা সেবার নাম লিখুন"
+              ? "ডাক্তার, মেডিসিন বা হাসপাতালের নাম লিখুন (যেমন: medicin, ambolence, icu)"
+              : "হাসপাতালের নাম, এলাকা বা সেবার নাম লিখুন (যেমন: evercare, bed, icu)"
           }
           aria-label="খুঁজুন"
         />
+      </div>
+
+      {/* Quick Search Chips */}
+      <div className="-mx-4 mt-2.5 flex items-center gap-1.5 overflow-x-auto px-4 pb-1 text-xs">
+        <span className="text-slate-500 font-semibold shrink-0">জনপ্রিয় সার্চ:</span>
+        {POPULAR_SEARCH_TAGS.map((t) => (
+          <button
+            key={t.val}
+            type="button"
+            onClick={() => setQ(t.val)}
+            className="rounded-full bg-slate-100 hover:bg-blue-soft text-navy px-2.5 py-1 font-medium transition-colors shrink-0"
+          >
+            #{t.label}
+          </button>
+        ))}
       </div>
 
       {doc && (
@@ -69,6 +185,41 @@ export default function Catalog({ kind, q0 = "", sp0 = "" }) {
               {s.bn}
             </button>
           ))}
+        </div>
+      )}
+
+      {/* TOP SERVICE MATCH BANNER (Displays first when matching any healthcare service) */}
+      {topMatch && (
+        <div className={`mt-5 rounded-2xl bg-gradient-to-r ${topMatch.color} p-5 text-white shadow-lg animate-fadeIn`}>
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div>
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-white/20 px-3 py-1 text-xs font-bold text-gold">
+                <Sparkles size={14} /> {topMatch.badge}
+              </span>
+              <h3 className="text-xl sm:text-2xl font-black !text-white mt-1.5">
+                {topMatch.title}
+              </h3>
+              <p className="text-xs sm:text-sm text-white/90 mt-1 max-w-2xl leading-relaxed">
+                {topMatch.desc}
+              </p>
+            </div>
+            <div className="flex flex-wrap items-center gap-2 shrink-0">
+              <Link
+                href={topMatch.ctaLink}
+                className="btn bg-white text-navy font-black !min-h-[40px] !px-4 text-xs shadow-md hover:bg-slate-50 flex items-center gap-1.5"
+              >
+                {topMatch.ctaText} <ArrowRight size={14} />
+              </Link>
+              {topMatch.hotline && (
+                <a
+                  href={SITE.tel}
+                  className="btn btn-gold font-black !min-h-[40px] !px-4 text-xs shadow-md flex items-center gap-1.5"
+                >
+                  <Phone size={14} /> {SITE.phone}
+                </a>
+              )}
+            </div>
+          </div>
         </div>
       )}
 
@@ -99,7 +250,7 @@ export default function Catalog({ kind, q0 = "", sp0 = "" }) {
                   {d.photo || d.logo ? (
                     <img
                       src={d.photo || d.logo}
-                      alt=""
+                      alt={d.name}
                       className="h-16 w-16 rounded-xl object-cover border border-slate-200 shrink-0"
                     />
                   ) : (
@@ -254,14 +405,22 @@ export default function Catalog({ kind, q0 = "", sp0 = "" }) {
 
       {items?.length === 0 && (
         <div className="card mt-6 text-center py-10">
-          <p className="text-lg font-bold text-navy">কিছু পাওয়া যায়নি।</p>
+          <p className="text-lg font-bold text-navy">সরাসরি কোনো রেকর্ড মেলেনি।</p>
           <p className="mt-1 text-sm text-slate-600">
-            আপনার প্রয়োজন বলুন, আমরা সঠিক {doc ? "ডাক্তার" : "হাসপাতাল"} খুঁজে দেব।
+            আমাদের কাছে আপনার কাঙ্ক্ষিত ডাক্তার বা সেবা তাৎক্ষণিক রয়েছে। সরাসরি কল করুন:
           </p>
-          <a href={SITE.tel} className="btn btn-red mt-4 mx-auto inline-flex items-center gap-2">
-            <Phone size={18} />
-            {SITE.phone}
-          </a>
+          <div className="mt-4 flex flex-wrap justify-center gap-3">
+            <a href={SITE.tel} className="btn btn-red inline-flex items-center gap-2">
+              <Phone size={18} />
+              জরুরি হটলাইন {SITE.phone}
+            </a>
+            <Link href="/ambulance" className="btn btn-navy">
+              অ্যাম্বুলেন্স বুকিং
+            </Link>
+            <Link href="/appointment" className="btn bg-white text-navy border border-slate-300">
+              ডাক্তার অ্যাপয়েন্টমেন্ট
+            </Link>
+          </div>
         </div>
       )}
     </div>
