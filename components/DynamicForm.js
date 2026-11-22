@@ -241,7 +241,7 @@ export default function DynamicForm({
       });
       const d = await r.json();
       if (!r.ok) throw new Error(d.error || "ত্রুটি হয়েছে");
-      setSt({ s: "ok" });
+      setSt({ s: "ok", bookingId: d.bookingId || null });
       setV(initial);
       onDone?.();
     } catch (x) {
@@ -255,8 +255,25 @@ export default function DynamicForm({
         <CheckCircle2 size={48} className="mx-auto text-green" />
         <p className="mt-3 font-head text-2xl font-bold text-navy">ধন্যবাদ!</p>
         <p className="mt-1 text-base text-slate-600 max-w-md mx-auto">{success}</p>
-        <button className="btn btn-navy mt-6 !px-6" onClick={() => setSt({ s: "idle" })}>
-          আরেকটি পাঠান
+
+        {st.bookingId && (
+          <div className="my-5 p-4 rounded-2xl bg-gradient-to-br from-navy to-blue-dark text-white shadow-lg max-w-sm mx-auto">
+            <span className="text-xs text-gold font-bold block">আপনার ট্র্যাকিং বুকিং আইডি</span>
+            <span className="text-2xl font-black text-white tracking-widest block mt-1">
+              {st.bookingId}
+            </span>
+            <p className="text-[11px] text-blue-soft mt-1">আইডিটি লিখে রাখুন অথবা নিচের বাটনে চাপ দিয়ে লাইভ স্ট্যাটাস দেখুন</p>
+            <a
+              href={`/track?id=${st.bookingId}`}
+              className="btn btn-gold w-full mt-3 font-black !min-h-[38px] !text-xs"
+            >
+              লাইভ অগ্রগতি ট্র্যাক করুন ➔
+            </a>
+          </div>
+        )}
+
+        <button className="btn btn-line mt-3 !px-6" onClick={() => setSt({ s: "idle" })}>
+          আরেকটি অনুরোধ পাঠান
         </button>
       </div>
     );
@@ -413,6 +430,44 @@ export default function DynamicForm({
           </div>
         );
       })}
+
+      {type === "ambulance" && (
+        <div className="sm:col-span-2 rounded-2xl bg-gradient-to-r from-blue-soft/70 via-blue-soft/40 to-slate-50 p-4 border border-blue/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
+          <div>
+            <span className="font-bold text-navy block text-sm">
+              আনুমানিক প্রারম্ভিক ভাড়া:{" "}
+              <b className="text-red font-black text-base">
+                {v.ambulanceType === "ICU"
+                  ? "৳৮,০০০"
+                  : v.ambulanceType === "NICU"
+                  ? "৳৯,৫০০"
+                  : v.ambulanceType === "Cardiac"
+                  ? "৳৮,৫০০"
+                  : v.ambulanceType === "Oxygen"
+                  ? "৳২,৫০০"
+                  : v.ambulanceType === "Long Distance"
+                  ? "৳৪,০০০ (প্রতি কিমি ৳৬৫)"
+                  : "৳১,৫০০"}
+              </b>
+            </span>
+            <span className="text-slate-500 block mt-0.5">
+              {v.ambulanceType === "ICU"
+                ? "ভেন্টিলেটর, মনিটর ও প্যারামেডিক সহ"
+                : v.ambulanceType === "NICU"
+                ? "ইনকিউবেটর ও বেবি সাপোর্ট ট্রলি সহ"
+                : v.ambulanceType === "Oxygen"
+                ? "সেন্ট্রাল অক্সিজেন ও মাস্ক সহ"
+                : "সাশ্রয়ী এসি অ্যাম্বুলেন্স"}
+            </span>
+          </div>
+          <div className="sm:text-right">
+            <span className="text-slate-500 block">গাড়ি পৌঁছানোর সম্ভাব্য সময়:</span>
+            <span className="font-bold text-emerald-700 bg-emerald-100 px-2.5 py-0.5 rounded-full inline-block mt-0.5">
+              ১৫-২৫ মিনিট
+            </span>
+          </div>
+        </div>
+      )}
 
       {st.s === "err" && (
         <p role="alert" className="rounded-lg bg-red/10 p-3 text-sm font-semibold text-red-dark sm:col-span-2">
