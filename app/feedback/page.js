@@ -78,11 +78,11 @@ export default async function Feedback() {
         )}
 
         {/* Submit New Feedback Section */}
-        <section className="rounded-2xl border border-blue/20 bg-blue-soft/20 p-6 sm:p-8">
+        <section className="rounded-2xl border border-slate-200/90 bg-white p-6 sm:p-8 shadow-card">
           <div className="mb-6 text-center">
             <span className="pill">আপনার মতামত জানান</span>
-            <h2 className="mt-2 text-2xl font-black text-navy">আপনার অভিজ্ঞতা কেমন ছিল?</h2>
-            <p className="text-sm text-slate-600 mt-1">
+            <h2 className="mt-2 text-2xl font-black text-navy-dark">আপনার অভিজ্ঞতা কেমন ছিল?</h2>
+            <p className="text-xs sm:text-sm text-slate-600 mt-1">
               আপনার একটি মূল্যবান পরামর্শ আমাদের সেবার মান আরও উন্নত করতে সহায়তা করবে।
             </p>
           </div>

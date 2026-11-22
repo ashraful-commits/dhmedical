@@ -3,28 +3,103 @@
 @tailwind utilities;
 
 @layer base {
-  html { scroll-behavior: smooth; -webkit-tap-highlight-color: transparent; }
-  body { @apply bg-sky text-slate-800 font-body antialiased; }
-  h1, h2, h3 { @apply font-head text-navy; }
-  :focus-visible { outline: 3px solid #1E63D6; outline-offset: 2px; }
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    @apply bg-surface text-slate-800 font-body antialiased;
+    background-color: #F8FAFC;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-head text-navy-dark tracking-tight;
+  }
+  :focus-visible {
+    outline: 2px solid #1D5CD8;
+    outline-offset: 2px;
+  }
 }
 
 @layer components {
-  .wrap { @apply mx-auto w-full max-w-6xl px-4 sm:px-6; }
-  .btn { @apply inline-flex min-h-[48px] items-center justify-center gap-2 rounded-full px-6 py-3 text-base font-semibold transition active:scale-[.98]; }
-  .btn-red { @apply bg-red text-white hover:bg-red-dark; }
-  .btn-navy { @apply bg-navy text-white hover:bg-navy-dark; }
-  .btn-green { @apply bg-green text-white hover:bg-green-dark; }
-  .btn-gold { @apply bg-gold text-navy-dark hover:brightness-95; }
-  .btn-line { @apply border-2 border-navy bg-white text-navy hover:bg-blue-soft; }
-  .card { @apply rounded-2xl border border-blue/20 bg-white p-5 shadow-sm; }
-  .pill { @apply inline-block rounded-full bg-navy px-5 py-2 font-head text-lg font-bold text-white sm:text-xl; }
-  .input { @apply min-h-[48px] w-full rounded-xl border border-blue/30 bg-white px-4 py-3 text-base text-slate-900 placeholder:text-slate-400 focus:border-blue; }
-  .chip { @apply min-h-[44px] rounded-full border-2 border-blue/30 bg-white px-4 text-sm font-semibold text-navy; }
-  .chip-on { @apply border-navy bg-navy text-white; }
+  .wrap {
+    @apply mx-auto w-full max-w-6xl px-4 sm:px-6;
+  }
+  
+  .btn {
+    @apply inline-flex min-h-[46px] items-center justify-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold transition-all duration-200 active:scale-[0.98] select-none;
+  }
+  
+  .btn-red {
+    @apply bg-red text-white hover:bg-red-dark shadow-sm hover:shadow-emergency;
+  }
+  
+  .btn-navy {
+    @apply bg-navy text-white hover:bg-navy-dark shadow-sm hover:shadow-card;
+  }
+  
+  .btn-green {
+    @apply bg-emerald text-white hover:bg-emerald-dark shadow-sm;
+  }
+  
+  .btn-gold {
+    @apply bg-gold text-navy-dark hover:brightness-95 shadow-sm font-black;
+  }
+  
+  .btn-line {
+    @apply border border-slate-300 bg-white text-navy hover:bg-slate-50 hover:border-slate-400 shadow-subtle;
+  }
+  
+  .card {
+    @apply rounded-2xl border border-slate-200/80 bg-white p-5 shadow-card transition-all duration-200;
+  }
+  
+  .card-hover {
+    @apply hover:border-blue/40 hover:shadow-hover hover:-translate-y-0.5;
+  }
+
+  .pill {
+    @apply inline-flex items-center gap-1.5 rounded-full bg-blue-50 px-3 py-1 text-xs font-bold text-blue uppercase tracking-wider border border-blue-100;
+  }
+  
+  .input {
+    @apply min-h-[46px] w-full rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 transition-colors focus:border-blue focus:ring-4 focus:ring-blue/10 focus:outline-none;
+  }
+  
+  .chip {
+    @apply min-h-[38px] rounded-xl border border-slate-200 bg-white px-3.5 py-1.5 text-xs font-bold text-slate-700 transition-all hover:bg-slate-50 hover:border-slate-300;
+  }
+  
+  .chip-on {
+    @apply border-navy bg-navy text-white shadow-sm hover:bg-navy-dark hover:border-navy-dark;
+  }
 }
 
-/* the one deliberate motion: the heartbeat line draws itself once on load */
-.ecg path { stroke-dasharray: 1400; stroke-dashoffset: 1400; animation: ecg 2.2s ease-out .2s forwards; }
-@keyframes ecg { to { stroke-dashoffset: 0; } }
-@media (prefers-reduced-motion: reduce) { .ecg path { animation: none; stroke-dashoffset: 0; } html { scroll-behavior: auto; } }
+/* Authentic subtle ECG animation */
+.ecg path {
+  stroke-dasharray: 1400;
+  stroke-dashoffset: 1400;
+  animation: ecg 2.5s ease-out 0.2s forwards;
+}
+@keyframes ecg {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fadeIn {
+  animation: fadeIn 0.25s ease-out forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ecg path {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+}

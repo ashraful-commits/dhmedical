@@ -15,9 +15,9 @@ const PHONE = "(\\+?88)?01[3-9][0-9]{8}";
 
 function Label({ f }) {
   return (
-    <span className="mb-1.5 block text-sm font-semibold text-navy">
+    <span className="mb-1.5 block text-xs font-bold uppercase tracking-wider text-slate-700">
       {f.label}
-      {f.required && <b className="text-red"> *</b>}
+      {f.required && <span className="text-red font-black"> *</span>}
     </span>
   );
 }
@@ -279,7 +279,7 @@ export default function DynamicForm({
     );
 
   return (
-    <form onSubmit={onSubmit} className="card grid gap-4 sm:grid-cols-2">
+    <form onSubmit={onSubmit} className="card border border-slate-200/90 shadow-card bg-white p-6 sm:p-8 rounded-2xl grid gap-5 sm:grid-cols-2">
       <input
         type="text"
         name="website"
@@ -432,9 +432,9 @@ export default function DynamicForm({
       })}
 
       {type === "ambulance" && (
-        <div className="sm:col-span-2 rounded-2xl bg-gradient-to-r from-blue-soft/70 via-blue-soft/40 to-slate-50 p-4 border border-blue/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
+        <div className="sm:col-span-2 rounded-2xl bg-gradient-to-r from-blue-50 via-slate-50 to-white p-4 sm:p-5 border border-blue-100 shadow-subtle flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
           <div>
-            <span className="font-bold text-navy block text-sm">
+            <span className="font-bold text-navy-dark block text-sm">
               আনুমানিক প্রারম্ভিক ভাড়া:{" "}
               <b className="text-red font-black text-base">
                 {v.ambulanceType === "ICU"
@@ -450,7 +450,7 @@ export default function DynamicForm({
                           : "৳১,৫০০"}
               </b>
             </span>
-            <span className="text-slate-500 block mt-0.5">
+            <span className="text-slate-500 block mt-1">
               {v.ambulanceType === "ICU"
                 ? "ভেন্টিলেটর, মনিটর ও প্যারামেডিক সহ"
                 : v.ambulanceType === "NICU"
@@ -460,10 +460,10 @@ export default function DynamicForm({
                     : "সাশ্রয়ী এসি অ্যাম্বুলেন্স"}
             </span>
           </div>
-          <div className="sm:text-right">
-            <span className="text-slate-500 block">গাড়ি পৌঁছানোর সম্ভাব্য সময়:</span>
-            <span className="font-bold text-emerald-700 bg-emerald-100 px-2.5 py-0.5 rounded-full inline-block mt-0.5">
-              ১৫-২৫ মিনিট
+          <div className="sm:text-right shrink-0">
+            <span className="text-slate-500 block text-[11px]">গাড়ি পৌঁছানোর সম্ভাব্য সময়:</span>
+            <span className="font-bold text-emerald-800 bg-emerald-100 border border-emerald-200 px-3 py-1 rounded-full inline-block mt-1">
+              ১৫-২৫ মিনিট (ঢাকা ও জেলা শহর)
             </span>
           </div>
         </div>

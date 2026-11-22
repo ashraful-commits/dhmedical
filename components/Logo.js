@@ -1,15 +1,37 @@
 export default function Logo({ light = false }) {
   return (
-    <span className="flex items-center gap-2 leading-none">
-      <svg viewBox="0 0 70 44" className="h-9 w-14 shrink-0" aria-hidden="true">
-        <path d="M6 22C2 8 22 2 30 14" fill="none" stroke="#E11D2E" strokeWidth="3.5" strokeLinecap="round" />
-        <path d="M24 10h8v8h8v8h-8v8h-8v-8h-8v-8h8z" fill="#1E63D6" />
-        <path d="M2 30h14l4-6 5 12 5-18 4 12h34" fill="none" stroke={light ? "#fff" : "#12347F"} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-      <span className="flex flex-col gap-1">
-        <b className="font-head text-2xl font-extrabold text-red">D·H</b>
-        <b className={`text-[11px] font-extrabold tracking-wide ${light ? "text-white" : "text-navy"}`}>MEDICAL SUPPORT</b>
-      </span>
-    </span>
+    <div className="flex items-center gap-2.5 leading-none select-none group">
+      {/* Handcrafted Medical Emblem Badge */}
+      <div className={`relative grid h-10 w-10 shrink-0 place-items-center rounded-xl transition-transform duration-200 group-hover:scale-105 ${
+        light
+          ? "bg-white/10 text-white border border-white/20 shadow-inner"
+          : "bg-gradient-to-br from-navy via-navy to-blue text-white shadow-sm"
+      }`}>
+        {/* Crisp Medical Cross with Pulse Heartbeat */}
+        <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <path d="M12 4v16m-8-8h16" stroke="rgba(255,255,255,0.35)" strokeWidth="3" />
+          <path d="M3 12h3.5l2-4 3.5 8 2.5-6 1.5 2H21" stroke="#FFD21F" strokeWidth="2.2" />
+        </svg>
+        <span className="absolute -top-0.5 -right-0.5 h-2 w-2 rounded-full bg-red ring-2 ring-white animate-pulse" />
+      </div>
+
+      <div className="flex flex-col">
+        <div className="flex items-center gap-1.5">
+          <span className="font-head text-xl font-black tracking-tight text-red">
+            D·H
+          </span>
+          <span className={`text-[13px] font-black tracking-wider uppercase font-head ${
+            light ? "text-white" : "text-navy"
+          }`}>
+            Medical
+          </span>
+        </div>
+        <span className={`text-[9.5px] font-bold tracking-widest uppercase mt-0.5 ${
+          light ? "text-blue-100" : "text-slate-500"
+        }`}>
+          Support & Coordination
+        </span>
+      </div>
+    </div>
   );
 }

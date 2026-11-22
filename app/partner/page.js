@@ -60,7 +60,7 @@ export default function Partner() {
 
       <div className="wrap max-w-4xl space-y-8 py-8">
         {/* Step-by-step Onboarding Guide */}
-        <section aria-labelledby="steps-title" className="rounded-2xl bg-gradient-to-br from-navy to-blue p-6 text-white shadow-lg sm:p-8">
+        <section aria-labelledby="steps-title" className="rounded-2xl bg-gradient-to-r from-navy-deep via-navy to-navy-dark p-6 text-white shadow-card sm:p-8 border border-white/10">
           <div className="text-center max-w-xl mx-auto">
             <span className="inline-flex items-center gap-1.5 rounded-full bg-white/20 px-3 py-1 text-xs font-bold text-gold">
               সহজ নিবন্ধন পদ্ধতি

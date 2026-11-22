@@ -107,21 +107,21 @@ export default function TrackPage({ searchParams }) {
         {data?.found && (
           <div className="space-y-6 animate-fadeIn">
             {/* Top Status Banner */}
-            <div className="rounded-2xl bg-gradient-to-br from-navy to-blue-dark p-5 text-white shadow-lg flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div className="rounded-2xl bg-gradient-to-r from-navy-deep via-navy to-navy-dark p-6 text-white shadow-card flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border border-white/10">
               <div>
-                <span className="inline-flex items-center gap-1 rounded-full bg-white/20 px-3 py-1 text-xs font-bold text-gold">
-                  {data.type === "ambulance" ? "অ্যাম্বুলেন্স বুকিং" : "ডাক্তার অ্যাপয়েন্টমেন্ট"}
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1 text-xs font-bold text-gold">
+                  {data.type === "ambulance" ? "🚑 অ্যাম্বুলেন্স বুকিং" : "🩺 ডাক্তার অ্যাপয়েন্টমেন্ট"}
                 </span>
                 <h2 className="mt-2 text-2xl font-black !text-white tracking-wide">
                   আইডি: {data.booking.bookingId}
                 </h2>
-                <p className="text-xs text-blue-soft mt-0.5">
+                <p className="text-xs text-blue-100/80 mt-0.5">
                   রোগী: <b className="text-white">{data.booking.patientName}</b> | যোগাযোগ: {data.booking.mobile}
                 </p>
               </div>
 
               <div className="text-right sm:text-right">
-                <span className="inline-block rounded-xl bg-gold/90 px-3 py-1 text-xs font-black text-navy uppercase">
+                <span className="inline-block rounded-xl bg-gold text-navy-dark px-3.5 py-1 text-xs font-black uppercase shadow-sm">
                   {data.booking.trackingStatus === "completed"
                     ? "সম্পন্ন (Completed)"
                     : data.booking.trackingStatus === "driver_assigned"
@@ -155,9 +155,9 @@ export default function TrackPage({ searchParams }) {
                         <span
                           className={`absolute -left-[31px] top-0 grid h-6 w-6 place-items-center rounded-full text-xs font-bold ${
                             isDone
-                              ? "bg-green text-white shadow-md ring-4 ring-green/20"
+                              ? "bg-emerald-600 text-white shadow-sm ring-4 ring-emerald-100"
                               : "bg-slate-200 text-slate-500"
-                          }`}
+                          } ${isCurrent ? "ring-4 ring-blue-200" : ""}`}
                         >
                           {isDone ? "✓" : idx + 1}
                         </span>

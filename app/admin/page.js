@@ -253,19 +253,21 @@ export default function Admin() {
     return (
       <div className="wrap max-w-md py-16">
         <form
-          className="card space-y-5 rounded-2xl border border-blue/20 p-6 shadow-xl"
+          className="card space-y-5 rounded-2xl border border-slate-200/90 p-8 shadow-card bg-white"
           onSubmit={handleLogin}
         >
           <div className="text-center">
-            <div className="mx-auto grid h-16 w-16 place-items-center rounded-2xl bg-blue-soft text-navy">
+            <div className="mx-auto grid h-16 w-16 place-items-center rounded-2xl bg-blue-50 text-blue border border-blue-100">
               <ShieldCheck size={36} />
             </div>
-            <h1 className="mt-3 text-2xl font-black text-navy">D H Medical Support</h1>
-            <p className="text-xs text-slate-500">সুরক্ষিত অ্যাডমিন কন্ট্রোল প্যানেল</p>
+            <h1 className="mt-3 text-2xl font-black text-navy-dark">D H Medical Support</h1>
+            <p className="text-xs text-slate-500 mt-0.5">সুরক্ষিত অ্যাডমিন কন্ট্রোল প্যানেল</p>
           </div>
 
           <div>
-            <label className="mb-1 block text-sm font-bold text-navy">অ্যাডমিন সিক্রেট পাসওয়ার্ড</label>
+            <label className="mb-1.5 block text-xs font-bold uppercase tracking-wider text-slate-700">
+              অ্যাডমিন সিক্রেট পাসওয়ার্ড
+            </label>
             <input
               className="input w-full"
               type="password"
@@ -275,12 +277,12 @@ export default function Admin() {
               required
             />
             <p className="mt-1 text-[11px] text-slate-400">
-              * সার্ভার-সাইড রেট লিমিটেড ও এনক্রিপ্টেড সেশন দ্বারা সুরক্ষিত
+              * সার্ভার-সাইড রেট লিমিটেড ও HMAC সেশন দ্বারা সুরক্ষিত
             </p>
           </div>
 
           {err && (
-            <div role="alert" className="rounded-xl bg-red/10 p-3 text-xs font-bold text-red flex items-center gap-2">
+            <div role="alert" className="rounded-xl bg-red-50 border border-red-100 p-3 text-xs font-bold text-red flex items-center gap-2">
               <AlertTriangle size={16} className="shrink-0" />
               <span>{err}</span>
             </div>
@@ -299,7 +301,7 @@ export default function Admin() {
   return (
     <div className="wrap max-w-7xl py-6">
       {/* Top Admin Header Bar */}
-      <div className="mb-6 flex flex-col gap-4 rounded-2xl bg-gradient-to-r from-navy via-navy to-blue-dark p-5 text-white shadow-lg sm:flex-row sm:items-center sm:justify-between">
+      <div className="mb-6 flex flex-col gap-4 rounded-2xl bg-gradient-to-r from-navy-deep via-navy to-navy-dark p-6 text-white shadow-card sm:flex-row sm:items-center sm:justify-between border border-white/10">
         <div>
           <span className="inline-flex items-center gap-1.5 rounded-full bg-white/20 px-3 py-1 text-xs font-semibold">
             <ShieldCheck size={14} className="text-gold" /> সেন্ট্রাল অফিস ম্যানেজমেন্ট ড্যাশবোর্ড
