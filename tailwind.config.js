@@ -34,24 +34,43 @@ module.exports = {
           subtle: "#F1F5F9",
         },
         care: {
-          50: "#FFF1F2",
-          100: "#FFE4E6",
-          200: "#FECDD3",
-          light: "#F43F5E",
-          DEFAULT: "#E11D48", // Warm Rose Crimson — Family Love & Care ("নিজের পরিবারের মতো ভালোবাসা")
-          dark: "#BE123C",
-          deep: "#881337",
+          50: "#FFF0F3",
+          100: "#FFE1E7",
+          200: "#FFC7D3",
+          light: "#FF8DA3",
+          DEFAULT: "#FF5E7E", // Lovable Warm Rose Coral ("নিজের পরিবারের মতো ভালোবাসা")
+          dark: "#E03E60",
+          deep: "#B32644",
+        },
+        love: {
+          50: "#FFF0F3",
+          100: "#FFE1E7",
+          200: "#FFC7D3",
+          light: "#FF8DA3",
+          DEFAULT: "#FF5E7E", // Lovable Warm Rose Coral
+          dark: "#E03E60",
+          deep: "#B32644",
         },
       },
       fontFamily: {
         body: ["var(--font-body)", "Hind Siliguri", "sans-serif"],
         head: ["var(--font-head)", "Anek Bangla", "sans-serif"],
       },
+      animation: {
+        fadeIn: "fadeIn 0.18s ease-out forwards",
+      },
+      keyframes: {
+        fadeIn: {
+          "0%": { opacity: "0", transform: "translateY(-6px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+      },
       boxShadow: {
         clean: "0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px 0 rgba(0, 0, 0, 0.02)",
         card: "0 2px 12px 0 rgba(15, 82, 186, 0.06), 0 1px 3px 0 rgba(0, 0, 0, 0.03)",
         hover: "0 10px 25px -4px rgba(15, 82, 186, 0.12), 0 4px 10px -2px rgba(0, 0, 0, 0.04)",
-        care: "0 4px 16px 0 rgba(225, 29, 72, 0.28)",
+        care: "0 4px 16px 0 rgba(255, 94, 126, 0.28)",
+        love: "0 4px 16px 0 rgba(255, 94, 126, 0.28)",
       },
     },
   },

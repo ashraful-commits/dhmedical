@@ -60,7 +60,7 @@ export default function Header() {
   }, []);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-slate-200/80 bg-white/95 backdrop-blur-md shadow-[0_2px_15px_-3px_rgba(15,82,186,0.04)]">
+    <header className="sticky top-0 z-[100] border-b border-slate-200/80 bg-white/95 backdrop-blur-md shadow-[0_2px_15px_-3px_rgba(15,82,186,0.04)]">
       <div className="wrap flex h-16 sm:h-18 items-center justify-between gap-3 sm:gap-4">
         {/* Brand Logo */}
         <Link
@@ -166,7 +166,7 @@ export default function Header() {
 
             {/* Desktop Mega Flyout Card */}
             {moreOpen && (
-              <div className="absolute right-0 top-full mt-2 w-72 rounded-2xl border border-slate-200/90 bg-white p-2.5 shadow-2xl animate-fadeIn z-50">
+              <div className="absolute right-0 top-full mt-2 w-72 rounded-2xl border border-slate-200/90 bg-white p-2.5 shadow-2xl animate-fadeIn z-[200]">
                 <div className="px-3 py-2 border-b border-slate-100 mb-1">
                   <span className="text-[10.5px] font-bold uppercase tracking-wider text-slate-400">
                     Additional Services
@@ -314,7 +314,7 @@ export default function Header() {
 
       {/* MOBILE DRAWER: COMPLETE LUXURY HEALTHCARE DESIGN */}
       {open && (
-        <div className="fixed inset-x-0 top-16 bottom-0 z-50 bg-slate-900/40 backdrop-blur-sm lg:hidden animate-fadeIn">
+        <div className="fixed inset-x-0 top-16 bottom-0 z-[150] bg-slate-900/40 backdrop-blur-sm lg:hidden animate-fadeIn">
           <div className="h-full overflow-y-auto bg-white border-t border-slate-100 px-4 py-5 shadow-2xl flex flex-col justify-between max-w-lg mx-auto">
             
             <div className="space-y-4">

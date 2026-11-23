@@ -25,12 +25,12 @@ export default function Logo({ light = false }) {
           strokeLinejoin="round"
         />
 
-        {/* Compassionate Rose Heart Node ("নিজের পরিবারের মতো ভালোবাসা") */}
+        {/* Compassionate Lovable Rose Heart Node ("নিজের পরিবারের মতো ভালোবাসা") */}
         <circle
           cx="28"
           cy="15"
           r="3"
-          fill="#E11D48"
+          fill="#FF5E7E"
           stroke={light ? "#0F52BA" : "#FFFFFF"}
           strokeWidth="1.5"
         />
@@ -62,13 +62,13 @@ export default function Logo({ light = false }) {
           >
             Healthcare Network
           </span>
-          <span className="h-1 w-1 rounded-full bg-care shrink-0" />
+          <span className="h-1 w-1 rounded-full bg-love shrink-0" />
           <span
             className={`text-[9.5px] font-bold ${
-              light ? "text-rose-200" : "text-care"
+              light ? "text-rose-200" : "text-love"
             }`}
           >
-            24/7 Support
+            24/7 Care
           </span>
         </div>
       </div>

@@ -31,6 +31,7 @@ import {
 import { motion } from "framer-motion";
 import { GsapFadeIn, GsapStagger } from "@/components/GsapAnimation";
 import PartnerHospitalsCarousel from "@/components/PartnerHospitalsCarousel";
+import { DocTimeWavePattern, ClinicalDotGrid } from "@/components/MedicalPatterns";
 import { SITE, AMBULANCE_TYPES_DATA } from "@/lib/site";
 import { useLanguage } from "@/context/LanguageContext";
 
@@ -217,6 +218,17 @@ export default function HomeClient() {
       <section className="py-6 sm:py-8">
         <div className="wrap">
           <div className="relative overflow-hidden rounded-3xl border border-[#D0E2F9] bg-gradient-to-r from-[#EEF4FC] via-[#F4F8FD] to-[#E5F0FA] p-6 sm:p-10 lg:p-12 shadow-clean">
+            {/* Subtle Clinical Dot Grid Pattern */}
+            <ClinicalDotGrid className="opacity-40" />
+
+            {/* DocTime Signature Flowing Wave Lines */}
+            <div className="absolute -top-10 -right-20 w-[620px] h-[340px] pointer-events-none">
+              <DocTimeWavePattern className="w-full h-full opacity-45" />
+            </div>
+            <div className="absolute -bottom-20 -left-20 w-[450px] h-[280px] pointer-events-none rotate-180">
+              <DocTimeWavePattern className="w-full h-full opacity-30" />
+            </div>
+
             {/* Subtle decorative medical cross watermark */}
             <div className="absolute right-4 bottom-0 opacity-10 pointer-events-none text-brand">
               <svg width="340" height="340" viewBox="0 0 24 24" fill="currentColor">
@@ -389,8 +401,9 @@ export default function HomeClient() {
       </section>
 
       {/* 4. AVAILABLE SPECIALTIES GRID (DocTime 15-Specialty Grid from Screenshot) */}
-      <section className="py-12 bg-[#F8FAFC]">
-        <div className="wrap">
+      <section className="relative overflow-hidden py-12 bg-[#F8FAFC]">
+        <ClinicalDotGrid className="opacity-30" />
+        <div className="wrap relative z-10">
           <div className="text-center sm:text-left mb-8">
             <span className="text-xs font-bold text-brand uppercase tracking-wider block mb-1">
               {t("sp_title")}
@@ -856,8 +869,11 @@ export default function HomeClient() {
       </section>
 
       {/* 11. 24/7 HOTLINE EMERGENCY BAR */}
-      <section className="py-8 bg-brand text-white">
-        <div className="wrap flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+      <section className="relative overflow-hidden py-8 bg-brand text-white">
+        <div className="absolute -top-16 -right-16 w-[520px] h-[220px] pointer-events-none opacity-20">
+          <DocTimeWavePattern className="w-full h-full text-white" />
+        </div>
+        <div className="wrap relative z-10 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
           <div>
             <h3 className="text-lg sm:text-xl font-black !text-white text-white">
               {t("hotline_heading")}
