@@ -33,6 +33,15 @@ module.exports = {
           card: "#FFFFFF",
           subtle: "#F1F5F9",
         },
+        care: {
+          50: "#FFF1F2",
+          100: "#FFE4E6",
+          200: "#FECDD3",
+          light: "#F43F5E",
+          DEFAULT: "#E11D48", // Warm Rose Crimson — Family Love & Care ("নিজের পরিবারের মতো ভালোবাসা")
+          dark: "#BE123C",
+          deep: "#881337",
+        },
       },
       fontFamily: {
         body: ["var(--font-body)", "Hind Siliguri", "sans-serif"],
@@ -42,6 +51,7 @@ module.exports = {
         clean: "0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px 0 rgba(0, 0, 0, 0.02)",
         card: "0 2px 12px 0 rgba(15, 82, 186, 0.06), 0 1px 3px 0 rgba(0, 0, 0, 0.03)",
         hover: "0 10px 25px -4px rgba(15, 82, 186, 0.12), 0 4px 10px -2px rgba(0, 0, 0, 0.04)",
+        care: "0 4px 16px 0 rgba(225, 29, 72, 0.28)",
       },
     },
   },

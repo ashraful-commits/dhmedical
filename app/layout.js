@@ -3,6 +3,7 @@ import { Hind_Siliguri, Anek_Bangla } from "next/font/google";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import BottomNav from "@/components/BottomNav";
+import PageLoader from "@/components/PageLoader";
 import { LanguageProvider } from "@/context/LanguageContext";
 import { BASE_URL, MASTER_SEO_KEYWORDS, getOrganizationSchema } from "@/lib/seoHelper";
 
@@ -100,6 +101,7 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body className="pb-[76px] md:pb-0">
+        <PageLoader />
         <LanguageProvider>
           <Header />
           <main>{children}</main>

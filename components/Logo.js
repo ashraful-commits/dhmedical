@@ -1,64 +1,76 @@
 export default function Logo({ light = false }) {
   return (
-    <div className="flex items-center gap-2.5 leading-none select-none group">
-      {/* Signature Medical Shield + Cross + Heartbeat Emblem */}
-      <div
-        className={`relative grid h-10 w-10 shrink-0 place-items-center rounded-xl transition-all duration-300 group-hover:scale-105 ${
-          light
-            ? "bg-white text-brand shadow-md"
-            : "bg-brand text-white shadow-[0_4px_12px_rgba(15,82,186,0.25)]"
-        }`}
+    <div className="flex items-center gap-3 select-none group transition-transform hover:scale-[1.02] active:scale-[0.99]">
+      {/* Freestanding Signature Medical Icon (No Solid Background Box) */}
+      <svg
+        viewBox="0 0 48 48"
+        className="h-11 w-11 shrink-0 transition-transform duration-300 group-hover:rotate-3"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
       >
-        <svg
-          viewBox="0 0 32 32"
-          className="h-6 w-6"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          aria-hidden="true"
-        >
-          {/* Medical Cross Geometry */}
-          <rect x="13" y="5" width="6" height="22" rx="3" fill="currentColor" fillOpacity="0.25" />
-          <rect x="5" y="13" width="22" height="6" rx="3" fill="currentColor" fillOpacity="0.25" />
+        {/* Freestanding Rounded Medical Cross in Signature Sapphire */}
+        <path
+          d="M20 6h8c1.657 0 3 1.343 3 3v8h8c1.657 0 3 1.343 3 3v8c0 1.657-1.343 3-3 3h-8v8c0 1.657-1.343 3-3 3h-8c-1.657 0-3-1.343-3-3v-8H9c-1.657 0-3-1.343-3-3v-8c0-1.657 1.343-3 3-3h8V9c0-1.657 1.343-3 3-3z"
+          fill={light ? "#FFFFFF" : "#0F52BA"}
+          fillOpacity={light ? 0.95 : 1}
+        />
 
-          {/* Dynamic Vital Lifeline (ECG / Pulse) */}
-          <path
-            d="M6 16h4.5l2.2-4.5 3.6 9 2.7-6 1.8 2.5H26"
-            stroke="currentColor"
-            strokeWidth="2.4"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
+        {/* Dynamic White/Care Heartbeat Pulse across the Cross */}
+        <path
+          d="M8 24h9l2.4-6.5 4.2 13 3.6-9 2.2 4H40"
+          stroke={light ? "#0F52BA" : "#FFFFFF"}
+          strokeWidth="3.2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
 
-          {/* Central Vital Core Dot */}
-          <circle cx="16" cy="16" r="1.5" fill="currentColor" />
-        </svg>
-      </div>
+        {/* Compassionate Rose Heart Node ("নিজের পরিবারের মতো ভালোবাসা") */}
+        <circle
+          cx="28"
+          cy="15"
+          r="3"
+          fill="#E11D48"
+          stroke={light ? "#0F52BA" : "#FFFFFF"}
+          strokeWidth="1.5"
+        />
+      </svg>
 
-      {/* Modern Wordmark */}
-      <div className="flex flex-col">
-        <div className="flex items-center gap-1.5">
+      {/* Prominent, Larger Premium Typography */}
+      <div className="flex flex-col justify-center">
+        <div className="flex items-baseline gap-1.5 leading-none">
           <span
-            className={`font-head text-xl font-black tracking-tight ${
+            className={`font-head text-2xl sm:text-[26px] font-black tracking-tight ${
               light ? "text-white" : "text-brand"
             }`}
           >
             D·H
           </span>
           <span
-            className={`font-head text-[13.5px] font-black tracking-wider uppercase ${
-              light ? "text-white" : "text-ink-dark"
+            className={`font-head text-base sm:text-lg font-black tracking-wider uppercase ${
+              light ? "text-white/95" : "text-ink-dark"
             }`}
           >
             Medical
           </span>
         </div>
-        <span
-          className={`text-[9.5px] font-bold tracking-widest uppercase mt-0.5 ${
-            light ? "text-brand-100" : "text-slate-400"
-          }`}
-        >
-          Healthcare Platform
-        </span>
+        <div className="flex items-center gap-1.5 mt-1 leading-none">
+          <span
+            className={`text-[9.5px] font-bold tracking-widest uppercase ${
+              light ? "text-white/80" : "text-slate-400"
+            }`}
+          >
+            Healthcare Network
+          </span>
+          <span className="h-1 w-1 rounded-full bg-care shrink-0" />
+          <span
+            className={`text-[9.5px] font-bold ${
+              light ? "text-rose-200" : "text-care"
+            }`}
+          >
+            24/7 Support
+          </span>
+        </div>
       </div>
     </div>
   );

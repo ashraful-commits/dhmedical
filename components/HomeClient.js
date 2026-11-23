@@ -407,19 +407,24 @@ export default function HomeClient() {
             {SPECIALTIES_15.map((sp) => {
               const IconComponent = sp.icon;
               return (
-                <Link
+                <motion.div
                   key={sp.name}
-                  href={`/doctors?sp=${encodeURIComponent(sp.query)}`}
-                  className="category-card group flex flex-col items-center justify-center min-h-[140px]"
+                  whileHover={{ y: -4, transition: { duration: 0.2, ease: "easeOut" } }}
+                  whileTap={{ scale: 0.98 }}
                 >
-                  <div className="grid h-11 w-11 place-items-center rounded-xl bg-brand-50 text-brand group-hover:bg-brand group-hover:text-white transition-colors mb-2.5">
-                    <IconComponent size={22} />
-                  </div>
-                  <h4 className="text-sm font-bold text-ink-dark group-hover:text-brand transition-colors text-center">
-                    {lang === "bn" ? sp.bn : sp.name}
-                  </h4>
-                  <p className="text-[11px] text-slate-400 mt-0.5 text-center">{sp.sub}</p>
-                </Link>
+                  <Link
+                    href={`/doctors?sp=${encodeURIComponent(sp.query)}`}
+                    className="category-card group flex flex-col items-center justify-center min-h-[140px] h-full"
+                  >
+                    <div className="grid h-11 w-11 place-items-center rounded-xl bg-brand-50 text-brand group-hover:bg-brand group-hover:text-white transition-colors duration-300 mb-2.5">
+                      <IconComponent size={22} />
+                    </div>
+                    <h4 className="text-sm font-bold text-ink-dark group-hover:text-brand transition-colors duration-300 text-center">
+                      {lang === "bn" ? sp.bn : sp.name}
+                    </h4>
+                    <p className="text-[11px] text-slate-400 mt-0.5 text-center">{sp.sub}</p>
+                  </Link>
+                </motion.div>
               );
             })}
           </div>
@@ -499,8 +504,10 @@ export default function HomeClient() {
 
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {DOCTORS_FEATURED.map((doc) => (
-              <div
+              <motion.div
                 key={doc.name}
+                whileHover={{ y: -6, transition: { duration: 0.25, ease: "easeOut" } }}
+                whileTap={{ scale: 0.99 }}
                 className="rounded-2xl border border-slate-200 bg-white p-5 shadow-clean hover:shadow-card hover:border-brand/40 transition-all flex flex-col justify-between"
               >
                 <div>
@@ -508,7 +515,7 @@ export default function HomeClient() {
                     <img
                       src={doc.img}
                       alt={doc.name}
-                      className="h-full w-full object-cover"
+                      className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
                     />
                   </div>
 
@@ -542,7 +549,7 @@ export default function HomeClient() {
                     <span>{t("doc_see_btn")}</span>
                   </Link>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -565,8 +572,10 @@ export default function HomeClient() {
 
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {HEALTH_PLANS.map((plan) => (
-              <div
+              <motion.div
                 key={plan.name}
+                whileHover={{ y: -6, transition: { duration: 0.25, ease: "easeOut" } }}
+                whileTap={{ scale: 0.99 }}
                 className={`relative rounded-3xl border p-6 flex flex-col justify-between transition-all ${plan.popular
                   ? "border-brand bg-white shadow-card ring-2 ring-brand/10"
                   : "border-slate-200 bg-white shadow-clean hover:border-slate-300"
@@ -607,7 +616,7 @@ export default function HomeClient() {
                     {t("plans_subscribe")}
                   </Link>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
 
@@ -742,8 +751,10 @@ export default function HomeClient() {
 
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {AMBULANCE_TYPES_DATA.slice(0, 4).map((amb) => (
-              <div
+              <motion.div
                 key={amb.key}
+                whileHover={{ y: -5, transition: { duration: 0.22, ease: "easeOut" } }}
+                whileTap={{ scale: 0.99 }}
                 className="rounded-2xl border border-slate-200 bg-white p-5 shadow-clean hover:border-brand/40 hover:shadow-card transition-all flex flex-col justify-between"
               >
                 <div>
@@ -770,7 +781,7 @@ export default function HomeClient() {
                     {t("fleet_book_now")}
                   </Link>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -848,10 +859,10 @@ export default function HomeClient() {
       <section className="py-8 bg-brand text-white">
         <div className="wrap flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
           <div>
-            <h3 className="text-lg sm:text-xl font-black">
+            <h3 className="text-lg sm:text-xl font-black !text-white text-white">
               {t("hotline_heading")}
             </h3>
-            <p className="text-xs text-brand-100 mt-0.5">
+            <p className="text-xs !text-white/95 text-white/95 mt-0.5">
               {t("hotline_sub")}
             </p>
           </div>

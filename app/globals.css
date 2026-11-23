@@ -38,19 +38,29 @@
     @apply mx-auto w-full max-w-6xl px-4 sm:px-6;
   }
 
-  /* Primary Solid Brand Button */
+  /* Primary Solid Brand Button with Modern Shine Wave & Lift Animation */
   .btn-primary {
-    @apply inline-flex min-h-[44px] items-center justify-center gap-2 rounded-xl bg-brand px-5 py-2.5 text-sm font-bold text-white shadow-sm transition-all duration-150 hover:bg-brand-dark active:scale-[0.98];
+    @apply relative inline-flex min-h-[44px] items-center justify-center gap-2 overflow-hidden rounded-xl bg-brand px-5 py-2.5 text-sm font-bold text-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-brand-dark hover:shadow-hover active:translate-y-0 active:scale-[0.98] before:absolute before:inset-0 before:-translate-x-full hover:before:translate-x-full before:bg-gradient-to-r before:from-transparent before:via-white/25 before:to-transparent before:transition-transform before:duration-700;
   }
 
-  /* Clean Outline Button */
+  /* Warm Compassionate Care / Family Love Button ("নিজের পরিবারের মতো ভালোবাসা") */
+  .btn-care {
+    @apply relative inline-flex min-h-[44px] items-center justify-center gap-2 overflow-hidden rounded-xl bg-care px-5 py-2.5 text-sm font-bold text-white shadow-care transition-all duration-200 hover:-translate-y-0.5 hover:bg-care-dark hover:shadow-[0_6px_20px_rgba(225, 29, 72, 0.35)] active:translate-y-0 active:scale-[0.98] before:absolute before:inset-0 before:-translate-x-full hover:before:translate-x-full before:bg-gradient-to-r before:from-transparent before:via-white/30 before:to-transparent before:transition-transform before:duration-700;
+  }
+
+  /* Clean Outline Button with Micro-Lift */
   .btn-outline {
-    @apply inline-flex min-h-[44px] items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-5 py-2.5 text-sm font-bold text-ink-dark transition-all duration-150 hover:bg-slate-50 hover:border-slate-400 active:scale-[0.98];
+    @apply inline-flex min-h-[44px] items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-5 py-2.5 text-sm font-bold text-ink-dark transition-all duration-200 hover:-translate-y-0.5 hover:border-brand/40 hover:bg-brand-50/50 hover:text-brand hover:shadow-sm active:translate-y-0 active:scale-[0.98];
   }
 
   /* Clean Soft Button */
   .btn-soft {
-    @apply inline-flex min-h-[44px] items-center justify-center gap-2 rounded-xl bg-brand-50 px-5 py-2.5 text-sm font-bold text-brand transition-all duration-150 hover:bg-brand-100 active:scale-[0.98];
+    @apply inline-flex min-h-[44px] items-center justify-center gap-2 rounded-xl bg-brand-50 px-5 py-2.5 text-sm font-bold text-brand transition-all duration-200 hover:-translate-y-0.5 hover:bg-brand-100 active:translate-y-0 active:scale-[0.98];
+  }
+
+  /* Warm Soft Care Badge / Pill */
+  .pill-care {
+    @apply inline-flex items-center gap-1.5 rounded-full bg-care-50 px-3 py-1 text-xs font-bold text-care border border-care-100;
   }
 
   /* DocTime-style Specialty / Category Card */
@@ -62,4 +72,54 @@
   .search-input {
     @apply h-12 w-full rounded-xl border border-slate-200 bg-white pl-11 pr-4 text-sm text-ink-dark placeholder:text-slate-400 transition-all focus:border-brand focus:outline-none focus:ring-4 focus:ring-brand/10;
   }
+}
+
+/* Medical Heartbeat & Pulse Keyframe Animations */
+@keyframes heartPulse {
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  14% {
+    transform: scale(1.15);
+  }
+
+  28% {
+    transform: scale(1);
+  }
+
+  42% {
+    transform: scale(1.15);
+  }
+
+  70% {
+    transform: scale(1);
+  }
+}
+
+.animate-heart-pulse {
+  animation: heartPulse 1.8s ease-in-out infinite;
+}
+
+@keyframes topLoader {
+  0% {
+    width: 0%;
+    left: 0;
+  }
+
+  50% {
+    width: 70%;
+    left: 15%;
+  }
+
+  100% {
+    width: 100%;
+    left: 0;
+  }
+}
+
+.animate-top-loader {
+  animation: topLoader 1.4s ease-in-out infinite;
 }
