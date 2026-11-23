@@ -38,20 +38,27 @@ export default function Logo({ light = false }) {
 
       {/* Prominent, Larger Premium Typography */}
       <div className="flex flex-col justify-center">
-        <div className="flex items-baseline gap-1.5 leading-none">
+        <div className="flex items-baseline gap-1 leading-none">
           <span
-            className={`font-head text-2xl sm:text-[26px] font-black tracking-tight ${
+            className={`font-head text-xl sm:text-[22px] font-black tracking-tight ${
               light ? "text-white" : "text-brand"
             }`}
           >
-            D·H
+            DH
           </span>
           <span
-            className={`font-head text-base sm:text-lg font-black tracking-wider uppercase ${
+            className={`font-head text-xl sm:text-[22px] font-black tracking-tight ${
               light ? "text-white/95" : "text-ink-dark"
             }`}
           >
             Medical
+          </span>
+          <span
+            className={`font-head text-xl sm:text-[22px] font-black tracking-tight ${
+              light ? "text-rose-200" : "text-love"
+            }`}
+          >
+            Support
           </span>
         </div>
         <div className="flex items-center gap-1.5 mt-1 leading-none">
