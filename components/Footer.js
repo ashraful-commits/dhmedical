@@ -1,9 +1,13 @@
+"use client";
 import Link from "next/link";
 import { Phone, MapPin, Ambulance, Stethoscope, ShieldCheck, HeartPulse, ExternalLink } from "lucide-react";
 import Logo from "./Logo";
 import { SITE, SPECIALTIES, DISTRICTS } from "@/lib/site";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function Footer() {
+  const { lang, t } = useLanguage();
+
   return (
     <footer className="mt-20 border-t border-slate-200 bg-[#F8FAFC] text-ink-light">
       {/* Upper Main Footer Grid */}
@@ -12,12 +16,12 @@ export default function Footer() {
         <div className="space-y-4 md:col-span-4">
           <Logo />
           <p className="text-sm font-medium text-slate-600 leading-relaxed max-w-sm">
-            {SITE.tagline}. ২৪ ঘণ্টা জরুরি অ্যাম্বুলেন্স ডিসপ্যাচ, বিশেষজ্ঞ ডাক্তার সিরিয়াল ও হোম ডায়াগনস্টিক সাপোর্ট।
+            {t("footer_tagline")}. {t("footer_desc")}
           </p>
 
           <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-clean space-y-1">
             <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">
-              ২৪ ঘণ্টা সেন্ট্রাল জরুরি হটলাইন
+              {t("footer_hotline_label")}
             </span>
             <a
               href={SITE.tel}
@@ -30,44 +34,44 @@ export default function Footer() {
 
           <div className="flex items-center gap-2 text-xs font-semibold text-slate-500">
             <ShieldCheck size={16} className="text-brand" />
-            <span>BMDC অনুমোদিত ডাক্তার ও অনুমোদিত এম্বুলেন্স বহর</span>
+            <span>{t("footer_bmdc_badge")}</span>
           </div>
         </div>
 
         {/* Quick Links Column */}
         <div className="space-y-3 md:col-span-2">
           <h4 className="text-xs font-black uppercase tracking-wider text-ink-dark">
-            প্রধান সেবা
+            {t("footer_main_services")}
           </h4>
           <ul className="space-y-2 text-xs font-medium text-slate-600">
             <li>
               <Link href="/appointment" className="hover:text-brand transition-colors block py-0.5">
-                ডাক্তার কনসালটেশন
+                {t("nav_consultation")}
               </Link>
             </li>
             <li>
               <Link href="/ambulance" className="hover:text-brand transition-colors block py-0.5">
-                জরুরি অ্যাম্বুলেন্স ২৪/৭
+                {t("nav_ambulance")}
               </Link>
             </li>
             <li>
               <Link href="/appointment#diagnostic" className="hover:text-brand transition-colors block py-0.5">
-                হোম ডায়াগনস্টিক টেস্ট
+                {t("nav_diagnostic")}
               </Link>
             </li>
             <li>
               <Link href="/family-care" className="hover:text-brand transition-colors block py-0.5">
-                ফ্যামিলি হেলথ প্ল্যান
+                {t("nav_plans")}
               </Link>
             </li>
             <li>
               <Link href="/track" className="hover:text-brand font-bold text-brand transition-colors block py-0.5">
-                লাইভ বুকিং ট্র্যাকিং
+                {t("nav_track")}
               </Link>
             </li>
             <li>
               <Link href="/hospitals" className="hover:text-brand transition-colors block py-0.5">
-                হাসপাতাল ও ICU বেড
+                {t("nav_hospitals")}
               </Link>
             </li>
           </ul>
@@ -76,7 +80,7 @@ export default function Footer() {
         {/* Clinical Specialties Column */}
         <div className="space-y-3 md:col-span-3">
           <h4 className="text-xs font-black uppercase tracking-wider text-ink-dark">
-            বিশেষজ্ঞ ডাক্তার বিভাগ
+            {t("footer_specialties")}
           </h4>
           <div className="grid grid-cols-2 gap-x-2 gap-y-1.5 text-xs font-medium text-slate-600">
             {SPECIALTIES.map((s) => (
@@ -85,7 +89,7 @@ export default function Footer() {
                 href={`/doctors?sp=${encodeURIComponent(s.key)}`}
                 className="hover:text-brand transition-colors truncate py-0.5"
               >
-                {s.bn}
+                {lang === "bn" ? s.bn : s.name}
               </Link>
             ))}
           </div>
@@ -94,34 +98,34 @@ export default function Footer() {
         {/* For Partners & App Column */}
         <div className="space-y-3 md:col-span-3">
           <h4 className="text-xs font-black uppercase tracking-wider text-ink-dark">
-            পার্টনার ও হেল্পডেস্ক
+            {t("footer_partner_menu")}
           </h4>
           <ul className="space-y-2 text-xs font-medium text-slate-600">
             <li>
               <Link href="/partner" className="hover:text-brand transition-colors block py-0.5">
-                ডাক্তার হিসেবে যুক্ত হোন (Join as Doctor)
+                {t("nav_join_doctor")}
               </Link>
             </li>
             <li>
               <Link href="/partner#ambulance" className="hover:text-brand transition-colors block py-0.5">
-                অ্যাম্বুলেন্স পার্টনার রেজিস্ট্রেশন
+                {t("nav_join_ambulance")}
               </Link>
             </li>
             <li>
               <Link href="/feedback" className="hover:text-brand transition-colors block py-0.5">
-                মতামত ও অভিযোগ (Feedback)
+                {t("nav_feedback")}
               </Link>
             </li>
             <li>
               <Link href="/admin" className="text-slate-400 hover:text-brand transition-colors block py-0.5">
-                অ্যাডমিন লগইন পোর্টাল
+                {t("nav_admin")}
               </Link>
             </li>
           </ul>
 
           <div className="pt-2">
             <span className="text-[11px] font-bold text-slate-400 block mb-1.5">
-              সারাদেশে ৬৪ জেলায় কভারেজ
+              {lang === "bn" ? "সারাদেশে ৬৪ জেলায় কভারেজ" : "Coverage Across 64 Districts"}
             </span>
             <div className="flex flex-wrap gap-1 text-[10.5px]">
               {DISTRICTS.slice(0, 8).map((d) => (
@@ -130,7 +134,7 @@ export default function Footer() {
                 </span>
               ))}
               <span className="rounded-md bg-brand-50 text-brand px-1.5 py-0.5 font-bold">
-                +৫৬ জেলা
+                {lang === "bn" ? "+৫৬ জেলা" : "+56 Districts"}
               </span>
             </div>
           </div>
@@ -144,10 +148,10 @@ export default function Footer() {
             © {new Date().getFullYear()} D H Medical Support. Central Healthcare & Ambulance Coordination Platform Bangladesh.
           </p>
           <div className="flex items-center gap-4 text-xs font-semibold">
-            <Link href="/ambulance" className="hover:text-brand transition-colors">অ্যাম্বুলেন্স</Link>
-            <Link href="/appointment" className="hover:text-brand transition-colors">ডাক্তার</Link>
-            <Link href="/family-care" className="hover:text-brand transition-colors">ফ্যামিলি কেয়ার</Link>
-            <Link href="/track" className="hover:text-brand transition-colors text-brand font-bold">ট্র্যাক করুন</Link>
+            <Link href="/ambulance" className="hover:text-brand transition-colors">{t("nav_ambulance")}</Link>
+            <Link href="/appointment" className="hover:text-brand transition-colors">{t("nav_consultation")}</Link>
+            <Link href="/family-care" className="hover:text-brand transition-colors">{t("nav_plans")}</Link>
+            <Link href="/track" className="hover:text-brand transition-colors text-brand font-bold">{t("nav_track")}</Link>
           </div>
         </div>
       </div>

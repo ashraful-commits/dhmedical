@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight, Building2, Bed, Phone, ShieldCheck, ArrowRight } from "lucide-react";
+import { useLanguage } from "@/context/LanguageContext";
 
 export const PARTNER_HOSPITALS = [
   {
@@ -81,6 +82,7 @@ export const PARTNER_HOSPITALS = [
 export default function PartnerHospitalsCarousel() {
   const [startIndex, setStartIndex] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(3);
+  const { lang, t } = useLanguage();
 
   // Responsive items count
   useEffect(() => {
@@ -116,17 +118,17 @@ export default function PartnerHospitalsCarousel() {
           <div>
             <div className="flex items-center gap-2">
               <span className="text-xs font-bold text-brand uppercase tracking-wider block">
-                Partner Network
+                {t("hosp_badge")}
               </span>
               <span className="rounded-full bg-brand-50 px-2.5 py-0.5 text-xs font-bold text-brand">
-                {PARTNER_HOSPITALS.length}+ শীর্ষ হাসপাতাল
+                {PARTNER_HOSPITALS.length}+ {lang === "bn" ? "শীর্ষ হাসপাতাল" : "Top Hospitals"}
               </span>
             </div>
             <h2 className="text-2xl sm:text-3xl font-black text-ink-dark mt-1">
-              আমাদের পার্টনার হাসপাতাল ও ক্লিনিক
+              {t("hosp_heading")}
             </h2>
             <p className="text-xs sm:text-sm text-slate-500 mt-1">
-              জরুরি মুহূর্তে আইসিইউ, সিসিইউ, কেবিন ও বিশেষজ্ঞ ডাক্তার সিরিয়াল সমন্বয়
+              {t("hosp_sub")}
             </p>
           </div>
 
@@ -135,7 +137,7 @@ export default function PartnerHospitalsCarousel() {
               href="/hospitals"
               className="text-xs sm:text-sm font-bold text-brand hover:underline inline-flex items-center gap-1"
             >
-              <span>সব হাসপাতাল</span>
+              <span>{t("hosp_view_all")}</span>
               <ArrowRight size={15} />
             </Link>
 
@@ -213,9 +215,10 @@ export default function PartnerHospitalsCarousel() {
 
                     <Link
                       href={`/hospitals?q=${encodeURIComponent(hosp.query)}`}
-                      className="btn-outline !min-h-[36px] !px-3.5 !py-1 text-xs font-bold !border-brand/30 !text-brand hover:!bg-brand hover:!text-white transition-all"
+                      className="btn-outline !min-h-[36px] !px-3.5 !py-1 text-xs font-bold !border-brand/30 !text-brand hover:!bg-brand hover:!text-white transition-all inline-flex items-center gap-1"
                     >
-                      বেড দেখুন &gt;
+                      <span>{t("hosp_view_bed")}</span>
+                      <ChevronRight size={14} />
                     </Link>
                   </div>
                 </div>

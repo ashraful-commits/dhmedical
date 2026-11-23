@@ -3,16 +3,18 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Home, Stethoscope, Ambulance, Navigation, Phone } from "lucide-react";
 import { SITE } from "@/lib/site";
-
-const items = [
-  { href: "/", label: "হোম", Icon: Home },
-  { href: "/ambulance", label: "অ্যাম্বুলেন্স", Icon: Ambulance },
-  { href: "/appointment", label: "ডাক্তার", Icon: Stethoscope },
-  { href: "/track", label: "ট্র্যাকিং", Icon: Navigation },
-];
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function BottomNav() {
   const pathname = usePathname();
+  const { lang } = useLanguage();
+
+  const items = [
+    { href: "/", label: lang === "bn" ? "হোম" : "Home", Icon: Home },
+    { href: "/ambulance", label: lang === "bn" ? "অ্যাম্বুলেন্স" : "Ambulance", Icon: Ambulance },
+    { href: "/appointment", label: lang === "bn" ? "ডাক্তার" : "Doctors", Icon: Stethoscope },
+    { href: "/track", label: lang === "bn" ? "ট্র্যাকিং" : "Track", Icon: Navigation },
+  ];
 
   return (
     <nav
@@ -36,7 +38,7 @@ export default function BottomNav() {
             }`}>
               <Icon size={20} strokeWidth={isActive ? 2.5 : 2} />
             </div>
-            <span>{label}</span>
+            <span className="whitespace-nowrap">{label}</span>
           </Link>
         );
       })}
@@ -47,7 +49,7 @@ export default function BottomNav() {
         className="flex min-h-[58px] flex-col items-center justify-center gap-0.5 bg-brand text-white text-[11px] font-black transition-all active:brightness-90 select-none shadow-inner"
       >
         <Phone size={20} />
-        <span>জরুরি কল</span>
+        <span className="whitespace-nowrap">{lang === "bn" ? "জরুরি কল" : "Call 24/7"}</span>
       </a>
     </nav>
   );

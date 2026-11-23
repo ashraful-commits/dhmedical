@@ -3,6 +3,7 @@ import { Hind_Siliguri, Anek_Bangla } from "next/font/google";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import BottomNav from "@/components/BottomNav";
+import { LanguageProvider } from "@/context/LanguageContext";
 import { BASE_URL, MASTER_SEO_KEYWORDS, getOrganizationSchema } from "@/lib/seoHelper";
 
 const body = Hind_Siliguri({
@@ -76,7 +77,7 @@ export const metadata = {
 };
 
 export const viewport = {
-  themeColor: "#12347F",
+  themeColor: "#0F52BA",
   width: "device-width",
   initialScale: 1,
 };
@@ -87,16 +88,24 @@ export default function RootLayout({ children }) {
   return (
     <html lang="bn" className={`${body.variable} ${head.variable}`}>
       <head>
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+        <link rel="apple-touch-icon" href="/favicon.svg" />
+        <meta name="geo.region" content="BD-13" />
+        <meta name="geo.placename" content="Dhaka, Bangladesh" />
+        <meta name="geo.position" content="23.8103;90.4125" />
+        <meta name="ICBM" content="23.8103, 90.4125" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
       <body className="pb-[76px] md:pb-0">
-        <Header />
-        <main>{children}</main>
-        <Footer />
-        <BottomNav />
+        <LanguageProvider>
+          <Header />
+          <main>{children}</main>
+          <Footer />
+          <BottomNav />
+        </LanguageProvider>
       </body>
     </html>
   );

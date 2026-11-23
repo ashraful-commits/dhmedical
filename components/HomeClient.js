@@ -32,6 +32,7 @@ import { motion } from "framer-motion";
 import { GsapFadeIn, GsapStagger } from "@/components/GsapAnimation";
 import PartnerHospitalsCarousel from "@/components/PartnerHospitalsCarousel";
 import { SITE, AMBULANCE_TYPES_DATA } from "@/lib/site";
+import { useLanguage } from "@/context/LanguageContext";
 
 // DocTime 15-Specialty Clinical Area Definitions
 const SPECIALTIES_15 = [
@@ -164,6 +165,7 @@ export default function HomeClient() {
   const [searchQuery, setSearchQuery] = useState("");
   const [sampleLocation, setSampleLocation] = useState("");
   const [locationSaved, setLocationSaved] = useState(false);
+  const { lang, t } = useLanguage();
 
   return (
     <div className="bg-white min-h-screen">
@@ -177,7 +179,7 @@ export default function HomeClient() {
               type="search"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search by doctor name/code, specialty, ambulance type or diagnostic test..."
+              placeholder={t("search_placeholder")}
               aria-label="Search Medical Services"
               className="search-input !h-14 !pl-12 !pr-28 !text-base !rounded-2xl shadow-sm"
             />
@@ -185,22 +187,28 @@ export default function HomeClient() {
               type="submit"
               className="btn-primary absolute right-2 top-2 !min-h-[40px] !px-5 text-sm"
             >
-              Search
+              {t("search_btn")}
             </button>
           </form>
 
           {/* Quick Search Tag Pills */}
           <div className="mt-3 flex flex-wrap items-center gap-2 text-xs text-slate-500">
-            <span className="font-semibold text-slate-700">Popular:</span>
-            {["General Physician", "Pediatrics", "Gynae & Obs", "ICU Ambulance", "Oxygen", "Dermatology", "Blood Test"].map((tag) => (
-              <Link
-                key={tag}
-                href={`/doctors?q=${encodeURIComponent(tag)}`}
-                className="rounded-full bg-slate-100 hover:bg-brand-50 hover:text-brand px-3 py-1 font-medium text-slate-600 transition-colors"
-              >
-                {tag}
-              </Link>
-            ))}
+            <span className="font-semibold text-slate-700">{t("popular_label")}</span>
+            {(lang === "bn"
+              ? ["মেডিসিন", "শিশুরোগ", "মহিলা ও প্রসূতি", "আইসিইউ অ্যাম্বুলেন্স", "অক্সিজেন", "চর্মরোগ", "রক্ত পরীক্ষা"]
+              : ["General Physician", "Pediatrics", "Gynae & Obs", "ICU Ambulance", "Oxygen", "Dermatology", "Blood Test"]
+            ).map((tag, i) => {
+              const query = ["Medicine", "Pediatrics", "Gynecology", "ICU Ambulance", "Oxygen", "Medicine", "Blood Test"][i];
+              return (
+                <Link
+                  key={tag}
+                  href={`/doctors?q=${encodeURIComponent(query)}`}
+                  className="rounded-full bg-slate-100 hover:bg-brand-50 hover:text-brand px-3 py-1 font-medium text-slate-600 transition-colors whitespace-nowrap"
+                >
+                  {tag}
+                </Link>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -221,15 +229,15 @@ export default function HomeClient() {
               <div className="lg:col-span-7 space-y-5">
                 <div className="inline-flex items-center gap-2 rounded-full bg-white px-3.5 py-1 text-xs font-bold text-brand shadow-sm border border-brand-100">
                   <span className="h-2 w-2 rounded-full bg-brand animate-ping" />
-                  <span>No. 1 Healthcare & Ambulance Coordination App in Bangladesh</span>
+                  <span>{t("hero_badge")}</span>
                 </div>
 
                 <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-ink-dark leading-[1.2] tracking-tight">
-                  1800+ Specialist And Experienced Doctors & Emergency Ambulance
+                  {t("hero_title")}
                 </h1>
 
                 <p className="text-sm sm:text-base text-slate-600 leading-relaxed max-w-xl">
-                  প্রবাসে আপনি, দেশে পরিবারের পাশে আমরা। ঘরে বসেই ১০ মিনিটে BMDC রেজিস্টার্ড ডাক্তারের ভিডিও পরামর্শ এবং জরুরি মুহূর্তে ১৫-২৫ মিনিটে দ্রুততম এম্বুলেন্স সেবা।
+                  {t("hero_sub")}
                 </p>
 
                 {/* DocTime Trust Bullet Points */}
@@ -238,28 +246,28 @@ export default function HomeClient() {
                     <div className="grid h-5 w-5 place-items-center rounded-full bg-brand text-white shrink-0">
                       <Check size={12} strokeWidth={3} />
                     </div>
-                    <span>All Doctors are BMDC Verified & Reputed Specialists</span>
+                    <span>{t("hero_trust_1")}</span>
                   </div>
 
                   <div className="flex items-center gap-2.5">
                     <div className="grid h-5 w-5 place-items-center rounded-full bg-brand text-white shrink-0">
                       <Check size={12} strokeWidth={3} />
                     </div>
-                    <span>Our doctors are rated 4.9 on average across 82,000+ consults</span>
+                    <span>{t("hero_trust_2")}</span>
                   </div>
 
                   <div className="flex items-center gap-2.5">
                     <div className="grid h-5 w-5 place-items-center rounded-full bg-brand text-white shrink-0">
                       <Check size={12} strokeWidth={3} />
                     </div>
-                    <span>Providing Care Across 37+ Clinical Departments nationwide</span>
+                    <span>{t("hero_trust_3")}</span>
                   </div>
 
                   <div className="flex items-center gap-2.5">
                     <div className="grid h-5 w-5 place-items-center rounded-full bg-brand text-white shrink-0">
                       <Check size={12} strokeWidth={3} />
                     </div>
-                    <span>Fastest Emergency Ambulance Dispatch in 64 Districts</span>
+                    <span>{t("hero_trust_4")}</span>
                   </div>
                 </div>
 
@@ -269,7 +277,7 @@ export default function HomeClient() {
                     href="/appointment"
                     className="btn-primary !min-h-[48px] !px-7 text-sm font-bold shadow-md"
                   >
-                    <span>Consult a Doctor Now</span>
+                    <span>{t("hero_cta_doctor")}</span>
                     <ArrowRight size={16} />
                   </Link>
 
@@ -278,7 +286,7 @@ export default function HomeClient() {
                     className="btn-outline !min-h-[48px] !px-6 text-sm font-bold !border-brand/40 !text-brand hover:!bg-brand-50"
                   >
                     <Ambulance size={18} />
-                    <span>Book Ambulance 24/7</span>
+                    <span>{t("hero_cta_ambulance")}</span>
                   </Link>
                 </div>
               </div>
@@ -322,10 +330,10 @@ export default function HomeClient() {
                 <Video size={24} />
               </div>
               <h3 className="text-base font-bold text-ink-dark group-hover:text-brand transition-colors">
-                Live Video Consultation
+                {t("srv_video_title")}
               </h3>
               <p className="mt-1.5 text-xs text-slate-500 leading-relaxed">
-                Get instant video consultation with top specialists or schedule your appointment.
+                {t("srv_video_desc")}
               </p>
             </Link>
 
@@ -338,10 +346,10 @@ export default function HomeClient() {
                 <Ambulance size={24} />
               </div>
               <h3 className="text-base font-bold text-ink-dark group-hover:text-brand transition-colors">
-                Emergency Ambulance 24/7
+                {t("srv_amb_title")}
               </h3>
               <p className="mt-1.5 text-xs text-slate-500 leading-relaxed">
-                Oxygen, ICU, NICU & AC fleet dispatched across 64 districts in 15-25 minutes.
+                {t("srv_amb_desc")}
               </p>
             </Link>
 
@@ -354,10 +362,10 @@ export default function HomeClient() {
                 <FileSpreadsheet size={24} />
               </div>
               <h3 className="text-base font-bold text-ink-dark group-hover:text-brand transition-colors">
-                Home Diagnostic Tests
+                {t("srv_diag_title")}
               </h3>
               <p className="mt-1.5 text-xs text-slate-500 leading-relaxed">
-                Certified phlebotomists collect blood/urine sample from your doorstep. Fast reports.
+                {t("srv_diag_desc")}
               </p>
             </Link>
 
@@ -370,10 +378,10 @@ export default function HomeClient() {
                 <Users size={24} />
               </div>
               <h3 className="text-base font-bold text-ink-dark group-hover:text-brand transition-colors">
-                Expatriate & Family Care
+                {t("srv_family_title")}
               </h3>
               <p className="mt-1.5 text-xs text-slate-500 leading-relaxed">
-                Complete health and emergency protection solutions for your family back home.
+                {t("srv_family_desc")}
               </p>
             </Link>
           </div>
@@ -385,13 +393,13 @@ export default function HomeClient() {
         <div className="wrap">
           <div className="text-center sm:text-left mb-8">
             <span className="text-xs font-bold text-brand uppercase tracking-wider block mb-1">
-              Available specialties
+              {t("sp_title")}
             </span>
             <h2 className="text-2xl sm:text-3xl font-black text-ink-dark">
-              Explore Doctors from 36+ clinical areas
+              {t("sp_heading")}
             </h2>
             <p className="text-xs sm:text-sm text-slate-500 mt-1">
-              যে কোনো স্বাস্থ্য সমস্যায় অভিজ্ঞ বিশেষজ্ঞ ডাক্তারের সরাসরি পরামর্শ নিন
+              {t("sp_sub")}
             </p>
           </div>
 
@@ -407,10 +415,10 @@ export default function HomeClient() {
                   <div className="grid h-11 w-11 place-items-center rounded-xl bg-brand-50 text-brand group-hover:bg-brand group-hover:text-white transition-colors mb-2.5">
                     <IconComponent size={22} />
                   </div>
-                  <h4 className="text-sm font-bold text-ink-dark group-hover:text-brand transition-colors">
-                    {sp.name}
+                  <h4 className="text-sm font-bold text-ink-dark group-hover:text-brand transition-colors text-center">
+                    {lang === "bn" ? sp.bn : sp.name}
                   </h4>
-                  <p className="text-[11px] text-slate-400 mt-0.5">{sp.sub}</p>
+                  <p className="text-[11px] text-slate-400 mt-0.5 text-center">{sp.sub}</p>
                 </Link>
               );
             })}
@@ -424,17 +432,17 @@ export default function HomeClient() {
           <div className="flex items-center justify-between mb-8">
             <div>
               <h2 className="text-2xl sm:text-3xl font-black text-ink-dark">
-                Common Health Concerns
+                {t("concerns_heading")}
               </h2>
               <p className="text-xs sm:text-sm text-slate-500 mt-1">
-                আপনার সমস্যা অনুযায়ী উপযুক্ত বিশেষজ্ঞ ডাক্তার খুঁজে নিন
+                {t("concerns_sub")}
               </p>
             </div>
             <Link
               href="/doctors"
               className="inline-flex items-center gap-1 text-xs sm:text-sm font-bold text-brand hover:underline"
             >
-              <span>View All</span>
+              <span>{t("concerns_view_all")}</span>
               <ChevronRight size={16} />
             </Link>
           </div>
@@ -450,11 +458,12 @@ export default function HomeClient() {
                   <HeartPulse size={32} className="group-hover:scale-110 transition-transform" />
                 </div>
                 <h4 className="text-sm font-bold text-ink-dark group-hover:text-brand transition-colors leading-snug">
-                  {item.title}
+                  {lang === "bn" ? item.bn : item.title}
                 </h4>
-                <p className="text-[11px] text-slate-500 mt-1">{item.bn}</p>
-                <span className="text-[10px] font-bold text-brand mt-2 inline-block">
-                  {item.count} available &gt;
+                <p className="text-[11px] text-slate-500 mt-1">{lang === "bn" ? item.title : item.bn}</p>
+                <span className="text-[10px] font-bold text-brand mt-2 inline-flex items-center gap-0.5">
+                  <span>{item.count} {lang === "bn" ? "উপলব্ধ" : "available"}</span>
+                  <ChevronRight size={12} />
                 </span>
               </Link>
             ))}
@@ -469,14 +478,14 @@ export default function HomeClient() {
             <div>
               <div className="flex items-center gap-2">
                 <h2 className="text-2xl sm:text-3xl font-black text-ink-dark">
-                  Available Doctors
+                  {t("doc_heading")}
                 </h2>
                 <span className="rounded-full bg-brand-50 px-2.5 py-0.5 text-xs font-bold text-brand">
-                  380 Doctors Online Now
+                  {t("doc_online")}
                 </span>
               </div>
               <p className="text-xs sm:text-sm text-slate-500 mt-1">
-                BMDC অনুমোদিত অভিজ্ঞ চিকিৎসকদের সিরিয়াল ও তাত্ক্ষণিক ভিডিও কল
+                {t("doc_sub")}
               </p>
             </div>
             <Link
@@ -518,7 +527,7 @@ export default function HomeClient() {
 
                 <div className="mt-4 pt-3 border-t border-slate-100">
                   <div className="flex items-center justify-between mb-3">
-                    <span className="text-xs text-slate-400">Consultation Fee</span>
+                    <span className="text-xs text-slate-400">{t("doc_fee_label")}</span>
                     <div className="flex items-center gap-1.5">
                       <span className="text-xs text-slate-400 line-through">৳{doc.oldFee}</span>
                       <span className="text-base font-black text-ink-dark">৳{doc.fee}</span>
@@ -530,7 +539,7 @@ export default function HomeClient() {
                     className="btn-outline w-full !min-h-[40px] text-xs font-bold !border-brand/40 !text-brand hover:!bg-brand hover:!text-white transition-all flex items-center justify-center gap-1.5"
                   >
                     <Video size={15} />
-                    <span>See Doctor Now</span>
+                    <span>{t("doc_see_btn")}</span>
                   </Link>
                 </div>
               </div>
@@ -544,13 +553,13 @@ export default function HomeClient() {
         <div className="wrap">
           <div className="text-center max-w-2xl mx-auto mb-10">
             <span className="text-xs font-bold text-brand uppercase tracking-wider block mb-1">
-              Healthcare Subscription
+              {t("plans_sub")}
             </span>
             <h2 className="text-2xl sm:text-4xl font-black text-ink-dark">
-              DH Medical Health Care and Protect Plans
+              {t("plans_heading")}
             </h2>
             <p className="text-xs sm:text-sm text-slate-500 mt-2">
-              প্রবাসে থাকা ভাইদের পরিবারের জন্য ও বয়োবৃদ্ধ মা-বাবার জন্য মাসিক নিশ্চিন্ত স্বাস্থ্য সুরক্ষা
+              {t("plans_desc")}
             </p>
           </div>
 
@@ -558,11 +567,10 @@ export default function HomeClient() {
             {HEALTH_PLANS.map((plan) => (
               <div
                 key={plan.name}
-                className={`relative rounded-3xl border p-6 flex flex-col justify-between transition-all ${
-                  plan.popular
-                    ? "border-brand bg-white shadow-card ring-2 ring-brand/10"
-                    : "border-slate-200 bg-white shadow-clean hover:border-slate-300"
-                }`}
+                className={`relative rounded-3xl border p-6 flex flex-col justify-between transition-all ${plan.popular
+                  ? "border-brand bg-white shadow-card ring-2 ring-brand/10"
+                  : "border-slate-200 bg-white shadow-clean hover:border-slate-300"
+                  }`}
               >
                 {plan.popular && (
                   <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-brand px-3 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white shadow-sm">
@@ -593,11 +601,10 @@ export default function HomeClient() {
                 <div className="mt-6 pt-4 border-t border-slate-100">
                   <Link
                     href={`/family-care?plan=${encodeURIComponent(plan.name)}`}
-                    className={`w-full text-xs font-bold justify-center ${
-                      plan.popular ? "btn-primary" : "btn-primary !bg-brand hover:!bg-brand-dark"
-                    }`}
+                    className={`w-full text-xs font-bold justify-center ${plan.popular ? "btn-primary" : "btn-primary !bg-brand hover:!bg-brand-dark"
+                      }`}
                   >
-                    Subscribe Now
+                    {t("plans_subscribe")}
                   </Link>
                 </div>
               </div>
@@ -607,9 +614,10 @@ export default function HomeClient() {
           <div className="mt-8 text-center">
             <Link
               href="/family-care"
-              className="btn-outline !min-h-[42px] !px-8 text-xs font-bold !border-brand/30 !text-brand hover:!bg-brand-50"
+              className="btn-outline !min-h-[42px] !px-8 text-xs font-bold !border-brand/30 !text-brand hover:!bg-brand-50 inline-flex items-center gap-1.5"
             >
-              See comparison with all packages &gt;
+              <span>{t("plans_compare")}</span>
+              <ChevronRight size={14} />
             </Link>
           </div>
         </div>
@@ -623,13 +631,13 @@ export default function HomeClient() {
               {/* Left Column: Features and Location Input */}
               <div className="lg:col-span-7 space-y-5">
                 <span className="text-xs font-bold text-brand uppercase tracking-wider block">
-                  Home Diagnostic Service
+                  {t("diag_badge")}
                 </span>
                 <h2 className="text-2xl sm:text-3xl font-black text-ink-dark">
-                  Sample collection at your Doorstep
+                  {t("diag_heading")}
                 </h2>
                 <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
-                  বাসায় বসেই রক্ত ও প্রস্রাব টেস্টের নমুনা দিন। ল্যাব টেকনোলজিস্ট এসে স্যাম্পল সংগ্রহ করবেন এবং ১২-২৪ ঘণ্টার ভেতর ডিজিটাল রিপোর্ট আপনার ফোনে পৌঁছে দেওয়া হবে।
+                  {t("diag_sub")}
                 </p>
 
                 <div className="space-y-3 pt-2">
@@ -637,21 +645,21 @@ export default function HomeClient() {
                     <div className="grid h-7 w-7 place-items-center rounded-lg bg-brand-50 text-brand shrink-0">
                       <Clock size={16} />
                     </div>
-                    <span>Faster and convenient tests booking from home or office</span>
+                    <span>{t("diag_f1")}</span>
                   </div>
 
                   <div className="flex items-center gap-3 text-xs sm:text-sm font-semibold text-slate-700">
                     <div className="grid h-7 w-7 place-items-center rounded-lg bg-brand-50 text-brand shrink-0">
                       <ShieldCheck size={16} />
                     </div>
-                    <span>Certified healthcare professionals will safely collect samples</span>
+                    <span>{t("diag_f2")}</span>
                   </div>
 
                   <div className="flex items-center gap-3 text-xs sm:text-sm font-semibold text-slate-700">
                     <div className="grid h-7 w-7 place-items-center rounded-lg bg-brand-50 text-brand shrink-0">
                       <FileSpreadsheet size={16} />
                     </div>
-                    <span>Get digital report on DH Medical app & WhatsApp within 24 hours</span>
+                    <span>{t("diag_f3")}</span>
                   </div>
                 </div>
 
@@ -659,7 +667,7 @@ export default function HomeClient() {
                 <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 space-y-3 mt-4">
                   <div className="flex items-center gap-2 text-xs font-bold text-ink-dark">
                     <MapPin size={15} className="text-brand" />
-                    <span>Sample Collection Location Checker</span>
+                    <span>{lang === "bn" ? "স্যাম্পল কালেকশন এরিয়া পরীক্ষক" : "Sample Collection Area Checker"}</span>
                   </div>
                   <div className="flex gap-2">
                     <input
@@ -669,7 +677,7 @@ export default function HomeClient() {
                         setSampleLocation(e.target.value);
                         setLocationSaved(false);
                       }}
-                      placeholder="Enter your area (e.g. Dhanmondi, Uttara, Mirpur, Sylhet...)"
+                      placeholder={t("diag_location_placeholder")}
                       className="search-input !h-11 !text-xs !bg-white"
                     />
                     <button
@@ -677,15 +685,16 @@ export default function HomeClient() {
                       onClick={() => {
                         if (sampleLocation.trim()) setLocationSaved(true);
                       }}
-                      className="btn-primary !min-h-[44px] !px-4 text-xs shrink-0"
+                      className="btn-primary !min-h-[44px] !px-4 text-xs shrink-0 inline-flex items-center gap-1.5"
                     >
-                      Confirm Location &rarr;
+                      <span>{t("diag_location_btn")}</span>
+                      <ArrowRight size={14} />
                     </button>
                   </div>
                   {locationSaved && (
                     <p className="text-xs font-bold text-brand bg-brand-50 rounded-lg p-2 flex items-center gap-1.5">
                       <CheckCircle2 size={15} />
-                      <span>সেবা উপলব্ধ! আমাদের টিম {sampleLocation}-এ নমুনা সংগ্রহ করতে প্রস্তুত।</span>
+                      <span>{lang === "bn" ? `সেবা উপলব্ধ! আমাদের টিম ${sampleLocation}-এ নমুনা সংগ্রহ করতে প্রস্তুত।` : `Service available in ${sampleLocation}! Our certified team is ready.`}</span>
                     </p>
                   )}
                 </div>
@@ -712,21 +721,22 @@ export default function HomeClient() {
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
             <div>
               <span className="text-xs font-bold text-brand uppercase tracking-wider block mb-1">
-                24/7 Nationwide Emergency
+                {t("fleet_badge")}
               </span>
               <h2 className="text-2xl sm:text-3xl font-black text-ink-dark">
-                Fastest Emergency Ambulance Fleet
+                {t("fleet_heading")}
               </h2>
               <p className="text-xs sm:text-sm text-slate-500 mt-1">
-                ১৫-২৫ মিনিটে পৌঁছায় সাধারণ এসি, অক্সিজেন, ICU ও নবজাতক (NICU) লাইফ সাপোর্ট গাড়ি
+                {t("fleet_sub")}
               </p>
             </div>
             <Link
               href="/ambulance"
-              className="btn-primary !min-h-[42px] !px-6 text-xs font-bold self-start sm:self-auto"
+              className="btn-primary !min-h-[42px] !px-6 text-xs font-bold self-start sm:self-auto inline-flex items-center gap-1.5"
             >
               <Ambulance size={16} />
-              <span>Full Ambulance Fleet &gt;</span>
+              <span>{t("fleet_view_all")}</span>
+              <ArrowRight size={14} />
             </Link>
           </div>
 
@@ -750,14 +760,14 @@ export default function HomeClient() {
 
                 <div className="mt-5 pt-3 border-t border-slate-100 flex items-center justify-between">
                   <div>
-                    <span className="text-[10px] text-slate-400 block uppercase">বেস ভাড়া</span>
-                    <b className="text-sm font-black text-ink-dark">৳{amb.baseFare.toLocaleString("bn-BD")}</b>
+                    <span className="text-[10px] text-slate-400 block uppercase">{t("fleet_base_fare")}</span>
+                    <b className="text-sm font-black text-ink-dark">৳{amb.baseFare.toLocaleString(lang === "bn" ? "bn-BD" : "en-US")}</b>
                   </div>
                   <Link
                     href={`/ambulance?type=${encodeURIComponent(amb.key)}`}
                     className="btn-primary !min-h-[36px] !px-3.5 !py-1 text-xs font-bold"
                   >
-                    বুক করুন
+                    {t("fleet_book_now")}
                   </Link>
                 </div>
               </div>
@@ -788,13 +798,13 @@ export default function HomeClient() {
               {/* Text & Action */}
               <div className="lg:col-span-7 space-y-4">
                 <span className="text-xs font-bold text-brand uppercase tracking-wider block">
-                  Join The Healthcare Network
+                  {lang === "bn" ? "স্বাস্থ্য নেটওয়ার্কে যুক্ত হোন" : "Join The Healthcare Network"}
                 </span>
                 <h2 className="text-2xl sm:text-3xl font-black text-ink-dark">
-                  Are You A Qualified Doctor or Ambulance Partner?
+                  {t("partner_join_title")}
                 </h2>
                 <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
-                  Join Bangladesh's premier healthcare and emergency platform. Create your virtual chamber, manage chamber appointments, or connect your ambulance fleet to serve thousands of patients nationwide.
+                  {t("partner_join_sub")}
                 </p>
 
                 <div className="space-y-2 text-xs font-medium text-slate-600 pt-1">
@@ -815,15 +825,17 @@ export default function HomeClient() {
                 <div className="pt-3 flex flex-wrap gap-3">
                   <Link
                     href="/partner"
-                    className="btn-primary !min-h-[44px] !px-6 text-xs font-bold"
+                    className="btn-primary !min-h-[44px] !px-6 text-xs font-bold inline-flex items-center gap-1.5"
                   >
-                    Join as Doctor &gt;
+                    <span>{t("partner_join_doc")}</span>
+                    <ArrowRight size={14} />
                   </Link>
                   <Link
                     href="/partner#ambulance"
-                    className="btn-outline !min-h-[44px] !px-6 text-xs font-bold !border-brand/30 !text-brand hover:!bg-brand-50"
+                    className="btn-outline !min-h-[44px] !px-6 text-xs font-bold !border-brand/30 !text-brand hover:!bg-brand-50 inline-flex items-center gap-1.5"
                   >
-                    Ambulance Partner &gt;
+                    <span>{t("partner_join_amb")}</span>
+                    <ArrowRight size={14} />
                   </Link>
                 </div>
               </div>
@@ -837,10 +849,10 @@ export default function HomeClient() {
         <div className="wrap flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
           <div>
             <h3 className="text-lg sm:text-xl font-black">
-              জরুরি প্রয়োজনে আমাদের মেডিকেল টিম ২৪ ঘণ্টা প্রস্তুত
+              {t("hotline_heading")}
             </h3>
             <p className="text-xs text-brand-100 mt-0.5">
-              অ্যাম্বুলেন্স, আইসিইউ বেড বা বিশেষজ্ঞ ডাক্তার সিরিয়ালের যে কোনো জরুরি সহায়তায় কল করুন
+              {t("hotline_sub")}
             </p>
           </div>
           <a
@@ -848,7 +860,7 @@ export default function HomeClient() {
             className="btn bg-white text-brand hover:bg-slate-100 !min-h-[46px] !px-7 font-black text-sm shrink-0 shadow-lg inline-flex items-center gap-2"
           >
             <Phone size={18} />
-            <span>কল করুন {SITE.phone}</span>
+            <span>{t("hotline_call_btn")} {SITE.phone}</span>
           </a>
         </div>
       </section>
