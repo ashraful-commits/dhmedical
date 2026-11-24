@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { Phone, MapPin, Ambulance, Stethoscope, ShieldCheck, HeartPulse, ExternalLink } from "lucide-react";
+import { Phone, MapPin, Ambulance, Stethoscope, ShieldCheck, HeartPulse, ExternalLink, FileSpreadsheet } from "lucide-react";
 import Logo from "./Logo";
 import { SITE, SPECIALTIES, DISTRICTS } from "@/lib/site";
 import { useLanguage } from "@/context/LanguageContext";
@@ -62,6 +62,11 @@ export default function Footer() {
             <li>
               <Link href="/family-care" className="hover:text-brand transition-colors block py-0.5">
                 {t("nav_plans")}
+              </Link>
+            </li>
+            <li>
+              <Link href="/prescription" className="hover:text-brand transition-colors block py-0.5">
+                {lang === "bn" ? "প্রেসক্রিপশন OCR" : "Prescription OCR"}
               </Link>
             </li>
             <li>
@@ -127,16 +132,23 @@ export default function Footer() {
             <span className="text-[11px] font-bold text-slate-400 block mb-1.5">
               {lang === "bn" ? "সারাদেশে ৬৪ জেলায় কভারেজ" : "Coverage Across 64 Districts"}
             </span>
-            <div className="flex flex-wrap gap-1 text-[10.5px]">
-              {DISTRICTS.slice(0, 8).map((d) => (
-                <span key={d} className="rounded-md bg-white border border-slate-200 px-1.5 py-0.5 text-slate-600">
+            <div className="flex max-h-24 flex-wrap gap-1 overflow-y-auto text-[10.5px]">
+              {DISTRICTS.map((d) => (
+                <Link
+                  key={d}
+                  href={`/districts?q=${encodeURIComponent(d)}`}
+                  className="rounded-md bg-white border border-slate-200 px-1.5 py-0.5 text-slate-600 hover:border-brand hover:text-brand"
+                >
                   {d}
-                </span>
+                </Link>
               ))}
-              <span className="rounded-md bg-brand-50 text-brand px-1.5 py-0.5 font-bold">
-                {lang === "bn" ? "+৫৬ জেলা" : "+56 Districts"}
-              </span>
             </div>
+            <Link
+              href="/districts"
+              className="mt-1.5 inline-block text-[11px] font-bold text-brand hover:underline"
+            >
+              {lang === "bn" ? "জেলা বা উপজেলা খুঁজুন →" : "Find a district or upazila →"}
+            </Link>
           </div>
         </div>
       </div>

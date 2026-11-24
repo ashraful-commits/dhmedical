@@ -31,8 +31,10 @@ import {
 import { motion } from "framer-motion";
 import { GsapFadeIn, GsapStagger } from "@/components/GsapAnimation";
 import PartnerHospitalsCarousel from "@/components/PartnerHospitalsCarousel";
+import DynamicForm from "@/components/DynamicForm";
 import { DocTimeWavePattern, ClinicalDotGrid } from "@/components/MedicalPatterns";
 import { SITE, AMBULANCE_TYPES_DATA } from "@/lib/site";
+import { insuranceFields } from "@/lib/forms";
 import { useLanguage } from "@/context/LanguageContext";
 
 // DocTime 15-Specialty Clinical Area Definitions
@@ -114,52 +116,80 @@ const DOCTORS_FEATURED = [
 const HEALTH_PLANS = [
   {
     name: "Jotno (যত্ন)",
-    price: "99",
+    price: "1,000+",
     period: "/monthly",
     target: "1 Person",
     features: [
-      "Free 4 consultations with BMDC General Physician",
-      "10% discount on any Specialist Doctor consultation",
-      "24/7 Central Emergency Hotline Priority",
+      "Free 2 consultations with BMDC General Physician",
+      "5% discount on Specialist Doctor consultation",
+      "Digital Health Record & Prescription Vault",
     ],
   },
   {
     name: "Astha (আস্থা)",
-    price: "175",
+    price: "1,500+",
     period: "/monthly",
     target: "1 Person",
     popular: true,
     features: [
-      "Free 8 consultations with BMDC General Physician",
-      "10% discount on any Specialist Doctor consultation",
+      "Free 4 consultations with BMDC General Physician",
+      "10% discount on Specialist Doctor consultation",
       "Free Home Diagnostic sample collection coordination",
       "Digital Health Record & Prescription Vault",
     ],
   },
   {
     name: "Aponjon (আপনজন)",
-    price: "249",
+    price: "2,500+",
     period: "/monthly",
     target: "For 4 persons (Family)",
     features: [
-      "Free 8 consultations with BMDC General Physician",
-      "10% discount on any Specialist Doctor consultation",
-      "Priority Emergency Ambulance Dispatch Guarantee",
+      "Free 6 consultations with BMDC General Physician",
+      "10% discount on Specialist Doctor consultation",
       "Full family coverage under 1 single subscription",
+      "Annual health checkup coordination",
     ],
   },
   {
     name: "Momota (মমতা - প্রবাসী ও মা-বাবা কেয়ার)",
-    price: "449",
+    price: "3,500+",
     period: "/monthly",
     target: "For Parents & Elders",
     features: [
-      "Free 8 consultations with BMDC General Physician",
+      "Free 6 consultations with BMDC General Physician",
       "Monthly 2 scheduled online health screening calls for parents",
       "Doorstep Medicine & Lab Test Coordination",
       "Dedicated Care Officer for Expatriate Families",
     ],
   },
+];
+
+const INSURANCE_GUIDE = [
+  {
+    title: "সরকারি স্বাস্থ্য বীমা (Shasthya Bima)",
+    type: "জেলা/উপজেলা ভিত্তিক সামাজিক স্বাস্থ্য সুরক্ষা",
+    detail: "কম প্রিমিয়ামে পরিবারের জন্য হাসপাতাল চিকিৎসা ও চিকিৎসা খরচে সহায়তা পাওয়া যায়। নিবন্ধন সাধারণত উপজেলা/জেলা অফিস বা নির্ধারিত ব্যাংকের মাধ্যমে হয়।",
+    note: "প্রয়োজন: NID, জন্ম নিবন্ধন, ঠিকানা প্রমাণ ও পরিবারের সদস্যদের তথ্য।",
+  },
+  {
+    title: "বেসরকারি হেলথ পলিসি (Jotno, Astha, Aponjon, Momota)",
+    type: "মাসিক/বার্ষিক প্রিমিয়াম, নেটওয়ার্ক হাসপাতালে ক্যাশলেস বা রিইম্বার্সমেন্ট",
+    detail: "পলিসিতে সাধারণত ওয়েটিং পিরিয়ড, বছরের সর্বোচ্চ কভারেজ, রুম ভাড়ার সীমা ও বাদ দেওয়া রোগের তালিকা থাকে। অসুস্থ হওয়ার আগে পলিসি নেওয়া ভালো।",
+    note: "প্রয়োজন: পলিসি নম্বর, NID, পূর্বের চিকিৎসা ইতিহাস ও মনোনীত হাসপাতালের তালিকা।",
+  },
+  {
+    title: "জীবন বীমার হেলথ রাইডার",
+    type: "মূল জীবন বীমার সাথে অতিরিক্ত স্বাস্থ্য কভারেজ",
+    detail: "হাসপাতালে ভর্তি, অস্ত্রোপচার ও গুরুতর অসুস্থতায় নির্ধারিত পরিমাণ টাকা পাওয়া যায়। কভারেজ শর্ত ভিন্ন হয়, তাই পলিসি ডকুমেন্ট পড়ে নিন।",
+    note: "প্রয়োজন: মূল পলিসি, রাইডার স্লিপ, প্রিমিয়াম রিসিট ও ক্লেইম ফর্ম।",
+  },
+];
+
+const INSURANCE_STEPS = [
+  { n: "০১", title: "পলিসি তুলুন", text: "প্রিমিয়াম, ওয়েটিং পিরিয়ড, কভারেজ সীমা ও পরিবারের কতজন অন্তর্ভুক্ত হবেন দেখুন।" },
+  { n: "০২", title: "নিবন্ধন করুন", text: "NID/জন্ম নিবন্ধন ও স্বাস্থ্য তথ্য দিয়ে আবেদন জমা দিন।" },
+  { n: "০৩", title: "চিকিৎসা নিন", text: "নেটওয়ার্ক হাসপাতালে ক্যাশলেস অথবা বিল সংরক্ষণ করে রিইম্বার্সমেন্ট চান।" },
+  { n: "০৪", title: "ক্লেইম ও নবায়ন", text: "বিল, প্রেসক্রিপশন ও ডিসচার্জ সামারি সহ ক্লেইম করে পলিসি সময়মতো নবায়ন করুন।" },
 ];
 
 export default function HomeClient() {
@@ -204,7 +234,7 @@ export default function HomeClient() {
                 <Link
                   key={tag}
                   href={`/doctors?q=${encodeURIComponent(query)}`}
-                  className="rounded-full bg-slate-100 hover:bg-brand-50 hover:text-brand px-3 py-1 font-medium text-slate-600 transition-colors whitespace-nowrap"
+                  className="rounded-full bg-slate-100 hover:bg-care-50 hover:text-care px-3 py-1 font-medium text-slate-600 transition-colors whitespace-nowrap"
                 >
                   {tag}
                 </Link>
@@ -239,8 +269,8 @@ export default function HomeClient() {
             <div className="grid gap-8 lg:grid-cols-12 lg:items-center relative z-10">
               {/* Left Column: Heading, Trust Badges, and Action Button */}
               <div className="lg:col-span-7 space-y-5">
-                <div className="inline-flex items-center gap-2 rounded-full bg-white px-3.5 py-1 text-xs font-bold text-brand shadow-sm border border-brand-100">
-                  <span className="h-2 w-2 rounded-full bg-brand animate-ping" />
+                <div className="inline-flex items-center gap-2 rounded-full bg-white px-3.5 py-1 text-xs font-bold text-care shadow-sm border border-care-100">
+                  <span className="h-2 w-2 rounded-full bg-care animate-ping" />
                   <span>{t("hero_badge")}</span>
                 </div>
 
@@ -255,28 +285,28 @@ export default function HomeClient() {
                 {/* DocTime Trust Bullet Points */}
                 <div className="space-y-2.5 text-xs sm:text-sm font-semibold text-ink-dark pt-1">
                   <div className="flex items-center gap-2.5">
-                    <div className="grid h-5 w-5 place-items-center rounded-full bg-brand text-white shrink-0">
+                    <div className="grid h-5 w-5 place-items-center rounded-full bg-care text-white shrink-0">
                       <Check size={12} strokeWidth={3} />
                     </div>
                     <span>{t("hero_trust_1")}</span>
                   </div>
 
                   <div className="flex items-center gap-2.5">
-                    <div className="grid h-5 w-5 place-items-center rounded-full bg-brand text-white shrink-0">
+                    <div className="grid h-5 w-5 place-items-center rounded-full bg-care text-white shrink-0">
                       <Check size={12} strokeWidth={3} />
                     </div>
                     <span>{t("hero_trust_2")}</span>
                   </div>
 
                   <div className="flex items-center gap-2.5">
-                    <div className="grid h-5 w-5 place-items-center rounded-full bg-brand text-white shrink-0">
+                    <div className="grid h-5 w-5 place-items-center rounded-full bg-care text-white shrink-0">
                       <Check size={12} strokeWidth={3} />
                     </div>
                     <span>{t("hero_trust_3")}</span>
                   </div>
 
                   <div className="flex items-center gap-2.5">
-                    <div className="grid h-5 w-5 place-items-center rounded-full bg-brand text-white shrink-0">
+                    <div className="grid h-5 w-5 place-items-center rounded-full bg-care text-white shrink-0">
                       <Check size={12} strokeWidth={3} />
                     </div>
                     <span>{t("hero_trust_4")}</span>
@@ -316,9 +346,9 @@ export default function HomeClient() {
                   <div className="absolute bottom-6 left-6 right-6 rounded-xl bg-white/95 p-3.5 shadow-lg backdrop-blur-md border border-slate-100 flex items-center justify-between">
                     <div>
                       <span className="text-[11px] font-bold text-slate-400 block uppercase">Trusted Network</span>
-                      <p className="text-sm font-black text-ink-dark">820,000+ Patients Served</p>
+                      <p className="text-sm font-black text-care">820,000+ Patients Served</p>
                     </div>
-                    <span className="inline-flex items-center gap-1 rounded-lg bg-brand-50 px-2.5 py-1 text-xs font-bold text-brand">
+                    <span className="inline-flex items-center gap-1 rounded-lg bg-care-50 px-2.5 py-1 text-xs font-bold text-care">
                       <ShieldCheck size={14} /> BMDC Verified
                     </span>
                   </div>
@@ -405,7 +435,7 @@ export default function HomeClient() {
         <ClinicalDotGrid className="opacity-30" />
         <div className="wrap relative z-10">
           <div className="text-center sm:text-left mb-8">
-            <span className="text-xs font-bold text-brand uppercase tracking-wider block mb-1">
+            <span className="text-xs font-bold text-care uppercase tracking-wider block mb-1">
               {t("sp_title")}
             </span>
             <h2 className="text-2xl sm:text-3xl font-black text-ink-dark">
@@ -472,14 +502,14 @@ export default function HomeClient() {
                 href={`/doctors?q=${encodeURIComponent(item.query)}`}
                 className="group rounded-2xl border border-slate-200 bg-white p-4 hover:border-brand/50 hover:shadow-hover transition-all"
               >
-                <div className="h-24 w-full rounded-xl bg-gradient-to-br from-brand-50 to-slate-100 flex items-center justify-center p-3 mb-3 text-brand">
+                <div className="h-24 w-full rounded-xl bg-gradient-to-br from-care-50 via-care-100/40 to-slate-100 flex items-center justify-center p-3 mb-3 text-care">
                   <HeartPulse size={32} className="group-hover:scale-110 transition-transform" />
                 </div>
                 <h4 className="text-sm font-bold text-ink-dark group-hover:text-brand transition-colors leading-snug">
                   {lang === "bn" ? item.bn : item.title}
                 </h4>
                 <p className="text-[11px] text-slate-500 mt-1">{lang === "bn" ? item.title : item.bn}</p>
-                <span className="text-[10px] font-bold text-brand mt-2 inline-flex items-center gap-0.5">
+                <span className="text-[10px] font-bold text-care mt-2 inline-flex items-center gap-0.5">
                   <span>{item.count} {lang === "bn" ? "উপলব্ধ" : "available"}</span>
                   <ChevronRight size={12} />
                 </span>
@@ -535,7 +565,7 @@ export default function HomeClient() {
                   <h3 className="text-sm font-bold text-ink-dark line-clamp-1">{doc.name}</h3>
                   <p className="text-[11px] text-slate-500 mt-0.5 line-clamp-1">{doc.degree}</p>
 
-                  <div className="mt-2.5 inline-block rounded-md bg-brand-50 px-2 py-0.5 text-[11px] font-bold text-brand">
+                  <div className="mt-2.5 inline-block rounded-md bg-care-50 px-2 py-0.5 text-[11px] font-bold text-care">
                     {doc.specialty}
                   </div>
 
@@ -572,7 +602,7 @@ export default function HomeClient() {
       <section className="py-14 bg-white">
         <div className="wrap">
           <div className="text-center max-w-2xl mx-auto mb-10">
-            <span className="text-xs font-bold text-brand uppercase tracking-wider block mb-1">
+            <span className="text-xs font-bold text-care uppercase tracking-wider block mb-1">
               {t("plans_sub")}
             </span>
             <h2 className="text-2xl sm:text-4xl font-black text-ink-dark">
@@ -595,7 +625,7 @@ export default function HomeClient() {
                   }`}
               >
                 {plan.popular && (
-                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-brand px-3 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white shadow-sm">
+                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-care px-3 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white shadow-sm">
                     Most Popular
                   </span>
                 )}
@@ -606,14 +636,14 @@ export default function HomeClient() {
                     <span className="text-3xl font-black text-ink-dark">৳{plan.price}</span>
                     <span className="text-xs text-slate-500">{plan.period}</span>
                   </div>
-                  <span className="text-xs font-semibold text-brand block mt-0.5">{plan.target}</span>
+                  <span className="text-xs font-semibold text-care block mt-0.5">{plan.target}</span>
 
                   <div className="my-5 border-t border-slate-100" />
 
                   <ul className="space-y-2.5 text-xs text-slate-600">
                     {plan.features.map((feat, i) => (
                       <li key={i} className="flex items-start gap-2">
-                        <Check size={14} className="text-brand shrink-0 mt-0.5" strokeWidth={2.5} />
+                        <Check size={14} className="text-care shrink-0 mt-0.5" strokeWidth={2.5} />
                         <span>{feat}</span>
                       </li>
                     ))}
@@ -631,6 +661,68 @@ export default function HomeClient() {
                 </div>
               </motion.div>
             ))}
+          </div>
+
+          <div className="mt-12 overflow-hidden rounded-3xl border border-slate-200 bg-[#F8FAFC] shadow-clean">
+            <div className="grid lg:grid-cols-12">
+              <div className="p-6 sm:p-8 lg:col-span-7">
+                <span className="text-xs font-bold text-care uppercase tracking-wider block mb-1">
+                  বাংলাদেশের বীমা গাইড
+                </span>
+                <h3 className="text-xl sm:text-2xl font-black text-ink-dark">
+                  বীমা পরিকল্পনা কীভাবে কাজ করে?
+                </h3>
+                <p className="mt-2 text-xs sm:text-sm text-slate-500 leading-relaxed">
+                  সরকারি স্বাস্থ্য বীমা, বেসরকারি হেলথ পলিসি বা জীবন বীমার হেলথ রাইডার — মূল ধাপ একই। নিচের তথ্যগুলো জানলে ক্লেইম ও নবায়ন সহজ হয়।
+                </p>
+
+                <div className="mt-5 grid gap-2 sm:grid-cols-2">
+                  {INSURANCE_STEPS.map((step) => (
+                    <div key={step.n} className="rounded-2xl border border-slate-200 bg-white p-3.5">
+                      <span className="text-[11px] font-black text-brand">{step.n}</span>
+                      <p className="mt-0.5 text-sm font-bold text-navy">{step.title}</p>
+                      <p className="mt-1 text-[11px] leading-relaxed text-slate-500">{step.text}</p>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="mt-5 space-y-2">
+                  {INSURANCE_GUIDE.map((item) => (
+                    <details key={item.title} className="group rounded-2xl border border-slate-200 bg-white p-4 open:shadow-sm">
+                      <summary className="flex cursor-pointer list-none items-start justify-between gap-3">
+                        <span>
+                          <span className="block text-sm font-black text-navy">{item.title}</span>
+                          <span className="mt-0.5 block text-[11px] font-semibold text-brand">{item.type}</span>
+                        </span>
+                        <ChevronRight size={16} className="mt-1 shrink-0 text-slate-400 transition-transform group-open:rotate-90" />
+                      </summary>
+                      <p className="mt-2 border-t border-slate-100 pt-2 text-[11px] leading-relaxed text-slate-600">{item.detail}</p>
+                      <p className="mt-1.5 text-[11px] font-semibold text-emerald-700">{item.note}</p>
+                    </details>
+                  ))}
+                </div>
+              </div>
+
+              <div className="border-t border-slate-200 bg-white p-4 sm:p-6 lg:col-span-5 lg:border-l lg:border-t-0">
+                <div className="mb-4 flex items-start gap-3">
+                  <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-brand-50 text-brand">
+                    <FileSpreadsheet size={20} />
+                  </div>
+                  <div>
+                    <h4 className="text-base font-black text-navy">নমুনা বীমা আবেদন ফর্ম</h4>
+                    <p className="mt-0.5 text-[11px] text-slate-500">
+                      নতুন পলিসি, ক্লেইম, নবায়ন বা সদস্য যোগ — যেকোনো একটি বেছে নিন।
+                    </p>
+                  </div>
+                </div>
+                <DynamicForm
+                  type="insuranceRequests"
+                  fields={insuranceFields}
+                  submit="বীমা সহায়তা চাই"
+                  success="আপনার বীমা আবেদন পৌঁছে গেছে। আমাদের কো-অর্ডিনেটর শীঘ্রই ফোন বা WhatsApp-এ যোগাযোগ করবেন।"
+                />
+              </div>
+            </div>
           </div>
 
           <div className="mt-8 text-center">
@@ -652,7 +744,7 @@ export default function HomeClient() {
             <div className="grid gap-8 lg:grid-cols-12 lg:items-center">
               {/* Left Column: Features and Location Input */}
               <div className="lg:col-span-7 space-y-5">
-                <span className="text-xs font-bold text-brand uppercase tracking-wider block">
+                <span className="text-xs font-bold text-care uppercase tracking-wider block">
                   {t("diag_badge")}
                 </span>
                 <h2 className="text-2xl sm:text-3xl font-black text-ink-dark">
@@ -742,7 +834,7 @@ export default function HomeClient() {
         <div className="wrap">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
             <div>
-              <span className="text-xs font-bold text-brand uppercase tracking-wider block mb-1">
+              <span className="text-xs font-bold text-care uppercase tracking-wider block mb-1">
                 {t("fleet_badge")}
               </span>
               <h2 className="text-2xl sm:text-3xl font-black text-ink-dark">
@@ -772,7 +864,7 @@ export default function HomeClient() {
               >
                 <div>
                   <div className="flex items-center justify-between mb-3">
-                    <span className="rounded-md bg-brand-50 px-2 py-0.5 text-[10.5px] font-bold text-brand">
+                    <span className="rounded-md bg-care-50 px-2 py-0.5 text-[10.5px] font-bold text-care">
                       {amb.badge}
                     </span>
                     <span className="text-[11px] font-bold text-slate-500">{amb.eta}</span>
@@ -833,15 +925,15 @@ export default function HomeClient() {
 
                 <div className="space-y-2 text-xs font-medium text-slate-600 pt-1">
                   <div className="flex items-center gap-2">
-                    <Check size={14} className="text-brand shrink-0" strokeWidth={2.5} />
+                    <Check size={14} className="text-care shrink-0" strokeWidth={2.5} />
                     <span>BMDC verified onboarding process with autonomous medical consultation</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Check size={14} className="text-brand shrink-0" strokeWidth={2.5} />
+                    <Check size={14} className="text-care shrink-0" strokeWidth={2.5} />
                     <span>24/7 dedicated technical coordination desk for doctors and ambulance drivers</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Check size={14} className="text-brand shrink-0" strokeWidth={2.5} />
+                    <Check size={14} className="text-care shrink-0" strokeWidth={2.5} />
                     <span>Timely verified settlements directly to your bank account</span>
                   </div>
                 </div>
@@ -884,7 +976,7 @@ export default function HomeClient() {
           </div>
           <a
             href={SITE.tel}
-            className="btn bg-white text-brand hover:bg-slate-100 !min-h-[46px] !px-7 font-black text-sm shrink-0 shadow-lg inline-flex items-center gap-2"
+            className="btn bg-white text-care hover:bg-care hover:text-white !min-h-[46px] !px-7 font-black text-sm shrink-0 shadow-lg inline-flex items-center gap-2 border border-care/20 transition-all"
           >
             <Phone size={18} />
             <span>{t("hotline_call_btn")} {SITE.phone}</span>

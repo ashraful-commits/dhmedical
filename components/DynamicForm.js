@@ -9,7 +9,9 @@ import {
   X,
   UploadCloud,
   ExternalLink,
+  Search,
 } from "lucide-react";
+import { findDistricts, findLocations } from "@/lib/site";
 
 const PHONE = "(\\+?88)?01[3-9][0-9]{8}";
 
@@ -217,6 +219,87 @@ function LocationPicker({ f, val, set }) {
   );
 }
 
+function DistrictPicker({ f, val, set }) {
+  const [query, setQuery] = useState(val || "");
+  const selected = findDistricts(String(val || "").split("—")[0].trim())[0];
+  const showResults = query && query !== val;
+  const districts = showResults ? findDistricts(query).slice(0, 8) : [];
+  const locations = showResults ? findLocations(query).slice(0, 8) : [];
+
+  function choose(text) {
+    set(f.name, text);
+    setQuery(text);
+  }
+
+  return (
+    <div>
+      <Label f={f} />
+      <div className="relative">
+        <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+        <input
+          type="text"
+          className="input !pl-10 w-full"
+          placeholder="জেলা, উপজেলা বা গ্রাম লিখুন (যেমন: Comilla)"
+          value={query}
+          required={f.required}
+          onChange={(e) => {
+            setQuery(e.target.value);
+            set(f.name, e.target.value);
+          }}
+        />
+      </div>
+
+      {showResults && (districts.length > 0 || locations.length > 0) && (
+        <div className="mt-2 max-h-56 overflow-y-auto rounded-xl border border-slate-200 bg-white p-1.5 shadow-sm">
+          {districts.map((d) => (
+            <button
+              key={`d-${d.name}`}
+              type="button"
+              onClick={() => choose(d.name)}
+              className="flex w-full items-center justify-between gap-2 rounded-lg px-3 py-2 text-left text-xs font-bold text-navy hover:bg-brand-50"
+            >
+              <span>{d.name} <span className="font-medium text-slate-400">({d.en})</span></span>
+              <span className="shrink-0 text-[10px] font-semibold text-brand">{d.upazilas.length} উপজেলা</span>
+            </button>
+          ))}
+          {locations.map((l, i) => (
+            <button
+              key={`l-${l.district}-${l.upazila}-${i}`}
+              type="button"
+              onClick={() =>
+                choose(`${l.district} — ${l.upazila}${l.matchedVillages[0] ? ` (${l.matchedVillages[0]})` : ""}`)
+              }
+              className="block w-full rounded-lg px-3 py-2 text-left text-xs font-medium text-slate-600 hover:bg-brand-50 hover:text-brand"
+            >
+              {l.district} › {l.upazila} {l.matchedVillages[0] ? `› ${l.matchedVillages[0]}` : ""}
+            </button>
+          ))}
+        </div>
+      )}
+
+      {selected && (
+        <div className="mt-2 rounded-xl bg-slate-50 p-2.5">
+          <p className="mb-1.5 text-[11px] font-bold text-slate-500">
+            {selected.name} ({selected.en}) — {selected.upazilas.length} উপজেলা
+          </p>
+          <div className="flex flex-wrap gap-1">
+            {selected.upazilas.map((u) => (
+              <button
+                key={u.name}
+                type="button"
+                onClick={() => choose(`${selected.name} — ${u.name}`)}
+                className="rounded-md border border-slate-200 bg-white px-2 py-1 text-[10.5px] font-semibold text-slate-600 hover:border-brand hover:text-brand"
+              >
+                {u.name}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function DynamicForm({
   type,
   fields,
@@ -294,7 +377,7 @@ export default function DynamicForm({
       {fields.map((f) => {
         const val = v[f.name];
         const wide =
-          f.full || ["textarea", "checks", "radio", "agree", "rating", "image", "location"].includes(f.type)
+          f.full || ["textarea", "checks", "radio", "agree", "rating", "image", "location", "district"].includes(f.type)
             ? f.type === "image"
               ? ""
               : "sm:col-span-2"
@@ -391,6 +474,12 @@ export default function DynamicForm({
           return (
             <div key={f.name} className={wide}>
               <LocationPicker f={f} val={val} set={set} />
+            </div>
+          );
+        } else if (f.type === "district") {
+          return (
+            <div key={f.name} className={wide}>
+              <DistrictPicker f={f} val={val} set={set} />
             </div>
           );
         } else if (f.type === "agree") {

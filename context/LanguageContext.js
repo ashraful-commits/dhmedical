@@ -82,7 +82,7 @@ export const translations = {
     // Protect Plans
     plans_sub: "Healthcare Subscription",
     plans_heading: "ডিএইচ মেডিকেল হেলথ কেয়ার ও প্রটেক্ট প্ল্যান",
-    plans_desc: "প্রবাসী পরিবার ও বয়োবৃদ্ধ মা-বাবার জন্য সাশ্রয়ী মাসিক স্বাস্থ্য সাবস্ক্রিপশন",
+    plans_desc: "প্রবাসী পরিবার ও বয়োবৃদ্ধ মা-বাবার জন্য ৳১,০০০+ মাসিক স্বাস্থ্য সাবস্ক্রিপশন ও বীমা গাইড",
     plans_compare: "সকল প্যাকেজের তুলনামূলক বিবরণী দেখুন",
     plans_subscribe: "সাবস্ক্রাইব করুন",
     
@@ -201,7 +201,7 @@ export const translations = {
     // Protect Plans
     plans_sub: "Healthcare Subscription",
     plans_heading: "DH Medical Health Care and Protect Plans",
-    plans_desc: "Affordable monthly health subscriptions for expatriate families and aging parents",
+    plans_desc: "Health subscriptions from ৳1,000+/month plus insurance guidance for expatriate families and aging parents",
     plans_compare: "See comparison with all packages",
     plans_subscribe: "Subscribe Now",
     

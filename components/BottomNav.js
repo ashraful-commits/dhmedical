@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Stethoscope, Ambulance, Navigation, Phone } from "lucide-react";
+import { Home, FileSpreadsheet, Ambulance, Navigation, Phone } from "lucide-react";
 import { SITE } from "@/lib/site";
 import { useLanguage } from "@/context/LanguageContext";
 
@@ -12,7 +12,7 @@ export default function BottomNav() {
   const items = [
     { href: "/", label: lang === "bn" ? "হোম" : "Home", Icon: Home },
     { href: "/ambulance", label: lang === "bn" ? "অ্যাম্বুলেন্স" : "Ambulance", Icon: Ambulance },
-    { href: "/appointment", label: lang === "bn" ? "ডাক্তার" : "Doctors", Icon: Stethoscope },
+    { href: "/prescription", label: lang === "bn" ? "প্রেসক্রিপশন" : "Prescription", Icon: FileSpreadsheet },
     { href: "/track", label: lang === "bn" ? "ট্র্যাকিং" : "Track", Icon: Navigation },
   ];
 

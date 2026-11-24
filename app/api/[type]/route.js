@@ -141,6 +141,8 @@ export async function POST(req, { params }) {
       body.trackingStatus = "requested";
     } else if (type === "memberships") {
       body.membershipId = generateBookingId("FC");
+    } else if (type === "insuranceRequests") {
+      body.requestId = generateBookingId("INS");
     }
 
     await db();
@@ -152,6 +154,7 @@ export async function POST(req, { params }) {
       bookingId: doc.bookingId || doc.membershipId || null,
       estimatedFare: doc.estimatedFare || null,
       eta: doc.eta || null,
+      requestId: doc.requestId || null,
     }, 201);
   } catch (e) {
     console.error("POST error:", e);

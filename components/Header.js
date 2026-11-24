@@ -14,6 +14,7 @@ import {
   Activity,
   FileSpreadsheet,
   Navigation,
+  MapPin,
   ArrowRight,
   MessageCircle,
   Clock,
@@ -218,6 +219,38 @@ export default function Header() {
                       {t("nav_join_ambulance")}
                     </span>
                     <span className="text-[11px] text-slate-400">অ্যাম্বুলেন্স মালিক ও ড্রাইভার পোর্টাল</span>
+                  </div>
+                </Link>
+
+                <Link
+                  href="/districts"
+                  onClick={() => setMoreOpen(false)}
+                  className="flex items-center gap-3 rounded-xl p-2.5 text-xs font-semibold text-slate-700 hover:bg-brand-50 hover:text-brand transition-colors group"
+                >
+                  <div className="grid h-8 w-8 place-items-center rounded-lg bg-brand-50 text-brand group-hover:bg-brand group-hover:text-white transition-colors">
+                    <MapPin size={16} />
+                  </div>
+                  <div>
+                    <span className="font-bold text-ink-dark group-hover:text-brand block">
+                      {lang === "bn" ? "৬৪ জেলা ও এলাকা" : "64 Districts & Areas"}
+                    </span>
+                    <span className="text-[11px] text-slate-400">কুমিল্লা, ঢাকা, চট্টগ্রাম ও সব উপজেলা</span>
+                  </div>
+                </Link>
+
+                <Link
+                  href="/prescription"
+                  onClick={() => setMoreOpen(false)}
+                  className="flex items-center gap-3 rounded-xl p-2.5 text-xs font-semibold text-slate-700 hover:bg-brand-50 hover:text-brand transition-colors group"
+                >
+                  <div className="grid h-8 w-8 place-items-center rounded-lg bg-brand-50 text-brand group-hover:bg-brand group-hover:text-white transition-colors">
+                    <FileSpreadsheet size={16} />
+                  </div>
+                  <div>
+                    <span className="font-bold text-ink-dark group-hover:text-brand block">
+                      {lang === "bn" ? "প্রেসক্রিপশন OCR" : "Prescription OCR"}
+                    </span>
+                    <span className="text-[11px] text-slate-400">ছবি থেকে ঔষধের টেবিল ও শেয়ার লিংক</span>
                   </div>
                 </Link>
 
@@ -479,7 +512,7 @@ export default function Header() {
                           {t("nav_plans")}
                         </span>
                         <span className="rounded-md bg-brand-50 text-brand px-1.5 py-0.2 text-[9.5px] font-black uppercase">
-                          {lang === "bn" ? "৳৯৯/মাসিক" : "৳99/MO"}
+                          {lang === "bn" ? "৳১,০০০+/মাসিক" : "৳1,000+/MO"}
                         </span>
                       </div>
                       <p className="text-xs text-slate-500 mt-0.5">
@@ -535,6 +568,24 @@ export default function Header() {
                   >
                     <Users size={16} className="text-brand" />
                     <span>{t("nav_join_doctor")}</span>
+                  </Link>
+
+                  <Link
+                    href="/districts"
+                    onClick={() => setOpen(false)}
+                    className="rounded-xl border border-slate-200 bg-slate-50 p-3 text-xs font-bold text-ink-dark hover:border-brand/40 hover:bg-white flex items-center gap-2"
+                  >
+                    <MapPin size={16} className="text-brand" />
+                    <span>{lang === "bn" ? "জেলা ও এলাকা" : "Districts"}</span>
+                  </Link>
+
+                  <Link
+                    href="/prescription"
+                    onClick={() => setOpen(false)}
+                    className="rounded-xl border border-slate-200 bg-slate-50 p-3 text-xs font-bold text-ink-dark hover:border-brand/40 hover:bg-white flex items-center gap-2"
+                  >
+                    <FileSpreadsheet size={16} className="text-brand" />
+                    <span>{lang === "bn" ? "প্রেসক্রিপশন" : "Prescription"}</span>
                   </Link>
 
                   <Link

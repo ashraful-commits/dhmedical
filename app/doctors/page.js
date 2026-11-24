@@ -1,7 +1,10 @@
-import { Stethoscope, HelpCircle } from "lucide-react";
+import Link from "next/link";
+import { Stethoscope, HelpCircle, MessageCircle, Phone, Users } from "lucide-react";
 import PageHead from "@/components/PageHead";
 import Catalog from "@/components/Catalog";
 import { BASE_URL, getFaqSchema } from "@/lib/seoHelper";
+import { SITE, SPECIALTIES } from "@/lib/site";
+import { doctorData } from "@/lib/seedData";
 
 export const metadata = {
   title: "বিশেষজ্ঞ ডাক্তার সিরিয়াল ও অ্যাপয়েন্টমেন্ট | মেডিসিন, নিউরো, কার্ডিওলজি ডাক্তার বাংলাদেশ",
@@ -60,6 +63,80 @@ export default function Doctors({ searchParams }) {
         title="ডাক্তার ও মেডিসিন বিশেষজ্ঞ খুঁজুন"
         sub="বিভাগ, রোগ বা ডাক্তারের নাম দিয়ে তাৎক্ষণিক খুঁজুন এবং ১-ক্লিকে চেম্বার সিরিয়াল বুক করুন।"
       />
+      <section className="wrap mt-6 space-y-4">
+        <div className="grid gap-4 lg:grid-cols-12">
+          <div className="card border border-slate-200 p-5 sm:p-6 lg:col-span-8">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <span className="pill">বিশেষজ্ঞ ডাক্তার ডাইরেক্টরি</span>
+                <h2 className="mt-1 text-lg font-black text-navy">
+                  বিভাগ অনুযায়ী {doctorData.length} জন ডাক্তারের তথ্য
+                </h2>
+                <p className="mt-1 text-xs text-slate-500">নিচের নামগুলো দেখে সরাসরি সিরিয়াল বা লাইভ কনসালটেশন চাইতে পারেন।</p>
+              </div>
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-brand-50 px-3 py-1.5 text-xs font-bold text-brand">
+                <Users size={14} /> {SPECIALTIES.length} টি বিভাগ
+              </span>
+            </div>
+
+            <div className="mt-5 space-y-3">
+              {SPECIALTIES.map((s) => {
+                const doctors = doctorData.filter((d) => d.specialty === s.key);
+                if (!doctors.length) return null;
+                return (
+                  <div key={s.key} className="rounded-2xl border border-slate-200 bg-slate-50/60 p-4">
+                    <div className="flex items-center justify-between gap-3">
+                      <h3 className="text-sm font-black text-navy">{s.bn}</h3>
+                      <span className="rounded-full bg-white px-2 py-0.5 text-[11px] font-bold text-brand border border-brand/15">
+                        {doctors.length} জন
+                      </span>
+                    </div>
+                    <div className="mt-2 flex flex-wrap gap-1.5">
+                      {doctors.map((d) => (
+                        <Link
+                          key={d.name}
+                          href={`/appointment?doctor=${encodeURIComponent(d.name)}&sp=${encodeURIComponent(s.key)}`}
+                          className="rounded-lg bg-white border border-slate-200 px-2.5 py-1.5 text-[11px] font-semibold text-slate-700 hover:border-brand hover:text-brand"
+                        >
+                          {d.name}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          <aside className="card border border-brand/20 bg-gradient-to-br from-navy to-blue-dark p-5 text-white lg:col-span-4">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1 text-[11px] font-bold">
+              <MessageCircle size={14} /> লাইভ ডাক্তার টক
+            </span>
+            <h3 className="mt-3 text-xl font-black !text-white">এখনই কথা বলুন</h3>
+            <p className="mt-1 text-xs text-blue-100/85 leading-relaxed">
+              কোন ডাক্তারের সাথে কথা বলবেন নিশ্চিত না? আমাদের কো-অর্ডিনেটর আপনার লক্ষণ শুনে সঠিক বিশেষজ্ঞের সাথে সংযোগ করবেন।
+            </p>
+            <div className="mt-4 space-y-2">
+              <a
+                href={SITE.whatsapp}
+                target="_blank"
+                rel="noreferrer"
+                className="btn btn-gold w-full !min-h-[40px] !text-xs flex items-center justify-center gap-1.5"
+              >
+                <MessageCircle size={14} /> WhatsApp-এ লাইভ চ্যাট
+              </a>
+              <a
+                href={SITE.tel}
+                className="btn w-full !min-h-[40px] !text-xs border border-white/25 bg-white/10 text-white flex items-center justify-center gap-1.5 hover:bg-white/20"
+              >
+                <Phone size={14} /> {SITE.phone}
+              </a>
+            </div>
+            <p className="mt-3 text-[10px] text-blue-100/70">BMDC-রেজিস্টার্ড ডাক্তার ও কো-অর্ডিনেটর নেটওয়ার্ক।</p>
+          </aside>
+        </div>
+      </section>
+
       <Catalog kind="doctors" q0={searchParams.q || ""} sp0={searchParams.sp || ""} />
 
       <div className="wrap max-w-4xl pb-10">
