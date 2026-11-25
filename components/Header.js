@@ -182,7 +182,7 @@ export default function Header() {
             </button>
 
             {moreOpen && (
-              <div className="fixed right-4 top-[92px] z-[1200] w-72 max-w-[calc(100vw-2rem)] animate-fadeIn border border-slate-200/90 bg-white p-2.5 shadow-2xl sm:right-6 sm:top-[104px]">
+              <div data-more-panel className="fixed right-4 top-[92px] z-[1200] w-72 max-w-[calc(100vw-2rem)] animate-fadeIn border border-slate-200/90 bg-white p-2.5 shadow-2xl sm:right-6 sm:top-[104px]">
                 <div className="mb-1 border-b border-slate-100 px-3 py-2">
                   <span className="text-[10.5px] font-bold uppercase tracking-wider text-slate-400">
                     {t("nav_additional_services")}
