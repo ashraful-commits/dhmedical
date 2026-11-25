@@ -61,23 +61,30 @@ export default function Header() {
   }, []);
 
   return (
-    <header className="sticky top-0 z-[100] border-b border-slate-200/80 bg-white/95 backdrop-blur-md shadow-[0_2px_15px_-3px_rgba(15,82,186,0.04)]">
-      <div className="wrap flex h-16 sm:h-18 items-center justify-between gap-3 sm:gap-4">
+    <header className="sticky top-0 z-[1000] border-b border-brand-100 bg-white/95 backdrop-blur-md shadow-[0_2px_16px_-4px_rgba(22,120,242,0.16)]">
+      <div className="flex h-7 items-center justify-center bg-gradient-to-r from-[#4B93F5] via-brand to-[#0F63CC] px-3 text-center text-[10px] font-bold text-white sm:h-8 sm:text-xs">
+        <a href={SITE.tel} className="inline-flex items-center gap-1.5 whitespace-nowrap">
+          <Phone size={12} className="animate-pulse" />
+          <span>{t("announcement")}</span>
+          <span className="hidden sm:inline">({SITE.phone})</span>
+        </a>
+      </div>
+      <div className="mx-auto flex h-16 w-full max-w-[1400px] items-center justify-between gap-2 px-4 sm:h-[72px] sm:gap-4 sm:px-6 lg:grid lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)]">
         {/* Brand Logo */}
         <Link
           href="/"
           aria-label="DH Medical Support Home"
           onClick={() => setOpen(false)}
-          className="shrink-0 transition-transform hover:scale-[1.01] active:scale-[0.99]"
+          className="shrink-0 justify-self-start transition-transform hover:scale-[1.01] active:scale-[0.99]"
         >
-          <Logo />
+          <Logo compact />
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden items-center gap-0.5 xl:gap-1.5 lg:flex" aria-label="Main Navigation">
+        <nav className="hidden items-center gap-0.5 xl:gap-1.5 lg:flex lg:justify-self-center" aria-label="Main Navigation">
           <Link
             href="/appointment"
-            className={`group flex items-center gap-1.5 rounded-xl px-2.5 xl:px-3 py-2 text-[13px] xl:text-[13.5px] font-bold whitespace-nowrap shrink-0 transition-all ${
+            className={`group flex items-center gap-1.5 rounded-lg px-2.5 xl:px-3 py-2 text-[13px] xl:text-[13.5px] font-bold whitespace-nowrap shrink-0 transition-all ${
               pathname === "/appointment" || pathname === "/doctors"
                 ? "bg-brand text-white shadow-sm"
                 : "text-slate-700 hover:text-brand hover:bg-brand-50/70"
@@ -92,7 +99,7 @@ export default function Header() {
 
           <Link
             href="/ambulance"
-            className={`group flex items-center gap-1.5 rounded-xl px-2.5 xl:px-3 py-2 text-[13px] xl:text-[13.5px] font-bold whitespace-nowrap shrink-0 transition-all relative ${
+            className={`group flex items-center gap-1.5 rounded-lg px-2.5 xl:px-3 py-2 text-[13px] xl:text-[13.5px] font-bold whitespace-nowrap shrink-0 transition-all relative ${
               pathname === "/ambulance"
                 ? "bg-brand text-white shadow-sm"
                 : "text-slate-700 hover:text-brand hover:bg-brand-50/70"
@@ -111,7 +118,7 @@ export default function Header() {
 
           <Link
             href="/appointment#diagnostic"
-            className="flex items-center gap-1.5 rounded-xl px-2.5 xl:px-3 py-2 text-[13px] xl:text-[13.5px] font-bold text-slate-700 hover:text-brand hover:bg-brand-50/70 whitespace-nowrap shrink-0 transition-all"
+            className="flex items-center gap-1.5 rounded-lg px-2.5 xl:px-3 py-2 text-[13px] xl:text-[13.5px] font-bold text-slate-700 hover:text-brand hover:bg-brand-50/70 whitespace-nowrap shrink-0 transition-all"
           >
             <FileSpreadsheet size={16} className="text-brand" />
             <span className="whitespace-nowrap">{t("nav_diagnostic")}</span>
@@ -119,7 +126,7 @@ export default function Header() {
 
           <Link
             href="/family-care"
-            className={`group flex items-center gap-1.5 rounded-xl px-2.5 xl:px-3 py-2 text-[13px] xl:text-[13.5px] font-bold whitespace-nowrap shrink-0 transition-all ${
+            className={`group flex items-center gap-1.5 rounded-lg px-2.5 xl:px-3 py-2 text-[13px] xl:text-[13.5px] font-bold whitespace-nowrap shrink-0 transition-all ${
               pathname === "/family-care"
                 ? "bg-brand text-white shadow-sm"
                 : "text-slate-700 hover:text-brand hover:bg-brand-50/70"
@@ -134,7 +141,7 @@ export default function Header() {
 
           <Link
             href="/track"
-            className={`flex items-center gap-1.5 rounded-xl px-2.5 xl:px-3 py-2 text-[13px] xl:text-[13.5px] font-bold whitespace-nowrap shrink-0 transition-all ${
+            className={`flex items-center gap-1.5 rounded-lg px-2.5 xl:px-3 py-2 text-[13px] xl:text-[13.5px] font-bold whitespace-nowrap shrink-0 transition-all ${
               pathname === "/track"
                 ? "bg-brand text-white shadow-sm"
                 : "text-slate-700 hover:text-brand hover:bg-brand-50/70"
@@ -147,135 +154,66 @@ export default function Header() {
             <span className="whitespace-nowrap">{t("nav_track")}</span>
           </Link>
 
-          {/* More Flyout Menu */}
+        </nav>
+
+        {/* Right CTA / Language Switcher / Emergency Phone */}
+        <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0 lg:justify-self-end">
           <div className="relative shrink-0" ref={moreRef}>
             <button
               onClick={() => setMoreOpen(!moreOpen)}
-              className={`flex items-center gap-1 rounded-xl px-2.5 xl:px-3 py-2 text-[13px] xl:text-[13.5px] font-bold whitespace-nowrap shrink-0 transition-all ${
-                moreOpen
-                  ? "bg-brand-50 text-brand"
-                  : "text-slate-700 hover:text-brand hover:bg-brand-50/70"
-              }`}
               aria-expanded={moreOpen}
+              aria-label={t("nav_more")}
+              className={`inline-flex min-h-[38px] items-center gap-1 border px-2.5 py-2 text-[13px] font-bold whitespace-nowrap transition-all ${
+                moreOpen
+                  ? "border-brand bg-brand-50 text-brand"
+                  : "border-slate-200 bg-white text-slate-700 hover:border-brand hover:bg-brand-50 hover:text-brand"
+              }`}
             >
-              <span className="whitespace-nowrap">{t("nav_more")}</span>
+              <Globe size={16} />
+              <span>{t("nav_more") || (lang === "bn" ? "অন্যান্য" : "More")}</span>
               <ChevronDown
                 size={14}
                 className={`transition-transform duration-200 ${moreOpen ? "rotate-180 text-brand" : "text-slate-400"}`}
               />
             </button>
 
-            {/* Desktop Mega Flyout Card */}
             {moreOpen && (
-              <div className="absolute right-0 top-full mt-2 w-72 rounded-2xl border border-slate-200/90 bg-white p-2.5 shadow-2xl animate-fadeIn z-[200]">
-                <div className="px-3 py-2 border-b border-slate-100 mb-1">
+              <div className="absolute right-0 top-full z-[1100] mt-2 w-72 animate-fadeIn border border-slate-200/90 bg-white p-2.5 shadow-2xl">
+                <div className="mb-1 border-b border-slate-100 px-3 py-2">
                   <span className="text-[10.5px] font-bold uppercase tracking-wider text-slate-400">
-                    Additional Services
+                    {t("nav_additional_services")}
                   </span>
                 </div>
 
-                <Link
-                  href="/hospitals"
-                  onClick={() => setMoreOpen(false)}
-                  className="flex items-center gap-3 rounded-xl p-2.5 text-xs font-semibold text-slate-700 hover:bg-brand-50 hover:text-brand transition-colors group"
-                >
-                  <div className="grid h-8 w-8 place-items-center rounded-lg bg-brand-50 text-brand group-hover:bg-brand group-hover:text-white transition-colors">
-                    <Building2 size={16} />
-                  </div>
-                  <div>
-                    <span className="font-bold text-ink-dark group-hover:text-brand block">
-                      {t("nav_hospitals")}
+                {[
+                  { href: "/hospitals", label: t("nav_hospitals"), note: t("nav_hospitals_note"), Icon: Building2 },
+                  { href: "/partner", label: t("nav_join_doctor"), note: t("nav_partner_note"), Icon: Award },
+                  { href: "/partner#ambulance", label: t("nav_join_ambulance"), note: t("nav_ambulance_partner_note"), Icon: Ambulance },
+                  { href: "/districts", label: t("nav_districts"), note: t("nav_districts_note"), Icon: MapPin },
+                  { href: "/prescription", label: t("nav_prescription"), note: t("nav_prescription_note"), Icon: FileSpreadsheet },
+                  { href: "/feedback", label: t("nav_feedback"), note: t("nav_feedback_note"), Icon: Users },
+                ].map(({ href, label, note, Icon }) => (
+                  <Link
+                    key={href}
+                    href={href}
+                    onClick={() => setMoreOpen(false)}
+                    className="group flex items-center gap-3 p-2.5 text-xs font-semibold text-slate-700 transition-colors hover:bg-brand-50 hover:text-brand"
+                  >
+                    <span className="grid h-8 w-8 place-items-center bg-brand-50 text-brand transition-colors group-hover:bg-brand group-hover:text-white">
+                      <Icon size={16} />
                     </span>
-                    <span className="text-[11px] text-slate-400">বারডেম, স্কয়ার, এভারকেয়ার বেড গাইড</span>
-                  </div>
-                </Link>
-
-                <Link
-                  href="/partner"
-                  onClick={() => setMoreOpen(false)}
-                  className="flex items-center gap-3 rounded-xl p-2.5 text-xs font-semibold text-slate-700 hover:bg-brand-50 hover:text-brand transition-colors group"
-                >
-                  <div className="grid h-8 w-8 place-items-center rounded-lg bg-brand-50 text-brand group-hover:bg-brand group-hover:text-white transition-colors">
-                    <Award size={16} />
-                  </div>
-                  <div>
-                    <span className="font-bold text-ink-dark group-hover:text-brand block">
-                      {t("nav_join_doctor")}
+                    <span className="min-w-0">
+                      <span className="block font-bold text-ink-dark group-hover:text-brand">{label}</span>
+                      <span className="block truncate text-[11px] text-slate-400">{note}</span>
                     </span>
-                    <span className="text-[11px] text-slate-400">BMDC রেজিস্টার্ড চিকিৎসক নেটওয়ার্ক</span>
-                  </div>
-                </Link>
-
-                <Link
-                  href="/partner#ambulance"
-                  onClick={() => setMoreOpen(false)}
-                  className="flex items-center gap-3 rounded-xl p-2.5 text-xs font-semibold text-slate-700 hover:bg-brand-50 hover:text-brand transition-colors group"
-                >
-                  <div className="grid h-8 w-8 place-items-center rounded-lg bg-brand-50 text-brand group-hover:bg-brand group-hover:text-white transition-colors">
-                    <Ambulance size={16} />
-                  </div>
-                  <div>
-                    <span className="font-bold text-ink-dark group-hover:text-brand block">
-                      {t("nav_join_ambulance")}
-                    </span>
-                    <span className="text-[11px] text-slate-400">অ্যাম্বুলেন্স মালিক ও ড্রাইভার পোর্টাল</span>
-                  </div>
-                </Link>
-
-                <Link
-                  href="/districts"
-                  onClick={() => setMoreOpen(false)}
-                  className="flex items-center gap-3 rounded-xl p-2.5 text-xs font-semibold text-slate-700 hover:bg-brand-50 hover:text-brand transition-colors group"
-                >
-                  <div className="grid h-8 w-8 place-items-center rounded-lg bg-brand-50 text-brand group-hover:bg-brand group-hover:text-white transition-colors">
-                    <MapPin size={16} />
-                  </div>
-                  <div>
-                    <span className="font-bold text-ink-dark group-hover:text-brand block">
-                      {lang === "bn" ? "৬৪ জেলা ও এলাকা" : "64 Districts & Areas"}
-                    </span>
-                    <span className="text-[11px] text-slate-400">কুমিল্লা, ঢাকা, চট্টগ্রাম ও সব উপজেলা</span>
-                  </div>
-                </Link>
-
-                <Link
-                  href="/prescription"
-                  onClick={() => setMoreOpen(false)}
-                  className="flex items-center gap-3 rounded-xl p-2.5 text-xs font-semibold text-slate-700 hover:bg-brand-50 hover:text-brand transition-colors group"
-                >
-                  <div className="grid h-8 w-8 place-items-center rounded-lg bg-brand-50 text-brand group-hover:bg-brand group-hover:text-white transition-colors">
-                    <FileSpreadsheet size={16} />
-                  </div>
-                  <div>
-                    <span className="font-bold text-ink-dark group-hover:text-brand block">
-                      {lang === "bn" ? "প্রেসক্রিপশন OCR" : "Prescription OCR"}
-                    </span>
-                    <span className="text-[11px] text-slate-400">ছবি থেকে ঔষধের টেবিল ও শেয়ার লিংক</span>
-                  </div>
-                </Link>
+                  </Link>
+                ))}
 
                 <div className="my-1.5 border-t border-slate-100" />
-
-                <Link
-                  href="/feedback"
-                  onClick={() => setMoreOpen(false)}
-                  className="flex items-center gap-3 rounded-xl p-2.5 text-xs font-semibold text-slate-700 hover:bg-brand-50 hover:text-brand transition-colors group"
-                >
-                  <div className="grid h-8 w-8 place-items-center rounded-lg bg-slate-100 text-slate-600 group-hover:bg-brand group-hover:text-white transition-colors">
-                    <Users size={16} />
-                  </div>
-                  <div>
-                    <span className="font-bold text-ink-dark group-hover:text-brand block">
-                      {t("nav_feedback")}
-                    </span>
-                    <span className="text-[11px] text-slate-400">মতামত ও সরাসরি হেল্পডেস্ক</span>
-                  </div>
-                </Link>
-
                 <Link
                   href="/admin"
                   onClick={() => setMoreOpen(false)}
-                  className="flex items-center gap-3 rounded-xl p-2 text-xs font-semibold text-slate-400 hover:bg-slate-50 hover:text-brand transition-colors"
+                  className="flex items-center gap-3 p-2 text-xs font-semibold text-slate-400 transition-colors hover:bg-slate-50 hover:text-brand"
                 >
                   <ShieldCheck size={15} />
                   <span>{t("nav_admin")}</span>
@@ -283,60 +221,49 @@ export default function Header() {
               </div>
             )}
           </div>
-        </nav>
 
-        {/* Right CTA / Language Switcher / Emergency Phone */}
-        <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
+          <Link
+            href="/feedback"
+            className="btn-primary hidden !min-h-[38px] !px-4 !text-xs xl:inline-flex"
+          >
+            <MessageCircle size={15} />
+            <span>{t("nav_feedback")}</span>
+          </Link>
+
           {/* i18n Language Toggle Pill */}
-          <div className="flex items-center rounded-xl bg-slate-100 p-1 border border-slate-200/90 shadow-inner shrink-0">
+          <div className="hidden sm:flex items-center rounded-lg bg-slate-100 p-1 border border-slate-200/90 shadow-inner shrink-0">
             <button
               onClick={() => setLang("bn")}
-              className={`rounded-lg px-2.5 py-1 text-xs font-bold transition-all whitespace-nowrap ${
+              className={`rounded-lg px-2 py-1 text-xs font-bold transition-all whitespace-nowrap sm:px-2.5 ${
                 lang === "bn"
                   ? "bg-brand text-white shadow-sm"
                   : "text-slate-600 hover:text-ink-dark"
               }`}
-              title="বাংলায় দেখুন"
+              title={t("header_view_bn")}
             >
               বাং
             </button>
             <button
               onClick={() => setLang("en")}
-              className={`rounded-lg px-2.5 py-1 text-xs font-bold transition-all whitespace-nowrap ${
+              className={`rounded-lg px-2 py-1 text-xs font-bold transition-all whitespace-nowrap sm:px-2.5 ${
                 lang === "en"
                   ? "bg-brand text-white shadow-sm"
                   : "text-slate-600 hover:text-ink-dark"
               }`}
-              title="Switch to English"
+              title={t("header_view_en")}
             >
               EN
             </button>
           </div>
 
-          <a
-            href={SITE.tel}
-            className="hidden xl:inline-flex items-center gap-1.5 rounded-xl bg-brand-50/80 px-3 py-2 text-xs font-bold text-brand hover:bg-brand-100 transition-colors border border-brand-100 whitespace-nowrap shrink-0"
-          >
-            <Phone size={14} className="text-brand animate-pulse shrink-0" />
-            <span className="whitespace-nowrap">{SITE.phone}</span>
-          </a>
-
-          <Link
-            href="/ambulance"
-            className="btn-primary !min-h-[38px] !px-3.5 !py-1 text-xs font-bold tracking-tight shadow-sm hover:shadow-hover whitespace-nowrap shrink-0 inline-flex items-center gap-1.5"
-          >
-            <Ambulance size={15} className="shrink-0" />
-            <span className="whitespace-nowrap">{t("nav_book_amb")}</span>
-          </Link>
-
           {/* Mobile Animated Hamburger Button */}
           <button
-            className={`grid h-10 w-10 place-items-center rounded-xl border transition-all lg:hidden ${
+            className={`grid h-9 w-9 sm:h-10 sm:w-10 place-items-center rounded-lg border transition-all lg:hidden ${
               open
                 ? "border-brand bg-brand text-white shadow-sm"
                 : "border-slate-200 bg-white text-ink-dark hover:bg-slate-50"
             }`}
-            aria-label="Navigation Menu"
+            aria-label={t("nav_more")}
             aria-expanded={open}
             onClick={() => setOpen(!open)}
           >
@@ -347,20 +274,20 @@ export default function Header() {
 
       {/* MOBILE DRAWER: COMPLETE LUXURY HEALTHCARE DESIGN */}
       {open && (
-        <div className="fixed inset-x-0 top-16 bottom-0 z-[150] bg-slate-900/40 backdrop-blur-sm lg:hidden animate-fadeIn">
+        <div className="fixed inset-x-0 bottom-0 top-[92px] z-[1050] bg-slate-900/40 backdrop-blur-sm lg:hidden animate-fadeIn sm:top-[104px]">
           <div className="h-full overflow-y-auto bg-white border-t border-slate-100 px-4 py-5 shadow-2xl flex flex-col justify-between max-w-lg mx-auto">
             
             <div className="space-y-4">
               {/* Top Row: Language Toggle + Emergency Hotline Header */}
-              <div className="flex items-center justify-between bg-slate-50 p-2.5 rounded-2xl border border-slate-200">
+              <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between bg-slate-50 p-2.5 rounded-2xl border border-slate-200">
                 <div className="flex items-center gap-2 text-xs font-bold text-slate-700">
                   <Globe size={15} className="text-brand" />
-                  <span>ভাষা / Language:</span>
+                  <span>{t("header_language")}</span>
                 </div>
-                <div className="flex items-center rounded-xl bg-white p-0.5 border border-slate-200 shadow-sm">
+                <div className="flex items-center rounded-lg bg-white p-0.5 border border-slate-200 shadow-sm">
                   <button
                     onClick={() => setLang("bn")}
-                    className={`rounded-lg px-3 py-1 text-xs font-bold transition-all ${
+                    className={`rounded-lg px-2 py-1 text-xs font-bold transition-all ${
                       lang === "bn" ? "bg-brand text-white" : "text-slate-600"
                     }`}
                   >
@@ -368,7 +295,7 @@ export default function Header() {
                   </button>
                   <button
                     onClick={() => setLang("en")}
-                    className={`rounded-lg px-3 py-1 text-xs font-bold transition-all ${
+                    className={`rounded-lg px-2 py-1 text-xs font-bold transition-all ${
                       lang === "en" ? "bg-brand text-white" : "text-slate-600"
                     }`}
                   >
@@ -378,7 +305,7 @@ export default function Header() {
               </div>
 
               {/* 1. Emergency Quick Callout Banner at Top of Mobile Menu */}
-              <div className="rounded-2xl bg-gradient-to-br from-brand via-brand-dark to-[#082d6b] p-4 text-white shadow-card">
+              <div className="rounded-2xl bg-gradient-to-br from-[#4B93F5] via-brand to-[#0F63CC] p-4 text-white shadow-card">
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-2">
                     <span className="flex h-2 w-2 relative">
@@ -430,8 +357,8 @@ export default function Header() {
                     <div className="grid h-11 w-11 place-items-center rounded-xl bg-brand-50 text-brand group-hover:bg-brand group-hover:text-white transition-colors shrink-0">
                       <Ambulance size={22} />
                     </div>
-                    <div>
-                      <div className="flex items-center gap-2">
+                    <div className="min-w-0 flex-1">
+                      <div className="flex flex-wrap items-center gap-1.5">
                         <span className="font-bold text-sm text-ink-dark group-hover:text-brand">
                           {t("nav_ambulance")}
                         </span>
@@ -457,8 +384,8 @@ export default function Header() {
                     <div className="grid h-11 w-11 place-items-center rounded-xl bg-brand-50 text-brand group-hover:bg-brand group-hover:text-white transition-colors shrink-0">
                       <Stethoscope size={22} />
                     </div>
-                    <div>
-                      <div className="flex items-center gap-2">
+                    <div className="min-w-0 flex-1">
+                      <div className="flex flex-wrap items-center gap-1.5">
                         <span className="font-bold text-sm text-ink-dark group-hover:text-brand">
                           {t("nav_consultation")}
                         </span>
@@ -506,8 +433,8 @@ export default function Header() {
                     <div className="grid h-11 w-11 place-items-center rounded-xl bg-brand-50 text-brand group-hover:bg-brand group-hover:text-white transition-colors shrink-0">
                       <HeartPulse size={22} />
                     </div>
-                    <div>
-                      <div className="flex items-center gap-2">
+                    <div className="min-w-0 flex-1">
+                      <div className="flex flex-wrap items-center gap-1.5">
                         <span className="font-bold text-sm text-ink-dark group-hover:text-brand">
                           {t("nav_plans")}
                         </span>
@@ -533,7 +460,7 @@ export default function Header() {
                     <div className="grid h-11 w-11 place-items-center rounded-xl bg-brand text-white shadow-sm shrink-0">
                       <Navigation size={22} />
                     </div>
-                    <div>
+                    <div className="min-w-0 flex-1">
                       <span className="font-bold text-sm text-brand block">
                         {t("nav_track")}
                       </span>
@@ -551,7 +478,7 @@ export default function Header() {
                 <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block px-1 mb-2">
                   {lang === "bn" ? "অন্যান্য সেবা ও পার্টনার" : "MORE SERVICES & PARTNERS"}
                 </span>
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                   <Link
                     href="/hospitals"
                     onClick={() => setOpen(false)}

@@ -3,9 +3,11 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { HeartPulse } from "lucide-react";
 import Logo from "./Logo";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function PageLoader() {
   const pathname = usePathname();
+  const { t } = useLanguage();
   const [loading, setLoading] = useState(false);
   const [initialLoad, setInitialLoad] = useState(true);
 
@@ -44,7 +46,7 @@ export default function PageLoader() {
           <div className="flex flex-col items-center gap-4 animate-fadeIn">
             {/* Pulsing Medical Cross Emblem */}
             <div className="relative">
-              <div className="grid h-16 w-16 place-items-center rounded-2xl bg-gradient-to-br from-brand to-[#0B4196] text-white shadow-[0_8px_24px_rgba(15,82,186,0.35)] animate-heart-pulse">
+              <div className="grid h-16 w-16 place-items-center rounded-2xl bg-gradient-to-br from-brand to-[#0A4FA6] text-white shadow-[0_8px_24px_rgba(22,120,242,0.28)] animate-heart-pulse">
                 <HeartPulse size={34} className="text-white" />
               </div>
               {/* Subtle Warm Rose Heart Ping */}
@@ -59,7 +61,7 @@ export default function PageLoader() {
                 D·H Medical Support
               </h3>
               <p className="text-xs font-semibold text-care flex items-center justify-center gap-1">
-                <span>প্রবাসে আপনি, দেশে পরিবারের পাশে আমরা</span>
+                <span>{t("footer_tagline")}</span>
               </p>
             </div>
           </div>

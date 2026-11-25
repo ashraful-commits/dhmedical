@@ -26,28 +26,28 @@ export default async function Feedback() {
         sub="আমাদের সেবা নিয়ে প্রবাসীদের পরিবার ও সেবাগ্রহীতাদের বাস্তব অভিজ্ঞতা ও পর্যালোচনা।"
       />
 
-      <div className="wrap max-w-4xl py-8 space-y-10">
+      <div className="wrap max-w-4xl py-10 sm:py-14 lg:py-16 space-y-10">
         {/* Recent Feedback Reviews */}
         {reviews.length > 0 && (
           <section aria-labelledby="reviews-head">
-            <h2 id="reviews-head" className="font-head text-2xl font-black text-navy mb-5 flex items-center gap-2">
-              <Quote className="text-blue" size={24} /> সেবাগ্রহীতাদের সাম্প্রতিক প্রতিক্রিয়া ({reviews.length})
+            <h2 id="reviews-head" className="font-head text-2xl sm:text-3xl lg:text-4xl font-black text-brand mb-6 sm:mb-8 flex items-center gap-2">
+              <Quote className="text-brand" size={24} /> সেবাগ্রহীতাদের সাম্প্রতিক প্রতিক্রিয়া ({reviews.length})
             </h2>
 
             <div className="grid gap-4 sm:grid-cols-2">
               {reviews.map((r) => (
                 <article
                   key={r._id}
-                  className="card flex flex-col justify-between border border-slate-200 bg-white shadow-sm hover:shadow-md transition-shadow"
+                  className="card flex flex-col justify-between p-5 sm:p-6 border border-slate-200 bg-white shadow-sm hover:shadow-md transition-shadow"
                 >
                   <div>
                     <div className="flex items-center justify-between gap-2 border-b border-slate-100 pb-2.5">
                       <div className="flex items-center gap-2.5">
-                        <span className="grid h-10 w-10 place-items-center rounded-full bg-blue-soft text-navy font-bold text-sm">
+                        <span className="grid h-10 w-10 place-items-center rounded-full bg-slate-100 text-brand font-bold text-sm">
                           {r.name ? r.name.slice(0, 2) : <User size={18} />}
                         </span>
                         <div>
-                          <b className="block text-sm font-bold text-navy leading-tight">{r.name || "সম্মানিত গ্রাহক"}</b>
+                          <b className="block text-sm font-bold text-brand leading-tight">{r.name || "সম্মানিত গ্রাহক"}</b>
                           <span className="text-xs text-slate-500">{r.service || "সাধারণ সেবা"}</span>
                         </div>
                       </div>
@@ -81,8 +81,8 @@ export default async function Feedback() {
         <section className="rounded-2xl border border-slate-200/90 bg-white p-6 sm:p-8 shadow-card">
           <div className="mb-6 text-center">
             <span className="pill">আপনার মতামত জানান</span>
-            <h2 className="mt-2 text-2xl font-black text-navy-dark">আপনার অভিজ্ঞতা কেমন ছিল?</h2>
-            <p className="text-xs sm:text-sm text-slate-600 mt-1">
+            <h2 className="mt-2 text-2xl sm:text-3xl lg:text-4xl font-black text-brand-dark mb-3">আপনার অভিজ্ঞতা কেমন ছিল?</h2>
+            <p className="text-sm sm:text-base text-slate-600 leading-relaxed max-w-2xl mt-2">
               আপনার একটি মূল্যবান পরামর্শ আমাদের সেবার মান আরও উন্নত করতে সহায়তা করবে।
             </p>
           </div>

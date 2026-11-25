@@ -11,20 +11,24 @@ import {
   ExternalLink,
   Search,
 } from "lucide-react";
-import { findDistricts, findLocations } from "@/lib/site";
+import { findDistricts, findLocations, imageFallback } from "@/lib/site";
+import { useLanguage } from "@/context/LanguageContext";
+import { translateFormField, translateText } from "@/lib/i18nData";
 
 const PHONE = "(\\+?88)?01[3-9][0-9]{8}";
 
 function Label({ f }) {
+  const { lang } = useLanguage();
   return (
     <span className="mb-1.5 block text-xs font-bold uppercase tracking-wider text-slate-700">
-      {f.label}
+      {translateText(f.label, lang)}
       {f.required && <span className="text-red font-black"> *</span>}
     </span>
   );
 }
 
 function Upload({ f, val, set }) {
+  const { lang } = useLanguage();
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState("");
 
@@ -38,10 +42,10 @@ function Upload({ f, val, set }) {
     try {
       const r = await fetch("/api/upload", { method: "POST", body: fd });
       const d = await r.json();
-      if (!r.ok) throw new Error(d.error || "আপলোড ব্যর্থ হয়েছে");
+      if (!r.ok) throw new Error(d.error || (lang === "bn" ? "আপলোড ব্যর্থ হয়েছে" : "Upload failed"));
       set(f.name, d.url);
     } catch (x) {
-      setErr(x.message || "আপলোড ব্যর্থ হয়েছে");
+      setErr(x.message || (lang === "bn" ? "আপলোড ব্যর্থ হয়েছে" : "Upload failed"));
     }
     setBusy(false);
     e.target.value = "";
@@ -52,15 +56,15 @@ function Upload({ f, val, set }) {
       <Label f={f} />
       {val ? (
         <div className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 p-3 shadow-sm">
-          <img src={val} alt="" className="h-20 w-20 rounded-xl object-cover border border-slate-300 shadow-inner shrink-0" />
+          <img src={val} alt={lang === "bn" ? "আপলোড করা ছবি" : "Uploaded preview"} onError={imageFallback("document")} className="h-20 w-20 rounded-xl object-cover border border-slate-300 shadow-inner shrink-0" />
           <div className="flex-1 min-w-0">
             <span className="inline-flex items-center gap-1 text-xs font-bold text-emerald-700 bg-emerald-100/80 px-2.5 py-0.5 rounded-full">
-              <CheckCircle2 size={13} /> ছবি সফলভাবে যুক্ত হয়েছে
+              <CheckCircle2 size={13} /> {lang === "bn" ? "ছবি সফলভাবে যুক্ত হয়েছে" : "Photo added successfully"}
             </span>
-            <p className="text-[11px] text-slate-500 truncate mt-1">লিংক: {val}</p>
+            <p className="text-[11px] text-slate-500 truncate mt-1">{lang === "bn" ? "লিংক" : "Link"}: {val}</p>
             <div className="mt-2 flex flex-wrap items-center gap-2">
-              <label className="btn btn-navy !min-h-[30px] !px-2.5 !py-1 text-xs cursor-pointer flex items-center gap-1 font-bold">
-                <Camera size={13} className="text-gold" /> রি-শট নিন
+              <label className="btn btn-primary !min-h-[30px] !px-2.5 !py-1 text-xs cursor-pointer flex items-center gap-1 font-bold">
+                <Camera size={13} className="text-gold" /> {lang === "bn" ? "রি-শট নিন" : "Retake"}
                 <input
                   type="file"
                   accept="image/*"
@@ -71,7 +75,7 @@ function Upload({ f, val, set }) {
                 />
               </label>
               <label className="btn btn-line !min-h-[30px] !px-2.5 !py-1 text-xs cursor-pointer flex items-center gap-1 font-bold">
-                <UploadCloud size={13} className="text-blue" /> গ্যালারি
+                <UploadCloud size={13} className="text-brand" /> {lang === "bn" ? "গ্যালারি" : "Gallery"}
                 <input
                   type="file"
                   accept="image/jpeg,image/png,image/webp"
@@ -85,28 +89,30 @@ function Upload({ f, val, set }) {
                 onClick={() => set(f.name, "")}
                 className="text-xs font-bold text-rose-600 hover:underline px-1"
               >
-                মুছুন
+                {lang === "bn" ? "মুছুন" : "Remove"}
               </button>
             </div>
           </div>
         </div>
       ) : (
-        <div className="rounded-2xl border-2 border-dashed border-blue/30 bg-blue-soft/20 p-4 transition-all hover:bg-blue-soft/30">
+        <div className="rounded-2xl border-2 border-dashed border-brand/30 bg-slate-100/20 p-4 transition-all hover:bg-slate-100/30">
           {busy ? (
             <div className="flex flex-col items-center justify-center py-4 gap-2 text-center">
-              <Loader2 className="animate-spin text-blue" size={30} />
-              <p className="text-xs font-bold text-navy">ছবি ক্লাউডিনারিতে আপলোড হচ্ছে, অপেক্ষা করুন…</p>
+              <Loader2 className="animate-spin text-brand" size={30} />
+              <p className="text-xs font-bold text-brand">{lang === "bn" ? "ছবি ক্লাউডিনারিতে আপলোড হচ্ছে, অপেক্ষা করুন…" : "Uploading photo to the cloud, please wait…"}</p>
             </div>
           ) : (
             <div className="space-y-3">
               <p className="text-xs font-medium text-slate-600 text-center">
-                নিচের যেকোনো একটি বেছে নিন (ক্যামেরা দিয়ে সরাসরি ছবি তুলুন অথবা গ্যালারি থেকে সিলেক্ট করুন):
+                {lang === "bn"
+                  ? "নিচের যেকোনো একটি বেছে নিন (ক্যামেরা দিয়ে সরাসরি ছবি তুলুন অথবা গ্যালারি থেকে সিলেক্ট করুন):"
+                  : "Choose one option below (take a photo with the camera or select from your gallery):"}
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                 {/* 1. Camera Option */}
-                <label className="flex items-center justify-center gap-2 rounded-xl bg-navy px-4 py-3 text-xs font-bold text-white shadow-md hover:bg-navy-dark cursor-pointer transition-transform active:scale-95">
+                <label className="flex items-center justify-center gap-2 rounded-xl bg-brand px-4 py-3 text-xs font-bold text-white shadow-md hover:bg-brand-dark cursor-pointer transition-transform active:scale-95">
                   <Camera size={18} className="text-gold" />
-                  <span>ক্যামেরা দিয়ে ছবি তুলুন</span>
+                  <span>{lang === "bn" ? "ক্যামেরা দিয়ে ছবি তুলুন" : "Take a photo"}</span>
                   <input
                     type="file"
                     accept="image/*"
@@ -118,9 +124,9 @@ function Upload({ f, val, set }) {
                 </label>
 
                 {/* 2. Gallery / File Upload Option */}
-                <label className="flex items-center justify-center gap-2 rounded-xl border-2 border-blue/30 bg-white px-4 py-3 text-xs font-bold text-navy shadow-sm hover:bg-blue-soft/40 cursor-pointer transition-transform active:scale-95">
-                  <UploadCloud size={18} className="text-blue" />
-                  <span>গ্যালারি থেকে আপলোড</span>
+                <label className="flex items-center justify-center gap-2 rounded-xl border-2 border-brand/30 bg-white px-4 py-3 text-xs font-bold text-brand shadow-sm hover:bg-slate-100/40 cursor-pointer transition-transform active:scale-95">
+                  <UploadCloud size={18} className="text-brand" />
+                  <span>{lang === "bn" ? "গ্যালারি থেকে আপলোড" : "Upload from gallery"}</span>
                   <input
                     type="file"
                     accept="image/jpeg,image/png,image/webp"
@@ -131,7 +137,7 @@ function Upload({ f, val, set }) {
                 </label>
               </div>
               <p className="text-[11px] text-slate-500 text-center">
-                JPG, PNG বা WEBP (সর্বোচ্চ ৫ MB)
+                {lang === "bn" ? "JPG, PNG বা WEBP (সর্বোচ্চ ৫ MB)" : "JPG, PNG or WEBP (maximum 5 MB)"}
               </p>
             </div>
           )}
@@ -143,12 +149,13 @@ function Upload({ f, val, set }) {
 }
 
 function LocationPicker({ f, val, set }) {
+  const { lang } = useLanguage();
   const [getting, setGetting] = useState(false);
   const [geoError, setGeoError] = useState("");
 
   function detectLocation() {
     if (typeof window === "undefined" || !navigator.geolocation) {
-      setGeoError("আপনার ব্রাউজারে লোকেশন সার্ভিস সমর্থিত নয়");
+      setGeoError(lang === "bn" ? "আপনার ব্রাউজারে লোকেশন সার্ভিস সমর্থিত নয়" : "Location services are not supported in your browser");
       return;
     }
     setGetting(true);
@@ -161,7 +168,11 @@ function LocationPicker({ f, val, set }) {
         setGetting(false);
       },
       (err) => {
-        setGeoError("লোকেশন শনাক্ত করা যায়নি (" + err.message + ")। ফোনের জিপিএস চালু করুন।");
+        setGeoError(
+          lang === "bn"
+            ? "লোকেশন শনাক্ত করা যায়নি (" + err.message + ")। ফোনের জিপিএস চালু করুন।"
+            : "Could not detect location (" + err.message + "). Please enable GPS on your device."
+        );
         setGetting(false);
       },
       { enableHighAccuracy: true, timeout: 12000 }
@@ -177,7 +188,7 @@ function LocationPicker({ f, val, set }) {
           <input
             type="text"
             className="input !pl-10 w-full"
-            placeholder="গুগল ম্যাপ লিংক বা জিপিএস অবস্থান"
+            placeholder={lang === "bn" ? "গুগল ম্যাপ লিংক বা জিপিএস অবস্থান" : "Google Maps link or GPS location"}
             value={val || ""}
             onChange={(e) => set(f.name, e.target.value)}
           />
@@ -186,15 +197,15 @@ function LocationPicker({ f, val, set }) {
           type="button"
           onClick={detectLocation}
           disabled={getting}
-          className="btn btn-navy shrink-0 !min-h-[42px] !px-4 text-xs font-bold flex items-center justify-center gap-1.5"
+          className="btn btn-primary shrink-0 !min-h-[42px] !px-4 text-xs font-bold flex items-center justify-center gap-1.5"
         >
           {getting ? (
             <>
-              <Loader2 className="animate-spin" size={15} /> অবস্থান খুঁজছি…
+              <Loader2 className="animate-spin" size={15} /> {lang === "bn" ? "অবস্থান খুঁজছি…" : "Detecting location…"}
             </>
           ) : (
             <>
-              <MapPin size={15} className="text-gold" /> আমার বর্তমান লোকেশন দিন
+              <MapPin size={15} className="text-gold" /> {lang === "bn" ? "আমার বর্তমান লোকেশন দিন" : "Use my current location"}
             </>
           )}
         </button>
@@ -203,14 +214,14 @@ function LocationPicker({ f, val, set }) {
       {val && (
         <div className="mt-1.5 flex items-center gap-2 text-xs font-semibold text-emerald-700">
           <CheckCircle2 size={14} />
-          <span>লোকেশন চিহ্নিত হয়েছে:</span>
+          <span>{lang === "bn" ? "লোকেশন চিহ্নিত হয়েছে:" : "Location detected:"}</span>
           <a
             href={val}
             target="_blank"
             rel="noreferrer"
-            className="underline text-blue flex items-center gap-0.5"
+            className="underline text-brand flex items-center gap-0.5"
           >
-            ম্যাপে অবস্থান খুলুন <ExternalLink size={11} />
+            {lang === "bn" ? "ম্যাপে অবস্থান খুলুন" : "Open in Maps"} <ExternalLink size={11} />
           </a>
         </div>
       )}
@@ -220,6 +231,7 @@ function LocationPicker({ f, val, set }) {
 }
 
 function DistrictPicker({ f, val, set }) {
+  const { lang } = useLanguage();
   const [query, setQuery] = useState(val || "");
   const selected = findDistricts(String(val || "").split("—")[0].trim())[0];
   const showResults = query && query !== val;
@@ -239,7 +251,7 @@ function DistrictPicker({ f, val, set }) {
         <input
           type="text"
           className="input !pl-10 w-full"
-          placeholder="জেলা, উপজেলা বা গ্রাম লিখুন (যেমন: Comilla)"
+          placeholder={lang === "bn" ? "জেলা, উপজেলা বা গ্রাম লিখুন (যেমন: Comilla)" : "Enter district, upazila or village (e.g. Comilla)"}
           value={query}
           required={f.required}
           onChange={(e) => {
@@ -256,10 +268,12 @@ function DistrictPicker({ f, val, set }) {
               key={`d-${d.name}`}
               type="button"
               onClick={() => choose(d.name)}
-              className="flex w-full items-center justify-between gap-2 rounded-lg px-3 py-2 text-left text-xs font-bold text-navy hover:bg-brand-50"
+              className="flex w-full items-center justify-between gap-2 rounded-lg px-3 py-2 text-left text-xs font-bold text-brand hover:bg-brand-50"
             >
               <span>{d.name} <span className="font-medium text-slate-400">({d.en})</span></span>
-              <span className="shrink-0 text-[10px] font-semibold text-brand">{d.upazilas.length} উপজেলা</span>
+              <span className="shrink-0 text-[10px] font-semibold text-brand">
+                {d.upazilas.length} {lang === "bn" ? "উপজেলা" : "upazilas"}
+              </span>
             </button>
           ))}
           {locations.map((l, i) => (
@@ -280,7 +294,7 @@ function DistrictPicker({ f, val, set }) {
       {selected && (
         <div className="mt-2 rounded-xl bg-slate-50 p-2.5">
           <p className="mb-1.5 text-[11px] font-bold text-slate-500">
-            {selected.name} ({selected.en}) — {selected.upazilas.length} উপজেলা
+            {lang === "bn" ? selected.name : selected.en} ({lang === "bn" ? selected.en : selected.name}) — {selected.upazilas.length} {lang === "bn" ? "উপজেলা" : "upazilas"}
           </p>
           <div className="flex flex-wrap gap-1">
             {selected.upazilas.map((u) => (
@@ -309,9 +323,50 @@ export default function DynamicForm({
   onDone,
   success = "আপনার তথ্য পাঠানো হয়েছে। আমরা শীঘ্রই যোগাযোগ করব।",
 }) {
+  const { lang } = useLanguage();
   const [v, setV] = useState(initial);
   const [st, setSt] = useState({ s: "idle" });
   const set = (k, val) => setV((p) => ({ ...p, [k]: val }));
+  const formFields = fields.map((f) => translateFormField(f, lang));
+  const fareByType = {
+    ICU: {
+      bn: "৳৮,০০০",
+      en: "৳8,000",
+      descBn: "ভেন্টিলেটর, মনিটর ও প্যারামেডিক সহ",
+      descEn: "With ventilator, monitor and paramedic support",
+    },
+    NICU: {
+      bn: "৳৯,৫০০",
+      en: "৳9,500",
+      descBn: "ইনকিউবেটর ও বেবি সাপোর্ট ট্রলি সহ",
+      descEn: "With incubator and baby support trolley",
+    },
+    Cardiac: {
+      bn: "৳৮,৫০০",
+      en: "৳8,500",
+      descBn: "কার্ডিয়াক মনিটর ও জরুরি কিট সহ",
+      descEn: "With cardiac monitor and emergency kit",
+    },
+    Oxygen: {
+      bn: "৳২,৫০০",
+      en: "৳2,500",
+      descBn: "সেন্ট্রাল অক্সিজেন ও মাস্ক সহ",
+      descEn: "With central oxygen and mask",
+    },
+    "Long Distance": {
+      bn: "৳৪,০০০ (প্রতি কিমি ৳৬৫)",
+      en: "৳4,000 (৳65 per km)",
+      descBn: "দূরপাল্লার রোগী পরিবহন",
+      descEn: "Long distance patient transfer",
+    },
+    General: {
+      bn: "৳১,৫০০",
+      en: "৳1,500",
+      descBn: "সাশ্রয়ী এসি অ্যাম্বুলেন্স",
+      descEn: "Affordable AC ambulance",
+    },
+  };
+  const fare = fareByType[v.ambulanceType] || fareByType.General;
 
   async function onSubmit(e) {
     e.preventDefault();
@@ -323,7 +378,7 @@ export default function DynamicForm({
         body: JSON.stringify(v),
       });
       const d = await r.json();
-      if (!r.ok) throw new Error(d.error || "ত্রুটি হয়েছে");
+      if (!r.ok) throw new Error(d.error || (lang === "bn" ? "ত্রুটি হয়েছে" : "Something went wrong"));
       setSt({ s: "ok", bookingId: d.bookingId || null });
       setV(initial);
       onDone?.();
@@ -336,27 +391,31 @@ export default function DynamicForm({
     return (
       <div className="card text-center py-8" role="status">
         <CheckCircle2 size={48} className="mx-auto text-green" />
-        <p className="mt-3 font-head text-2xl font-bold text-navy">ধন্যবাদ!</p>
-        <p className="mt-1 text-base text-slate-600 max-w-md mx-auto">{success}</p>
+        <p className="mt-3 font-head text-2xl font-bold text-brand">{lang === "bn" ? "ধন্যবাদ!" : "Thank you!"}</p>
+        <p className="mt-1 text-base text-slate-600 max-w-md mx-auto">{translateText(success, lang)}</p>
 
         {st.bookingId && (
-          <div className="my-5 p-4 rounded-2xl bg-gradient-to-br from-navy to-blue-dark text-white shadow-lg max-w-sm mx-auto">
-            <span className="text-xs text-gold font-bold block">আপনার ট্র্যাকিং বুকিং আইডি</span>
-            <span className="text-2xl font-black text-white tracking-widest block mt-1">
+          <div className="my-5 p-4 rounded-2xl bg-gradient-to-br from-[#4B93F5] via-brand to-[#0F63CC] text-white shadow-lg max-w-sm mx-auto">
+            <span className="text-xs text-gold font-bold block">{lang === "bn" ? "আপনার ট্র্যাকিং বুকিং আইডি" : "Your tracking booking ID"}</span>
+            <span className="block mt-1 break-all text-xl font-black text-white tracking-normal sm:text-2xl sm:tracking-widest">
               {st.bookingId}
             </span>
-            <p className="text-[11px] text-blue-soft mt-1">আইডিটি লিখে রাখুন অথবা নিচের বাটনে চাপ দিয়ে লাইভ স্ট্যাটাস দেখুন</p>
+            <p className="text-[11px] text-slate-100 mt-1">
+              {lang === "bn"
+                ? "আইডিটি লিখে রাখুন অথবা নিচের বাটনে চাপ দিয়ে লাইভ স্ট্যাটাস দেখুন"
+                : "Save this ID or tap the button below to see live status"}
+            </p>
             <a
               href={`/track?id=${st.bookingId}`}
               className="btn btn-gold w-full mt-3 font-black !min-h-[38px] !text-xs"
             >
-              লাইভ অগ্রগতি ট্র্যাক করুন ➔
+              {lang === "bn" ? "লাইভ অগ্রগতি ট্র্যাক করুন ➔" : "Track live progress ➔"}
             </a>
           </div>
         )}
 
         <button className="btn btn-line mt-3 !px-6" onClick={() => setSt({ s: "idle" })}>
-          আরেকটি অনুরোধ পাঠান
+          {lang === "bn" ? "আরেকটি অনুরোধ পাঠান" : "Send another request"}
         </button>
       </div>
     );
@@ -374,7 +433,7 @@ export default function DynamicForm({
         aria-hidden="true"
       />
 
-      {fields.map((f) => {
+      {formFields.map((f) => {
         const val = v[f.name];
         const wide =
           f.full || ["textarea", "checks", "radio", "agree", "rating", "image", "location", "district"].includes(f.type)
@@ -397,10 +456,10 @@ export default function DynamicForm({
         } else if (f.type === "select") {
           ctl = (
             <select {...common}>
-              <option value="">নির্বাচন করুন</option>
+              <option value="">{lang === "bn" ? "নির্বাচন করুন" : "Select"}</option>
               {f.options.map((o) => (
                 <option key={o} value={o}>
-                  {o}
+                  {translateText(o, lang)}
                 </option>
               ))}
             </select>
@@ -419,14 +478,14 @@ export default function DynamicForm({
                     onClick={() =>
                       set(f.name, on ? val.filter((x) => x !== o) : [...(val || []), o])
                     }
-                  >
-                    {o}
-                  </button>
-                );
-              })}
-            </div>
-          );
-        } else if (f.type === "radio") {
+                    >
+                      {translateText(o, lang)}
+                    </button>
+                  );
+                })}
+              </div>
+            );
+          } else if (f.type === "radio") {
           ctl = (
             <div className="flex flex-wrap gap-2" role="radiogroup">
               {f.options.map((o) => (
@@ -438,27 +497,28 @@ export default function DynamicForm({
                   className={`chip ${val === o ? "chip-on" : ""}`}
                   onClick={() => set(f.name, o)}
                 >
-                  {o}
+                  {translateText(o, lang)}
                 </button>
               ))}
             </div>
           );
         } else if (f.type === "rating") {
           ctl = (
-            <div className="flex gap-1" role="radiogroup" aria-label="রেটিং">
+            <div className="flex flex-wrap justify-center gap-1" role="radiogroup" aria-label={lang === "bn" ? "রেটিং" : "Rating"}>
               {[1, 2, 3, 4, 5].map((n) => (
                 <button
                   type="button"
                   key={n}
                   role="radio"
                   aria-checked={val === n}
-                  aria-label={`${n} তারা`}
+                  aria-label={`${n} ${lang === "bn" ? "তারা" : "stars"}`}
                   onClick={() => set(f.name, n)}
-                  className="grid h-12 w-12 place-items-center"
+                  className="grid h-10 w-10 place-items-center sm:h-12 sm:w-12"
                 >
                   <Star
-                    size={34}
-                    className={n <= (val || 0) ? "fill-gold text-gold" : "text-slate-300"}
+                    className={`h-7 w-7 sm:h-[34px] sm:w-[34px] ${
+                      n <= (val || 0) ? "fill-gold text-gold" : "text-slate-300"
+                    }`}
                   />
                 </button>
               ))}
@@ -486,16 +546,16 @@ export default function DynamicForm({
           return (
             <label
               key={f.name}
-              className={`flex items-start gap-3 rounded-xl bg-blue-soft/50 p-3 text-sm ${wide}`}
+              className={`flex items-start gap-3 rounded-xl bg-slate-100/50 p-3 text-sm ${wide}`}
             >
               <input
                 type="checkbox"
                 required={f.required}
                 checked={!!val}
                 onChange={(e) => set(f.name, e.target.checked)}
-                className="mt-1 h-5 w-5 shrink-0 accent-navy"
+                className="mt-1 h-5 w-5 shrink-0 accent-brand"
               />
-              <span className="font-medium text-navy">{f.label}</span>
+              <span className="font-medium text-brand">{f.label}</span>
             </label>
           );
         } else {
@@ -521,38 +581,20 @@ export default function DynamicForm({
       })}
 
       {type === "ambulance" && (
-        <div className="sm:col-span-2 rounded-2xl bg-gradient-to-r from-blue-50 via-slate-50 to-white p-4 sm:p-5 border border-blue-100 shadow-subtle flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
+        <div className="sm:col-span-2 rounded-2xl bg-gradient-to-r from-slate-50 via-slate-50 to-white p-4 sm:p-5 border border-slate-100 shadow-subtle flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
           <div>
-            <span className="font-bold text-navy-dark block text-sm">
-              আনুমানিক প্রারম্ভিক ভাড়া:{" "}
-              <b className="text-red font-black text-base">
-                {v.ambulanceType === "ICU"
-                  ? "৳৮,০০০"
-                  : v.ambulanceType === "NICU"
-                    ? "৳৯,৫০০"
-                    : v.ambulanceType === "Cardiac"
-                      ? "৳৮,৫০০"
-                      : v.ambulanceType === "Oxygen"
-                        ? "৳২,৫০০"
-                        : v.ambulanceType === "Long Distance"
-                          ? "৳৪,০০০ (প্রতি কিমি ৳৬৫)"
-                          : "৳১,৫০০"}
-              </b>
+            <span className="font-bold text-brand-dark block text-sm">
+              {lang === "bn" ? "আনুমানিক প্রারম্ভিক ভাড়া:" : "Estimated starting fare:"}{" "}
+              <b className="text-red font-black text-base">{lang === "bn" ? fare.bn : fare.en}</b>
             </span>
-            <span className="text-slate-500 block mt-1">
-              {v.ambulanceType === "ICU"
-                ? "ভেন্টিলেটর, মনিটর ও প্যারামেডিক সহ"
-                : v.ambulanceType === "NICU"
-                  ? "ইনকিউবেটর ও বেবি সাপোর্ট ট্রলি সহ"
-                  : v.ambulanceType === "Oxygen"
-                    ? "সেন্ট্রাল অক্সিজেন ও মাস্ক সহ"
-                    : "সাশ্রয়ী এসি অ্যাম্বুলেন্স"}
-            </span>
+            <span className="text-slate-500 block mt-1">{lang === "bn" ? fare.descBn : fare.descEn}</span>
           </div>
           <div className="sm:text-right shrink-0">
-            <span className="text-slate-500 block text-[11px]">গাড়ি পৌঁছানোর সম্ভাব্য সময়:</span>
+            <span className="text-slate-500 block text-[11px]">
+              {lang === "bn" ? "গাড়ি পৌঁছানোর সম্ভাব্য সময়:" : "Estimated arrival time:"}
+            </span>
             <span className="font-bold text-emerald-800 bg-emerald-100 border border-emerald-200 px-3 py-1 rounded-full inline-block mt-1">
-              ১৫-২৫ মিনিট (ঢাকা ও জেলা শহর)
+              {lang === "bn" ? "১৫-২৫ মিনিট (ঢাকা ও জেলা শহর)" : "15-25 minutes (Dhaka and district towns)"}
             </span>
           </div>
         </div>
@@ -568,10 +610,10 @@ export default function DynamicForm({
         {st.s === "loading" ? (
           <>
             <Loader2 className="animate-spin" size={20} />
-            পাঠানো হচ্ছে…
+            {lang === "bn" ? "পাঠানো হচ্ছে…" : "Submitting…"}
           </>
         ) : (
-          submit
+          translateText(submit, lang)
         )}
       </button>
     </form>

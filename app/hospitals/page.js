@@ -57,19 +57,19 @@ export default function Hospitals({ searchParams }) {
       />
       <Catalog kind="hospitals" q0={searchParams.q || ""} />
 
-      <div className="wrap max-w-4xl pb-10">
-        <section className="card p-6 border border-slate-200 space-y-4">
-          <h2 className="text-xl font-black text-navy flex items-center gap-2">
-            <HelpCircle size={22} className="text-blue" /> সাধারণ জিজ্ঞাসাবলী — হাসপাতাল ও আইসিইউ সেবা
+      <div className="wrap max-w-4xl pb-10 sm:pb-14 lg:pb-16">
+        <section className="card p-5 sm:p-6 border border-slate-200 space-y-4">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-brand flex items-center gap-2 mb-3">
+            <HelpCircle size={22} className="text-brand" /> সাধারণ জিজ্ঞাসাবলী — হাসপাতাল ও আইসিইউ সেবা
           </h2>
           <div className="space-y-3">
             {HOSPITAL_FAQS.map((faq, i) => (
               <details key={i} className="group rounded-xl border border-slate-200 bg-slate-50/50 p-4 transition-all open:bg-white open:shadow-sm">
-                <summary className="font-bold text-navy cursor-pointer list-none flex items-center justify-between">
+                <summary className="font-bold text-brand cursor-pointer list-none flex items-center justify-between">
                   <span>{faq.q}</span>
-                  <span className="text-blue font-black transition-transform group-open:rotate-180">▼</span>
+                  <span className="text-brand font-black transition-transform group-open:rotate-180">▼</span>
                 </summary>
-                <p className="mt-2 text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-2">{faq.a}</p>
+                <p className="mt-2 text-sm sm:text-base text-slate-600 leading-relaxed border-t border-slate-100 pt-2">{faq.a}</p>
               </details>
             ))}
           </div>

@@ -78,7 +78,7 @@ export const metadata = {
 };
 
 export const viewport = {
-  themeColor: "#0F52BA",
+  themeColor: "#1678F2",
   width: "device-width",
   initialScale: 1,
 };
@@ -117,8 +117,8 @@ export default function RootLayout({ children }) {
           <svg className="absolute left-0 top-0 h-full w-40 opacity-[0.035]" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
             <defs>
               <pattern id="leftGrid" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
-                <path d="M0 40 L40 0 M-10 10 L10 -10 M30 50 L50 30" stroke="#0F52BA" strokeWidth="0.6" fill="none"/>
-                <circle cx="20" cy="20" r="1.2" fill="#0F52BA" opacity="0.5"/>
+                <path d="M0 40 L40 0 M-10 10 L10 -10 M30 50 L50 30" stroke="#1678F2" strokeWidth="0.6" fill="none"/>
+                <circle cx="20" cy="20" r="1.2" fill="#1678F2" opacity="0.5"/>
               </pattern>
             </defs>
             <rect width="100%" height="100%" fill="url(#leftGrid)" />
@@ -126,8 +126,8 @@ export default function RootLayout({ children }) {
           <svg className="absolute right-0 top-0 h-full w-40 opacity-[0.035]" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
             <defs>
               <pattern id="rightGrid" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
-                <path d="M0 40 L40 0 M-10 10 L10 -10 M30 50 L50 30" stroke="#FF5E7E" strokeWidth="0.6" fill="none"/>
-                <circle cx="20" cy="20" r="1.2" fill="#FF5E7E" opacity="0.4"/>
+                <path d="M0 40 L40 0 M-10 10 L10 -10 M30 50 L50 30" stroke="#F7B296" strokeWidth="0.6" fill="none"/>
+                <circle cx="20" cy="20" r="1.2" fill="#F7B296" opacity="0.4"/>
               </pattern>
             </defs>
             <rect width="100%" height="100%" fill="url(#rightGrid)" />
@@ -139,9 +139,9 @@ export default function RootLayout({ children }) {
             <path d="M50 0 C120 200, 10 400, 100 600 C180 800, 10 1000, 70 1200" stroke="url(#lWave)" strokeWidth="1"/>
             <defs>
               <linearGradient id="lWave" x1="0" y1="0" x2="0" y2="1200" gradientUnits="userSpaceOnUse">
-                <stop stopColor="#0F52BA" offset="0%"/>
-                <stop stopColor="#FF5E7E" offset="50%"/>
-                <stop stopColor="#0F52BA" offset="100%"/>
+                <stop stopColor="#1678F2" offset="0%"/>
+                <stop stopColor="#F7B296" offset="50%"/>
+                <stop stopColor="#1678F2" offset="100%"/>
               </linearGradient>
             </defs>
           </svg>
@@ -152,16 +152,16 @@ export default function RootLayout({ children }) {
             <path d="M140 0 C70 200, 180 400, 90 600 C10 800, 180 1000, 120 1200" stroke="url(#rWave)" strokeWidth="1"/>
             <defs>
               <linearGradient id="rWave" x1="0" y1="0" x2="0" y2="1200" gradientUnits="userSpaceOnUse">
-                <stop stopColor="#FF5E7E" offset="0%"/>
-                <stop stopColor="#0F52BA" offset="50%"/>
-                <stop stopColor="#FF5E7E" offset="100%"/>
+                <stop stopColor="#F7B296" offset="0%"/>
+                <stop stopColor="#1678F2" offset="50%"/>
+                <stop stopColor="#F7B296" offset="100%"/>
               </linearGradient>
             </defs>
           </svg>
         </div>
 
-        <PageLoader />
         <LanguageProvider>
+          <PageLoader />
           <Header />
           <main className="relative z-[1]">{children}</main>
           <Footer />

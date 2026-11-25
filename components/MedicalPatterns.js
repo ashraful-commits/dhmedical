@@ -16,9 +16,9 @@ export function DocTimeWavePattern({ className = "opacity-25" }) {
     >
       <defs>
         <linearGradient id="waveGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#0F52BA" stopOpacity="0.8" />
-          <stop offset="60%" stopColor="#2563EB" stopOpacity="0.4" />
-          <stop offset="100%" stopColor="#FF5E7E" stopOpacity="0.6" />
+          <stop offset="0%" stopColor="#1678F2" stopOpacity="0.8" />
+          <stop offset="60%" stopColor="#0F63CC" stopOpacity="0.4" />
+          <stop offset="100%" stopColor="#F7B296" stopOpacity="0.6" />
         </linearGradient>
       </defs>
 
@@ -60,7 +60,7 @@ export function DocTimeWavePattern({ className = "opacity-25" }) {
 export function ClinicalDotGrid({ className = "opacity-40" }) {
   return (
     <div
-      className={`absolute inset-0 pointer-events-none select-none [background-image:radial-gradient(rgba(15,82,186,0.12)_1px,transparent_1px)] [background-size:24px_24px] ${className}`}
+      className={`absolute inset-0 pointer-events-none select-none [background-image:radial-gradient(rgba(22,120,242,0.12)_1px,transparent_1px)] [background-size:24px_24px] ${className}`}
       aria-hidden="true"
     />
   );

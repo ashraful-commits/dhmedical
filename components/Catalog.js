@@ -18,7 +18,7 @@ import {
   Stethoscope,
   ArrowRight,
 } from "lucide-react";
-import { SITE, SPECIALTIES, spBn } from "@/lib/site";
+import { SITE, SPECIALTIES, spBn, imageFallback } from "@/lib/site";
 
 const POPULAR_SEARCH_TAGS = [
   { label: "মেডিসিন", val: "medicin" },
@@ -55,7 +55,7 @@ function getTopServiceMatch(query) {
       ctaText: "মেডিসিন ডাক্তার সিরিয়াল নিন",
       ctaLink: "/appointment?sp=Medicine",
       hotline: false,
-      color: "from-blue-700 via-indigo-600 to-navy",
+      color: "from-[#4B93F5] via-brand to-[#0F63CC]",
       badge: "মেডিসিন সেবা শীর্ষ ম্যাচ",
     };
   }
@@ -68,7 +68,7 @@ function getTopServiceMatch(query) {
       ctaText: "সরাসরি সিরিয়াল বুক করুন",
       ctaLink: "/appointment",
       hotline: false,
-      color: "from-emerald-700 via-teal-700 to-navy",
+      color: "from-[#0A4FA6] via-brand to-[#4B93F5]",
       badge: "ডাক্তার সেবা শীর্ষ ম্যাচ",
     };
   }
@@ -81,7 +81,7 @@ function getTopServiceMatch(query) {
       ctaText: "হাসপাতাল তালিকা ও বেড দেখুন",
       ctaLink: "/hospitals",
       hotline: true,
-      color: "from-navy via-slate-800 to-blue-900",
+      color: "from-brand via-slate-800 to-brand-deep",
       badge: "হাসপাতাল শীর্ষ ম্যাচ",
     };
   }
@@ -94,7 +94,7 @@ function getTopServiceMatch(query) {
       ctaText: "ICU অ্যাম্বুলেন্স বুক করুন",
       ctaLink: "/ambulance",
       hotline: true,
-      color: "from-red-700 via-rose-700 to-navy",
+      color: "from-[#0A4FA6] via-brand to-[#4B93F5]",
       badge: "ICU লাইফ সাপোর্ট ম্যাচ",
     };
   }
@@ -107,7 +107,7 @@ function getTopServiceMatch(query) {
       ctaText: "অক্সিজেন অ্যাম্বুলেন্স নিন",
       ctaLink: "/ambulance",
       hotline: true,
-      color: "from-cyan-700 via-blue-700 to-navy",
+      color: "from-[#4B93F5] via-brand to-[#0F63CC]",
       badge: "অক্সিজেন সেবা ম্যাচ",
     };
   }
@@ -144,7 +144,7 @@ export default function Catalog({ kind, q0 = "", sp0 = "" }) {
   return (
     <div className="wrap py-6">
       <div className="relative">
-        <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-blue" size={20} />
+        <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-brand" size={20} />
         <input
           className="input !pl-12 w-full"
           type="search"
@@ -167,7 +167,7 @@ export default function Catalog({ kind, q0 = "", sp0 = "" }) {
             key={t.val}
             type="button"
             onClick={() => setQ(t.val)}
-            className="rounded-full bg-slate-100 hover:bg-blue-soft text-navy px-2.5 py-1 font-medium transition-colors shrink-0"
+            className="rounded-full bg-slate-100 hover:bg-slate-100 text-brand px-2.5 py-1 font-medium transition-colors shrink-0"
           >
             #{t.label}
           </button>
@@ -225,7 +225,7 @@ export default function Catalog({ kind, q0 = "", sp0 = "" }) {
 
       <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {items === null &&
-          [1, 2, 3].map((i) => <div key={i} className="card h-40 animate-pulse bg-blue-soft/50" />)}
+          [1, 2, 3].map((i) => <div key={i} className="card h-40 animate-pulse bg-slate-100/50" />)}
 
         {items?.map((d) => {
           const isFloorOpen = openFloorId === d._id;
@@ -250,16 +250,17 @@ export default function Catalog({ kind, q0 = "", sp0 = "" }) {
                   {d.photo || d.logo ? (
                     <img
                       src={d.photo || d.logo}
-                      alt={d.name}
+                      alt={`${d.name} — DH Medical Support listing`}
+                      onError={imageFallback(doc ? "doctor" : "hospital")}
                       className="h-16 w-16 rounded-xl object-cover border border-slate-200 shrink-0"
                     />
                   ) : (
-                    <span className="grid h-16 w-16 place-items-center rounded-xl bg-blue-soft text-blue shrink-0">
+                    <span className="grid h-16 w-16 place-items-center rounded-xl bg-slate-100 text-brand shrink-0">
                       {doc ? <User size={28} /> : <Building2 size={28} />}
                     </span>
                   )}
                   <div className="min-w-0 flex-1">
-                    <h3 className="font-head text-lg font-bold leading-tight text-navy">{d.name}</h3>
+                    <h3 className="font-head text-lg font-bold leading-tight text-brand">{d.name}</h3>
                     {doc ? (
                       <p className="text-xs text-slate-600 mt-0.5">{d.degree}</p>
                     ) : (
@@ -276,22 +277,22 @@ export default function Catalog({ kind, q0 = "", sp0 = "" }) {
                   <ul className="mt-3 space-y-1 text-xs text-slate-700 border-t border-slate-100 pt-2.5">
                     {d.specialty && (
                       <li>
-                        <b className="text-navy">বিভাগ:</b> {spBn(d.specialty)}
+                        <b className="text-brand">বিভাগ:</b> {spBn(d.specialty)}
                       </li>
                     )}
                     {d.hospital && (
                       <li>
-                        <b className="text-navy">হাসপাতাল:</b> {d.hospital}
+                        <b className="text-brand">হাসপাতাল:</b> {d.hospital}
                       </li>
                     )}
                     {d.schedule && (
                       <li>
-                        <b className="text-navy">সময়সূচি:</b> {d.schedule}
+                        <b className="text-brand">সময়সূচি:</b> {d.schedule}
                       </li>
                     )}
                     {d.fee && (
                       <li>
-                        <b className="text-navy">ভিজিট ফি:</b>{" "}
+                        <b className="text-brand">ভিজিট ফি:</b>{" "}
                         <span className="font-bold text-red">{d.fee}</span>
                       </li>
                     )}
@@ -312,7 +313,7 @@ export default function Catalog({ kind, q0 = "", sp0 = "" }) {
                     {/* Services list */}
                     {d.services && (
                       <p className="text-slate-600 leading-relaxed">
-                        <b className="text-navy">প্রধান সেবা:</b> {d.services}
+                        <b className="text-brand">প্রধান সেবা:</b> {d.services}
                       </p>
                     )}
 
@@ -322,7 +323,7 @@ export default function Catalog({ kind, q0 = "", sp0 = "" }) {
                         href={d.mapUrl || mapSearchUrl}
                         target="_blank"
                         rel="noreferrer"
-                        className="inline-flex items-center gap-1 text-blue font-bold hover:underline"
+                        className="inline-flex items-center gap-1 text-brand font-bold hover:underline"
                       >
                         <MapPin size={13} className="text-red" />
                         গুগল ম্যাপে লোকেশন দেখুন <ExternalLink size={11} />
@@ -331,27 +332,27 @@ export default function Catalog({ kind, q0 = "", sp0 = "" }) {
 
                     {/* Floor & Room Directory (কয়তলায় কোন রুম আছে) */}
                     {floorList.length > 0 && (
-                      <div className="rounded-xl border border-blue/20 bg-blue-soft/30 overflow-hidden">
+                      <div className="rounded-xl border border-brand/20 bg-slate-100/30 overflow-hidden">
                         <button
                           type="button"
                           onClick={() => toggleFloor(d._id)}
-                          className="flex w-full items-center justify-between p-2.5 text-xs font-bold text-navy hover:bg-blue-soft/60 transition-colors"
+                          className="flex w-full items-center justify-between p-2.5 text-xs font-bold text-brand hover:bg-slate-100/60 transition-colors"
                         >
                           <span className="flex items-center gap-1.5">
-                            <Layers size={14} className="text-blue" />
+                            <Layers size={14} className="text-brand" />
                             কয়তলায় কোন রুম আছে (ফ্লোর ডিরেক্টরি)
                           </span>
                           {isFloorOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
                         </button>
 
                         {isFloorOpen && (
-                          <div className="border-t border-blue/15 bg-white p-3 space-y-1.5 animate-fadeIn">
+                          <div className="border-t border-brand/15 bg-white p-3 space-y-1.5 animate-fadeIn">
                             {floorList.map((floor, idx) => (
                               <div
                                 key={idx}
                                 className="flex items-start gap-2 border-b border-slate-100 pb-1 last:border-0 last:pb-0"
                               >
-                                <span className="grid h-5 w-5 shrink-0 place-items-center rounded bg-navy text-[10px] font-bold text-white mt-0.5">
+                                <span className="grid h-5 w-5 shrink-0 place-items-center rounded bg-brand text-[10px] font-bold text-white mt-0.5">
                                   {idx + 1}
                                 </span>
                                 <span className="text-[11px] text-slate-700 leading-tight">

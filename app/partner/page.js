@@ -58,35 +58,35 @@ export default function Partner() {
         sub="D H Medical Support পার্টনার নেটওয়ার্কে যুক্ত হয়ে নিয়মিত রোগী পান ও সম্মানিত সেবা দিন।"
       />
 
-      <div className="wrap max-w-4xl space-y-8 py-8">
+      <div className="wrap max-w-4xl space-y-8 py-10 sm:py-14 lg:py-16">
         {/* Step-by-step Onboarding Guide */}
-        <section aria-labelledby="steps-title" className="rounded-2xl bg-gradient-to-r from-navy-deep via-navy to-navy-dark p-6 text-white shadow-card sm:p-8 border border-white/10">
-          <div className="text-center max-w-xl mx-auto">
+        <section aria-labelledby="steps-title" className="rounded-2xl bg-gradient-to-r from-[#4B93F5] via-brand to-[#0F63CC] p-5 sm:p-6 text-white shadow-card border border-white/10">
+          <div className="text-center max-w-xl mx-auto mb-6 sm:mb-8">
             <span className="inline-flex items-center gap-1.5 rounded-full bg-white/20 px-3 py-1 text-xs font-bold text-gold">
               সহজ নিবন্ধন পদ্ধতি
             </span>
-            <h2 id="steps-title" className="mt-2 text-2xl font-black sm:text-3xl !text-white">
+            <h2 id="steps-title" className="mt-2 text-2xl sm:text-3xl lg:text-4xl font-black !text-white mb-3">
               ড্রাইভার ও মালিক যেভাবে যুক্ত হবেন
             </h2>
-            <p className="mt-1 text-xs text-blue-soft sm:text-sm">
+            <p className="mt-2 text-sm sm:text-base text-slate-100 leading-relaxed max-w-2xl">
               নিচের ৪টি সহজ ধাপ অনুসরণ করে আজই আপনার অ্যাকাউন্ট খুলুন
             </p>
           </div>
 
-          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {STEPS.map((s) => {
               const I = s.Icon;
               return (
                 <div key={s.step} className="rounded-xl bg-white/10 p-4 border border-white/10 backdrop-blur flex flex-col justify-between">
                   <div>
                     <div className="flex items-center justify-between mb-3">
-                      <span className="grid h-8 w-8 place-items-center rounded-full bg-gold text-navy font-black text-sm">
+                      <span className="grid h-8 w-8 place-items-center rounded-full bg-gold text-brand font-black text-sm">
                         {s.step}
                       </span>
-                      <I size={22} className="text-blue-soft" />
+                      <I size={22} className="text-slate-100" />
                     </div>
                     <h3 className="font-bold text-base text-white">{s.title}</h3>
-                    <p className="mt-1 text-xs text-blue-soft leading-relaxed">{s.desc}</p>
+                    <p className="mt-1 text-xs sm:text-sm text-slate-100 leading-relaxed">{s.desc}</p>
                   </div>
                 </div>
               );
@@ -95,14 +95,14 @@ export default function Partner() {
         </section>
 
         {/* Terms of Service */}
-        <div className="card border-blue/20">
-          <h2 className="font-head text-xl font-bold text-navy flex items-center gap-2">
+        <div className="card border-brand/20 p-5 sm:p-6">
+          <h2 className="font-head text-2xl sm:text-3xl lg:text-4xl font-black text-brand flex items-center gap-2 mb-3">
             <CheckCircle2 className="text-green" size={22} /> চুক্তির নিয়ম ও শর্তাবলী
           </h2>
-          <ul className="mt-3 space-y-2.5 text-sm text-slate-700">
+          <ul className="mt-3 space-y-2.5 text-sm sm:text-base text-slate-700">
             {TERMS.map((t) => (
               <li key={t} className="flex gap-3">
-                <BadgeCheck className="shrink-0 text-blue mt-0.5" size={18} />
+                <BadgeCheck className="shrink-0 text-brand mt-0.5" size={18} />
                 <span>{t}</span>
               </li>
             ))}
@@ -111,12 +111,12 @@ export default function Partner() {
 
         {/* Partner Registration Form */}
         <section aria-labelledby="form-heading">
-          <div className="mb-4">
+          <div className="mb-6 sm:mb-8">
             <span className="pill">নিবন্ধন ফর্ম</span>
-            <h2 id="form-heading" className="text-2xl font-black text-navy mt-1">
+            <h2 id="form-heading" className="text-2xl sm:text-3xl lg:text-4xl font-black text-brand mt-1 mb-3">
               আপনার সঠিক তথ্য ও NID কার্ডের ছবি দিন
             </h2>
-            <p className="text-sm text-slate-600">
+            <p className="text-sm sm:text-base text-slate-600 leading-relaxed max-w-2xl">
               সবগুলো তথ্য পূরণ করুন। আপনার দেওয়া তথ্য ও ছবি আমাদের সুরক্ষিত সার্ভারে সংরক্ষিত থাকবে।
             </p>
           </div>

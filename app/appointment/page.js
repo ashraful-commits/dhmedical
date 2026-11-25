@@ -26,7 +26,7 @@ export default function Appointment({ searchParams: s }) {
   return (
     <>
       <PageHead Icon={CalendarCheck} title="ডাক্তারের অ্যাপয়েন্টমেন্ট" sub="তথ্য দিন, আমরা সিরিয়াল নিশ্চিত করে আপনাকে জানাব।" />
-      <div className="wrap max-w-3xl py-6">
+      <div className="wrap max-w-3xl py-10 sm:py-14 lg:py-16">
         <DynamicForm type="appointments" fields={appointmentFields} initial={initial} submit="অ্যাপয়েন্টমেন্ট অনুরোধ পাঠান" />
       </div>
     </>

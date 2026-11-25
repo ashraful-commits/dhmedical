@@ -3,77 +3,110 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight, Building2, Bed, Phone, ShieldCheck, ArrowRight } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
+import { imageFallback } from "@/lib/site";
 
 export const PARTNER_HOSPITALS = [
   {
     name: "বারডেম জেনারেল হাসপাতাল (BIRDEM)",
+    nameEn: "BIRDEM General Hospital",
     beds: "৭০০ বেড (৫০টি ICU)",
+    bedsEn: "700 beds (50 ICU)",
     location: "শাহবাগ, ঢাকা",
+    locationEn: "Shahbag, Dhaka",
     phone: "01713-047461",
     badge: "ডায়াবেটিস ও স্পেশালাইজড",
+    badgeEn: "Diabetes & Specialized Care",
     img: "https://images.unsplash.com/photo-1586773860418-d37222d8fce3?w=600&auto=format&fit=crop&q=80",
     query: "বারডেম জেনারেল হাসপাতাল (BIRDEM)",
   },
   {
     name: "জাতীয় হৃদরোগ ইনস্টিটিউট ও হাসপাতাল",
+    nameEn: "National Institute of Cardiovascular Diseases & Hospital",
     beds: "১২৫০ বেড (৮০টি ICU)",
+    bedsEn: "1,250 beds (80 ICU)",
     location: "শেরেবাংলা নগর, ঢাকা",
+    locationEn: "Sher-e-Bangla Nagar, Dhaka",
     phone: "01713-377775",
     badge: "জাতীয় রেফারাল সেন্টার",
+    badgeEn: "National Referral Center",
     img: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=600&auto=format&fit=crop&q=80",
     query: "জাতীয় হৃদরোগ ইনস্টিটিউট ও হাসপাতাল",
   },
   {
     name: "ল্যাবএইড স্পেশালাইজড হাসপাতাল (Labaid)",
+    nameEn: "Labaid Specialized Hospital",
     beds: "৩৫০ বেড (৩৫টি ICU)",
+    bedsEn: "350 beds (35 ICU)",
     location: "ধানমন্ডি, ঢাকা",
+    locationEn: "Dhanmondi, Dhaka",
     phone: "01713-333337",
     badge: "কার্ডিয়াক ও মাল্টিডিসিপ্লিনারি",
+    badgeEn: "Cardiac & Multidisciplinary",
     img: "https://images.unsplash.com/photo-1516549655169-df83a0774514?w=600&auto=format&fit=crop&q=80",
     query: "ল্যাবএইড স্পেশালাইজড হাসপাতাল (Labaid)",
   },
   {
     name: "ইউনাইটেড হাসপাতাল লিমিটেড (United)",
+    nameEn: "United Hospital Limited",
     beds: "৫০০ বেড (৫০টি CCU/ICU)",
+    bedsEn: "500 beds (50 CCU/ICU)",
     location: "গুলশান-২, ঢাকা",
+    locationEn: "Gulshan-2, Dhaka",
     phone: "01914-001234",
     badge: "আন্তর্জাতিক মানসম্পন্ন",
+    badgeEn: "International Standard Care",
     img: "https://images.unsplash.com/photo-1587351021759-3e566b6af7cc?w=600&auto=format&fit=crop&q=80",
     query: "ইউনাইটেড হাসপাতাল লিমিটেড (United)",
   },
   {
     name: "ইবনে সিনা স্পেশালাইজড হাসপাতাল",
+    nameEn: "Ibn Sina Specialized Hospital",
     beds: "৩০০ বেড (৩০টি ICU)",
+    bedsEn: "300 beds (30 ICU)",
     location: "ধানমন্ডি, ঢাকা",
+    locationEn: "Dhanmondi, Dhaka",
     phone: "01823-039800",
     badge: "আধুনিক আইসিইউ ও ল্যাব",
+    badgeEn: "Modern ICU & Lab",
     img: "https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=600&auto=format&fit=crop&q=80",
     query: "ইবনে সিনা স্পেশালাইজড হাসপাতাল",
   },
   {
     name: "পপুলার ডায়াগনস্টিক সেন্টার ও হাসপাতাল",
+    nameEn: "Popular Diagnostic Center & Hospital",
     beds: "২৫০ বেড (২৫টি ICU)",
+    bedsEn: "250 beds (25 ICU)",
     location: "শান্তিনগর / ধানমন্ডি, ঢাকা",
+    locationEn: "Shantinagar / Dhanmondi, Dhaka",
     phone: "01755-691981",
     badge: "ডায়াগনস্টিক ও জরুরি কেয়ার",
+    badgeEn: "Diagnostics & Emergency Care",
     img: "https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=600&auto=format&fit=crop&q=80",
     query: "পপুলার ডায়াগনস্টিক সেন্টার ও হাসপাতাল",
   },
   {
     name: "এভারকেয়ার হসপিটাল ঢাকা (Evercare)",
+    nameEn: "Evercare Hospital Dhaka",
     beds: "৪২৫ বেড (৪০টি ICU/NICU)",
+    bedsEn: "425 beds (40 ICU/NICU)",
     location: "বসুন্ধরা আবাসিক এলাকা, ঢাকা",
+    locationEn: "Bashundhara Residential Area, Dhaka",
     phone: "01713-047461",
     badge: "JCI স্বীকৃত আন্তর্জাতিক হাসপাতাল",
+    badgeEn: "JCI Accredited International Hospital",
     img: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=600&auto=format&fit=crop&q=80",
     query: "এভারকেয়ার হসপিটাল ঢাকা (Evercare)",
   },
   {
     name: "স্কয়ার হাসপাতাল লিমিটেড (Square)",
+    nameEn: "Square Hospital Limited",
     beds: "৪০০ বেড (৪৫টি ICU)",
+    bedsEn: "400 beds (45 ICU)",
     location: "পান্থপথ, ঢাকা",
+    locationEn: "Panthapath, Dhaka",
     phone: "01713-377775",
     badge: "প্রাইম টারশিয়ারি হাসপাতাল",
+    badgeEn: "Premier Tertiary Care Hospital",
     img: "https://images.unsplash.com/photo-1586773860418-d37222d8fce3?w=600&auto=format&fit=crop&q=80",
     query: "স্কয়ার হাসপাতাল লিমিটেড (Square)",
   },
@@ -81,7 +114,7 @@ export const PARTNER_HOSPITALS = [
 
 export default function PartnerHospitalsCarousel() {
   const [startIndex, setStartIndex] = useState(0);
-  const [itemsPerPage, setItemsPerPage] = useState(3);
+  const [itemsPerPage, setItemsPerPage] = useState(1);
   const { lang, t } = useLanguage();
 
   // Responsive items count
@@ -181,25 +214,26 @@ export default function PartnerHospitalsCarousel() {
                     <div className="relative overflow-hidden rounded-xl bg-slate-100 aspect-[16/9] mb-4">
                       <img
                         src={hosp.img}
-                        alt={hosp.name}
+                        alt={`${lang === "bn" ? hosp.name : hosp.nameEn} — ${lang === "bn" ? "ডিএইচ মেডিকেল সাপোর্টের পার্টনার হাসপাতাল" : "DH Medical Support partner hospital"}`}
+                        onError={imageFallback("hospital")}
                         className="h-full w-full object-cover"
                       />
                       <span className="absolute top-2.5 left-2.5 rounded-lg bg-white/95 px-2.5 py-1 text-[10.5px] font-bold text-brand shadow-sm backdrop-blur-sm">
-                        {hosp.badge}
+                        {lang === "bn" ? hosp.badge : hosp.badgeEn}
                       </span>
                     </div>
 
                     <h3 className="text-base font-bold text-ink-dark line-clamp-1">
-                      {hosp.name}
+                      {lang === "bn" ? hosp.name : hosp.nameEn}
                     </h3>
                     <p className="text-xs text-slate-500 mt-1 flex items-center gap-1">
-                      <span>{hosp.location}</span>
+                      <span>{lang === "bn" ? hosp.location : hosp.locationEn}</span>
                     </p>
 
                     <div className="mt-3 flex items-center gap-2 rounded-xl bg-brand-50/70 p-2.5 border border-brand-100/50">
                       <Bed size={16} className="text-brand shrink-0" />
                       <span className="text-xs font-bold text-brand">
-                        {hosp.beds}
+                        {lang === "bn" ? hosp.beds : hosp.bedsEn}
                       </span>
                     </div>
                   </div>

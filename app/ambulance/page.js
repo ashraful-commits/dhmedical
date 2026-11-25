@@ -107,7 +107,7 @@ export default function AmbulancePage() {
         sub="সাধারণ এসি, অক্সিজেন, ICU ও নবজাতক অ্যাম্বুলেন্স — লাইভ জিপিএস লোকেশন ট্র্যাকিংসহ ১৫-২৫ মিনিটে দ্রুততম সমন্বয়।"
       />
 
-      <div className="wrap max-w-4xl space-y-8 py-8">
+      <div className="wrap max-w-4xl space-y-8 py-10 sm:py-14 lg:py-16">
         {/* Authoritative Emergency Dispatch Callout */}
         <div className="rounded-2xl bg-brand p-6 text-white shadow-card flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5 border border-brand-dark/20">
           <div className="space-y-1">
@@ -117,10 +117,10 @@ export default function AmbulancePage() {
                 ২৪ ঘণ্টা সেন্ট্রাল ডিসপ্যাচ রুম
               </span>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-black !text-white leading-tight">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black !text-white leading-tight mb-3">
               খুব বেশি জরুরি অবস্থায় আছেন?
             </h2>
-            <p className="text-xs sm:text-sm text-white/90">
+            <p className="text-sm sm:text-base text-white/90 leading-relaxed max-w-2xl">
               দেরি না করে সরাসরি আমাদের জরুরি হটলাইনে কল দিন — কোঅর্ডিনেটর সাথে সাথে গাড়ি পাঠিয়ে দেবে।
             </p>
           </div>
@@ -136,10 +136,10 @@ export default function AmbulancePage() {
 
         {/* Fleet Grid */}
         <section aria-labelledby="fleet-title" className="space-y-4">
-          <div className="flex items-end justify-between">
+          <div className="flex items-end justify-between mb-6 sm:mb-8">
             <div>
               <span className="pill">আমাদের অ্যাম্বুলেন্স বহর</span>
-              <h2 id="fleet-title" className="text-xl sm:text-2xl font-black text-navy-dark mt-1.5 flex items-center gap-2">
+              <h2 id="fleet-title" className="text-2xl sm:text-3xl lg:text-4xl font-black text-brand-dark mt-2 mb-3 flex items-center gap-2">
                 রোগীর প্রয়োজন অনুযায়ী উপযুক্ত গাড়ি নির্বাচন করুন
               </h2>
             </div>
@@ -149,21 +149,21 @@ export default function AmbulancePage() {
             {AMBULANCE_TYPES.map((a) => (
               <div
                 key={a.type}
-                className="card card-hover flex flex-col justify-between !p-4 border border-slate-200"
+                className="card card-hover flex flex-col justify-between p-4 sm:p-5 border border-slate-200"
               >
                 <div>
                   <div className="flex items-center justify-between">
                     <span className={`rounded-full px-2.5 py-0.5 text-[10px] font-bold border ${a.badgeColor}`}>
                       {a.badge}
                     </span>
-                    <span className="text-[11px] font-bold text-slate-500">
+                    <span className="text-xs font-bold text-slate-500">
                       ETA: {a.eta}
                     </span>
                   </div>
 
-                  <h3 className="mt-2.5 font-bold text-base text-navy-dark">{a.type}</h3>
-                  <p className="text-xs font-semibold text-blue mt-0.5">{a.tag}</p>
-                  <p className="mt-2 text-xs text-slate-600 leading-relaxed">{a.desc}</p>
+                  <h3 className="mt-2.5 font-bold text-base text-brand-dark">{a.type}</h3>
+                  <p className="text-xs font-semibold text-brand mt-0.5">{a.tag}</p>
+                  <p className="mt-2 text-xs sm:text-sm text-slate-600 leading-relaxed">{a.desc}</p>
                 </div>
 
                 <div className="mt-4 pt-2.5 border-t border-slate-100 flex items-center justify-between text-xs">
@@ -177,13 +177,13 @@ export default function AmbulancePage() {
 
         {/* Booking Form with GPS Location Tagging */}
         <section aria-labelledby="booking-title" className="space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-2">
+          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-2 mb-6 sm:mb-8">
             <div>
               <span className="pill">অনলাইন রিকুয়েস্ট</span>
-              <h2 id="booking-title" className="text-xl sm:text-2xl font-black text-navy-dark mt-1.5">
+              <h2 id="booking-title" className="text-2xl sm:text-3xl lg:text-4xl font-black text-brand-dark mt-2 mb-3">
                 অ্যাম্বুলেন্সের জন্য তথ্য পূরণ করুন
               </h2>
-              <p className="text-xs text-slate-600 mt-0.5">
+              <p className="text-sm sm:text-base text-slate-600 leading-relaxed max-w-2xl mt-1">
                 রোগীর বর্তমান ঠিকানা ও <b>&quot;📍 আমার বর্তমান লোকেশন দিন&quot;</b> বাটনে ক্লিক করে জিপিএস পিন ট্যাগ করুন।
               </p>
             </div>
@@ -202,12 +202,12 @@ export default function AmbulancePage() {
         </section>
 
         {/* SEO FAQs Accordion Section */}
-        <section className="card p-6 border border-slate-200/90 space-y-4">
+        <section className="card p-5 sm:p-6 border border-slate-200/90 space-y-4">
           <div className="flex items-center gap-2">
-            <span className="grid h-8 w-8 place-items-center rounded-lg bg-blue-50 text-blue">
+            <span className="grid h-8 w-8 place-items-center rounded-lg bg-slate-50 text-brand">
               <HelpCircle size={18} />
             </span>
-            <h2 className="text-lg font-black text-navy-dark">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-brand-dark mb-3">
               সাধারণ জিজ্ঞাসাবলী (FAQ) — অ্যাম্বুলেন্স সার্ভিস
             </h2>
           </div>
@@ -218,11 +218,11 @@ export default function AmbulancePage() {
                 key={i}
                 className="group rounded-xl border border-slate-200 bg-slate-50/60 p-4 transition-all open:bg-white open:shadow-subtle"
               >
-                <summary className="font-bold text-sm text-navy-dark cursor-pointer list-none flex items-center justify-between">
+                <summary className="font-bold text-sm text-brand-dark cursor-pointer list-none flex items-center justify-between">
                   <span>{faq.q}</span>
-                  <span className="text-blue font-black transition-transform group-open:rotate-180">▼</span>
+                  <span className="text-brand font-black transition-transform group-open:rotate-180">▼</span>
                 </summary>
-                <p className="mt-2 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-2">
+                <p className="mt-2 text-sm sm:text-base text-slate-600 leading-relaxed border-t border-slate-100 pt-2">
                   {faq.a}
                 </p>
               </details>

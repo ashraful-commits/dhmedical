@@ -10,7 +10,7 @@
 
   body {
     background-color: #FFFFFF;
-    color: #1E293B;
+    color: #334155;
     font-family: var(--font-body), "Hind Siliguri", sans-serif;
     -webkit-font-smoothing: antialiased;
   }
@@ -22,13 +22,13 @@
   h5,
   h6 {
     font-family: var(--font-head), "Anek Bangla", sans-serif;
-    color: #0F172A;
+    color: #14213D;
     font-weight: 800;
     letter-spacing: -0.015em;
   }
 
   :focus-visible {
-    outline: 2px solid #0F52BA;
+    outline: 2px solid #1678F2;
     outline-offset: 2px;
   }
 }
@@ -38,39 +38,69 @@
     @apply mx-auto w-full max-w-6xl px-4 sm:px-6;
   }
 
-  /* Primary Solid Brand Button with Modern Shine Wave & Lift Animation */
+  .card,
+  .modern-card {
+    @apply relative border border-slate-200/80 bg-surface-card shadow-clean transition-all duration-200 hover:border-brand/40 hover:shadow-hover;
+  }
+
+  .btn {
+    @apply inline-flex min-h-[44px] items-center justify-center gap-2 rounded-none px-5 py-2.5 text-sm font-bold transition-all duration-200 active:translate-y-0 active:scale-[0.98];
+  }
+
+  .btn-line {
+    @apply inline-flex min-h-[44px] items-center justify-center gap-2 rounded-none border border-slate-200 bg-white px-5 py-2.5 text-sm font-bold text-ink-dark transition-all duration-200 hover:border-brand/40 hover:bg-brand-50/50 hover:text-brand;
+  }
+
   .btn-primary {
-    @apply relative inline-flex min-h-[44px] items-center justify-center gap-2 overflow-hidden rounded-xl bg-brand px-5 py-2.5 text-sm font-bold text-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-brand-dark hover:shadow-hover active:translate-y-0 active:scale-[0.98] before:absolute before:inset-0 before:-translate-x-full hover:before:translate-x-full before:bg-gradient-to-r before:from-transparent before:via-white/25 before:to-transparent before:transition-transform before:duration-700;
+    @apply relative inline-flex min-h-[44px] items-center justify-center gap-2 overflow-hidden rounded-none bg-brand px-5 py-2.5 text-sm font-bold text-white shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:bg-brand-dark hover:shadow-hover active:translate-y-0 active:scale-[0.98] before:absolute before:inset-0 before:-translate-x-full hover:before:translate-x-full before:bg-gradient-to-r before:from-transparent before:via-white/25 before:to-transparent before:transition-transform before:duration-700;
   }
 
-  /* Warm Compassionate Care / Family Love Button ("নিজের পরিবারের মতো ভালোবাসা") */
   .btn-care {
-    @apply relative inline-flex min-h-[44px] items-center justify-center gap-2 overflow-hidden rounded-xl bg-care px-5 py-2.5 text-sm font-bold text-white shadow-care transition-all duration-200 hover:-translate-y-0.5 hover:bg-care-dark hover:shadow-[0_6px_20px_rgba(225, 29, 72, 0.35)] active:translate-y-0 active:scale-[0.98] before:absolute before:inset-0 before:-translate-x-full hover:before:translate-x-full before:bg-gradient-to-r before:from-transparent before:via-white/30 before:to-transparent before:transition-transform before:duration-700;
+    @apply relative inline-flex min-h-[44px] items-center justify-center gap-2 overflow-hidden rounded-none bg-care-deep px-5 py-2.5 text-sm font-bold text-white shadow-care transition-all duration-200 hover:-translate-y-0.5 hover:bg-care-dark active:translate-y-0 active:scale-[0.98] before:absolute before:inset-0 before:-translate-x-full hover:before:translate-x-full before:bg-gradient-to-r before:from-transparent before:via-white/25 before:to-transparent before:transition-transform before:duration-700;
   }
 
-  /* Clean Outline Button with Micro-Lift */
+  .btn-gold {
+    @apply inline-flex min-h-[44px] items-center justify-center gap-2 rounded-none bg-care-deep px-5 py-2.5 text-sm font-bold text-white shadow-care transition-all duration-200 hover:-translate-y-0.5 hover:bg-care-dark active:translate-y-0 active:scale-[0.98];
+  }
+
   .btn-outline {
-    @apply inline-flex min-h-[44px] items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-5 py-2.5 text-sm font-bold text-ink-dark transition-all duration-200 hover:-translate-y-0.5 hover:border-brand/40 hover:bg-brand-50/50 hover:text-brand hover:shadow-sm active:translate-y-0 active:scale-[0.98];
+    @apply inline-flex min-h-[44px] items-center justify-center gap-2 rounded-none border border-slate-200 bg-white px-5 py-2.5 text-sm font-bold text-ink-dark transition-all duration-200 hover:-translate-y-0.5 hover:border-brand/40 hover:bg-brand-50/50 hover:text-brand hover:shadow-sm active:translate-y-0 active:scale-[0.98];
   }
 
-  /* Clean Soft Button */
   .btn-soft {
-    @apply inline-flex min-h-[44px] items-center justify-center gap-2 rounded-xl bg-brand-50 px-5 py-2.5 text-sm font-bold text-brand transition-all duration-200 hover:-translate-y-0.5 hover:bg-brand-100 active:translate-y-0 active:scale-[0.98];
+    @apply inline-flex min-h-[44px] items-center justify-center gap-2 rounded-none bg-brand-50 px-5 py-2.5 text-sm font-bold text-brand transition-all duration-200 hover:-translate-y-0.5 hover:bg-brand-100 active:translate-y-0 active:scale-[0.98];
   }
 
-  /* Warm Soft Care Badge / Pill */
   .pill-care {
-    @apply inline-flex items-center gap-1.5 rounded-full bg-care-50 px-3 py-1 text-xs font-bold text-care border border-care-100;
+    @apply inline-flex items-center gap-1.5 rounded-none bg-care-50 px-3 py-1 text-xs font-bold text-care-deep border border-care-200;
   }
 
-  /* DocTime-style Specialty / Category Card */
   .category-card {
-    @apply rounded-2xl border border-slate-200/80 bg-white p-5 text-center transition-all duration-200 hover:border-brand/40 hover:shadow-hover hover:-translate-y-0.5;
+    @apply rounded-none border border-slate-200/80 bg-white p-4 text-center transition-all duration-200 hover:border-brand hover:bg-brand hover:text-white hover:shadow-hover hover:-translate-y-0.5 sm:p-5;
   }
 
-  /* DocTime Search Input */
+  .behance-card {
+    @apply flex h-full min-h-[190px] flex-col items-center justify-center border border-slate-200/80 bg-white p-6 text-center shadow-clean transition-all duration-200 hover:-translate-y-1 hover:border-brand hover:bg-brand hover:shadow-hover;
+    border-radius: 16px !important;
+  }
+
+  .behance-icon {
+    @apply mb-4 grid h-16 w-16 place-items-center bg-brand-50 text-brand transition-colors duration-300;
+    border-radius: 9999px !important;
+  }
+
+  .behance-card:hover .behance-icon {
+    background-color: rgba(255, 255, 255, 0.18);
+    color: #ffffff;
+  }
+
+  .behance-card:hover h4,
+  .behance-card:hover p {
+    color: #ffffff;
+  }
+
   .search-input {
-    @apply h-12 w-full rounded-xl border border-slate-200 bg-white pl-11 pr-4 text-sm text-ink-dark placeholder:text-slate-400 transition-all focus:border-brand focus:outline-none focus:ring-4 focus:ring-brand/10;
+    @apply h-12 w-full rounded-none border border-slate-200 bg-white pl-11 pr-4 text-sm text-ink-dark placeholder:text-slate-400 transition-all focus:border-brand focus:outline-none focus:ring-4 focus:ring-brand/10;
   }
 }
 
@@ -137,4 +167,59 @@
 
 .animate-fadeIn {
   animation: fadeIn 0.18s ease-out forwards;
+}
+
+button,
+header a,
+a[class*="btn"],
+label[class*="btn"],
+[class*="card"],
+[class*="rounded-md"],
+[class*="rounded-lg"],
+[class*="rounded-xl"],
+[class*="rounded-2xl"],
+[class*="rounded-3xl"] {
+  border-radius: 0 !important;
+}
+
+.behance-card {
+  border-radius: 16px !important;
+}
+
+.behance-icon {
+  border-radius: 9999px !important;
+}
+
+.card,
+.modern-card,
+.behance-card,
+.category-card,
+div[class*="rounded-2xl"][class*="border-slate-200"][class*="bg-white"],
+div[class*="rounded-xl"][class*="border-slate-200"][class*="bg-white"],
+a[class*="rounded-2xl"][class*="border-slate-200"][class*="bg-white"],
+details[class*="rounded-2xl"][class*="border-slate-200"][class*="bg-white"],
+article[class*="rounded-2xl"][class*="border-slate-200"][class*="bg-white"] {
+  border-radius: 16px !important;
+  border-color: rgba(203, 213, 225, 0.9) !important;
+  box-shadow: 0 2px 10px rgba(20, 33, 61, 0.06) !important;
+}
+
+.card:hover,
+.modern-card:hover,
+.behance-card:hover,
+.category-card:hover,
+div[class*="rounded-2xl"][class*="border-slate-200"][class*="bg-white"]:hover,
+div[class*="rounded-xl"][class*="border-slate-200"][class*="bg-white"]:hover,
+a[class*="rounded-2xl"][class*="border-slate-200"][class*="bg-white"]:hover,
+details[class*="rounded-2xl"][class*="border-slate-200"][class*="bg-white"]:hover,
+article[class*="rounded-2xl"][class*="border-slate-200"][class*="bg-white"]:hover {
+  border-color: rgba(22, 120, 242, 0.45) !important;
+  box-shadow: 0 6px 18px rgba(22, 120, 242, 0.1) !important;
+}
+
+.btn-outline,
+.btn-line {
+  background-color: #1678f2 !important;
+  color: #ffffff !important;
+  border-color: transparent !important;
 }

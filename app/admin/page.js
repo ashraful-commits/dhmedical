@@ -32,7 +32,7 @@ import {
 } from "lucide-react";
 import DynamicForm from "@/components/DynamicForm";
 import { FORMS } from "@/lib/forms";
-import { SPECIALTIES, DISTRICTS } from "@/lib/site";
+import { SPECIALTIES, DISTRICTS, imageFallback } from "@/lib/site";
 
 const TABS = [
   { id: "ambulance", label: "অ্যাম্বুলেন্স বুকিং", Icon: Ambulance },
@@ -47,11 +47,11 @@ const TABS = [
 ];
 
 const TRACKING_LABELS = {
-  requested: { label: "অনুরোধ গৃহীত", cls: "bg-blue-100 text-blue-800 border-blue-300" },
+  requested: { label: "অনুরোধ গৃহীত", cls: "bg-slate-100 text-brand-dark border-slate-300" },
   confirmed: { label: "বুকিং নিশ্চিত", cls: "bg-amber-100 text-amber-800 border-amber-300" },
   driver_assigned: { label: "ড্রাইভার বরাদ্দ", cls: "bg-purple-100 text-purple-800 border-purple-300" },
-  on_the_way: { label: "চালক রওনা হয়েছেন", cls: "bg-indigo-100 text-indigo-800 border-indigo-300" },
-  picked_up: { label: "রোগী তোলা হয়েছে", cls: "bg-cyan-100 text-cyan-800 border-cyan-300" },
+  on_the_way: { label: "চালক রওনা হয়েছেন", cls: "bg-slate-100 text-brand-dark border-slate-300" },
+  picked_up: { label: "রোগী তোলা হয়েছে", cls: "bg-slate-100 text-brand-dark border-brand" },
   completed: { label: "সম্পন্ন", cls: "bg-green-100 text-green-800 border-green-300" },
   cancelled: { label: "বাতিল", cls: "bg-rose-100 text-rose-800 border-rose-300" },
 };
@@ -257,10 +257,10 @@ export default function Admin() {
           onSubmit={handleLogin}
         >
           <div className="text-center">
-            <div className="mx-auto grid h-16 w-16 place-items-center rounded-2xl bg-blue-50 text-blue border border-blue-100">
+            <div className="mx-auto grid h-16 w-16 place-items-center rounded-2xl bg-slate-50 text-brand border border-slate-100">
               <ShieldCheck size={36} />
             </div>
-            <h1 className="mt-3 text-2xl font-black text-navy-dark">D H Medical Support</h1>
+            <h1 className="mt-3 text-2xl font-black text-brand-dark">D H Medical Support</h1>
             <p className="text-xs text-slate-500 mt-0.5">সুরক্ষিত অ্যাডমিন কন্ট্রোল প্যানেল</p>
           </div>
 
@@ -288,7 +288,7 @@ export default function Admin() {
             </div>
           )}
 
-          <button className="btn btn-navy w-full py-3 text-sm font-bold shadow-md" disabled={loading}>
+          <button className="btn btn-primary w-full py-3 text-sm font-bold shadow-md" disabled={loading}>
             {loading ? "যাচাই করা হচ্ছে…" : "নিরাপদে প্রবেশ করুন"}
           </button>
         </form>
@@ -301,13 +301,13 @@ export default function Admin() {
   return (
     <div className="wrap max-w-7xl py-6">
       {/* Top Admin Header Bar */}
-      <div className="mb-6 flex flex-col gap-4 rounded-2xl bg-gradient-to-r from-navy-deep via-navy to-navy-dark p-6 text-white shadow-card sm:flex-row sm:items-center sm:justify-between border border-white/10">
+      <div className="mb-6 flex flex-col gap-4 rounded-2xl bg-gradient-to-r from-[#4B93F5] via-brand to-[#0F63CC] p-6 text-white shadow-card sm:flex-row sm:items-center sm:justify-between border border-white/10">
         <div>
           <span className="inline-flex items-center gap-1.5 rounded-full bg-white/20 px-3 py-1 text-xs font-semibold">
             <ShieldCheck size={14} className="text-gold" /> সেন্ট্রাল অফিস ম্যানেজমেন্ট ড্যাশবোর্ড
           </span>
           <h1 className="mt-1 text-2xl font-black sm:text-3xl">D H MEDICAL CENTRAL OPS</h1>
-          <p className="text-xs text-blue-soft">রিয়েল-টাইম ডাটাবেজ, ডিসপ্যাচ ও বুকিং অগ্রগতি মনিটরিং</p>
+          <p className="text-xs text-slate-100">রিয়েল-টাইম ডাটাবেজ, ডিসপ্যাচ ও বুকিং অগ্রগতি মনিটরিং</p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
           <button
@@ -349,11 +349,11 @@ export default function Admin() {
                 setAssigningBooking(null);
               }}
               className={`flex shrink-0 items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-bold transition-all ${on
-                ? "bg-navy text-white shadow-md"
-                : "bg-white text-slate-700 hover:bg-blue-soft/50 border border-slate-200"
+                ? "bg-brand text-white shadow-md"
+                : "bg-white text-slate-700 hover:bg-slate-100/50 border border-slate-200"
                 }`}
             >
-              <I size={16} className={on ? "text-gold" : "text-blue"} />
+              <I size={16} className={on ? "text-gold" : "text-brand"} />
               {t.label}
               {counts[t.id] != null && (
                 <span className={`rounded-full px-2 py-0.5 text-[10px] ${on ? "bg-white/25 text-white" : "bg-slate-100 text-slate-600"}`}>
@@ -387,7 +387,7 @@ export default function Admin() {
         <div className="flex flex-wrap items-center gap-2">
           {tab === "ambulance" && (
             <select
-              className="input !h-11 !py-1 text-xs font-bold"
+              className="input !h-11 w-full min-w-0 !py-1 text-xs font-bold sm:w-auto"
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
             >
@@ -428,11 +428,11 @@ export default function Admin() {
           <div className="max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-2xl bg-white p-6 shadow-2xl">
             <div className="mb-4 flex items-center justify-between border-b pb-3">
               <div>
-                <h3 className="text-lg font-bold text-navy flex items-center gap-2">
-                  <Car className="text-blue" size={20} /> অ্যাম্বুলেন্স ও ড্রাইভার বরাদ্দ করুন
+                <h3 className="text-lg font-bold text-brand flex items-center gap-2">
+                  <Car className="text-brand" size={20} /> অ্যাম্বুলেন্স ও ড্রাইভার বরাদ্দ করুন
                 </h3>
                 <span className="text-xs text-slate-500">
-                  বুকিং আইডি: <b className="text-navy">{assigningBooking.bookingId}</b> | রোগী: {assigningBooking.patientName}
+                  বুকিং আইডি: <b className="text-brand">{assigningBooking.bookingId}</b> | রোগী: {assigningBooking.patientName}
                 </span>
               </div>
               <button
@@ -445,7 +445,7 @@ export default function Admin() {
 
             <form onSubmit={handleAssignSubmit} className="space-y-3.5 text-xs">
               <div>
-                <label className="block font-bold text-navy mb-1">ড্রাইভার / চালকের নাম</label>
+                <label className="block font-bold text-brand mb-1">ড্রাইভার / চালকের নাম</label>
                 <input
                   className="input w-full"
                   required
@@ -456,7 +456,7 @@ export default function Admin() {
               </div>
 
               <div>
-                <label className="block font-bold text-navy mb-1">ড্রাইভারের মোবাইল নম্বর</label>
+                <label className="block font-bold text-brand mb-1">ড্রাইভারের মোবাইল নম্বর</label>
                 <input
                   className="input w-full"
                   type="tel"
@@ -468,7 +468,7 @@ export default function Admin() {
               </div>
 
               <div>
-                <label className="block font-bold text-navy mb-1">গাড়ির রেজিস্ট্রেশন নম্বর</label>
+                <label className="block font-bold text-brand mb-1">গাড়ির রেজিস্ট্রেশন নম্বর</label>
                 <input
                   className="input w-full"
                   required
@@ -478,21 +478,21 @@ export default function Admin() {
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block font-bold text-navy mb-1">ভাড়া (টাকা)</label>
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                <div className="min-w-0">
+                  <label className="block font-bold text-brand mb-1">ভাড়া (টাকা)</label>
                   <input
                     type="number"
-                    className="input w-full"
+                    className="input w-full min-w-0"
                     placeholder="যেমন: ৩০০০"
                     value={assignForm.actualFare}
                     onChange={(e) => setAssignForm({ ...assignForm, actualFare: e.target.value })}
                   />
                 </div>
-                <div>
-                  <label className="block font-bold text-navy mb-1">পৌঁছানোর আনুমানিক সময়</label>
+                <div className="min-w-0">
+                  <label className="block font-bold text-brand mb-1">পৌঁছানোর আনুমানিক সময়</label>
                   <input
-                    className="input w-full"
+                    className="input w-full min-w-0"
                     value={assignForm.eta}
                     onChange={(e) => setAssignForm({ ...assignForm, eta: e.target.value })}
                   />
@@ -507,7 +507,7 @@ export default function Admin() {
                 >
                   বাতিল
                 </button>
-                <button type="submit" className="btn btn-navy !h-9 !px-6 font-bold">
+                <button type="submit" className="btn btn-primary !h-9 !px-6 font-bold">
                   বরাদ্দ নিশ্চিত করুন
                 </button>
               </div>
@@ -518,9 +518,9 @@ export default function Admin() {
 
       {/* Add Form (for Doctors & Hospitals) */}
       {isCatalog && showAddForm && (
-        <div className="mb-8 rounded-2xl border-2 border-dashed border-blue/40 bg-blue-soft/20 p-5 shadow-inner">
+        <div className="mb-8 rounded-2xl border-2 border-dashed border-brand/40 bg-slate-100/20 p-5 shadow-inner">
           <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-lg font-bold text-navy">
+            <h2 className="text-lg font-bold text-brand">
               নতুন {tab === "doctors" ? "ডাক্তার" : "হাসপাতাল"} এন্ট্রি করুন
             </h2>
             <button
@@ -547,14 +547,14 @@ export default function Admin() {
 
       {/* Main Content Listing */}
       <div className="space-y-4">
-        <div className="flex items-center justify-between text-xs text-slate-500">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 text-xs text-slate-500">
           <span>মোট {items.length} টি রেকর্ড পাওয়া গেছে</span>
-          {loading && <span className="font-semibold text-blue">লোড হচ্ছে…</span>}
+          {loading && <span className="font-semibold text-brand">লোড হচ্ছে…</span>}
         </div>
 
         {items.length === 0 && !loading && (
           <div className="card text-center py-12">
-            <p className="text-base font-bold text-navy">কোনো রেকর্ড পাওয়া যায়নি</p>
+            <p className="text-base font-bold text-brand">কোনো রেকর্ড পাওয়া যায়নি</p>
             <p className="mt-1 text-xs text-slate-500">
               আপনি উপরে &quot;স্যাম্পল ডেটা সিড করুন&quot; বাটনে ক্লিক করে রিয়েল ডেটা লোড করতে পারেন।
             </p>
@@ -565,7 +565,7 @@ export default function Admin() {
         {tab === "accounts" && items.length > 0 && (
           <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-sm">
             <table className="w-full text-left text-xs">
-              <thead className="bg-slate-50 text-navy font-bold border-b border-slate-200">
+              <thead className="bg-slate-50 text-brand font-bold border-b border-slate-200">
                 <tr>
                   <th className="p-3">বুকিং আইডি</th>
                   <th className="p-3">সেবার ধরন</th>
@@ -579,10 +579,10 @@ export default function Admin() {
               <tbody className="divide-y divide-slate-100">
                 {items.map((acc) => (
                   <tr key={acc._id} className="hover:bg-slate-50">
-                    <td className="p-3 font-bold text-blue">{acc.bookingId || "DH-AMB-001"}</td>
+                    <td className="p-3 font-bold text-brand">{acc.bookingId || "DH-AMB-001"}</td>
                     <td className="p-3">{acc.serviceType}</td>
-                    <td className="p-3 font-semibold text-navy">{acc.patientName || "রোগী"}</td>
-                    <td className="p-3 font-black text-navy">৳{acc.totalFare || 0}</td>
+                    <td className="p-3 font-semibold text-brand">{acc.patientName || "রোগী"}</td>
+                    <td className="p-3 font-black text-brand">৳{acc.totalFare || 0}</td>
                     <td className="p-3 font-bold text-slate-600">৳{acc.partnerShare || 0}</td>
                     <td className="p-3 font-black text-green-700">৳{acc.officeCommission || 0}</td>
                     <td className="p-3">
@@ -601,7 +601,7 @@ export default function Admin() {
         {tab === "activity_logs" && items.length > 0 && (
           <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-sm">
             <table className="w-full text-left text-xs">
-              <thead className="bg-slate-50 text-navy font-bold border-b border-slate-200">
+              <thead className="bg-slate-50 text-brand font-bold border-b border-slate-200">
                 <tr>
                   <th className="p-3">সময়</th>
                   <th className="p-3">অ্যাডমিন ইউজার</th>
@@ -616,8 +616,8 @@ export default function Admin() {
                     <td className="p-3 text-slate-500 whitespace-nowrap">
                       {new Date(log.createdAt || Date.now()).toLocaleString("bn-BD")}
                     </td>
-                    <td className="p-3 font-bold text-navy">{log.adminUser}</td>
-                    <td className="p-3 font-semibold text-blue">{log.action}</td>
+                    <td className="p-3 font-bold text-brand">{log.adminUser}</td>
+                    <td className="p-3 font-semibold text-brand">{log.action}</td>
                     <td className="p-3 text-slate-600">{log.targetType}</td>
                     <td className="p-3 text-slate-600">{log.details || "-"}</td>
                   </tr>
@@ -645,11 +645,14 @@ export default function Admin() {
                         {item.photo || item.logo || item.vehiclePhoto ? (
                           <img
                             src={item.photo || item.logo || item.vehiclePhoto}
-                            alt=""
+                            alt={`${item.name || item.patientName || "DH Medical Support"} profile`}
+                            onError={imageFallback(
+                              tab === "doctors" ? "doctor" : tab === "ambulance" ? "ambulance" : "hospital"
+                            )}
                             className="h-14 w-14 rounded-xl object-cover border border-slate-200 shrink-0"
                           />
                         ) : (
-                          <span className="grid h-14 w-14 place-items-center rounded-xl bg-blue-soft text-blue font-bold shrink-0">
+                          <span className="grid h-14 w-14 place-items-center rounded-xl bg-slate-100 text-brand font-bold shrink-0">
                             {tab === "doctors" ? (
                               <Stethoscope size={24} />
                             ) : tab === "hospitals" ? (
@@ -664,11 +667,11 @@ export default function Admin() {
 
                         <div className="min-w-0">
                           {item.bookingId && (
-                            <span className="block text-xs font-black text-blue tracking-wide">
+                            <span className="block text-xs font-black text-brand tracking-wide">
                               আইডি: {item.bookingId}
                             </span>
                           )}
-                          <h2 className="font-head text-base font-bold text-navy leading-tight truncate">
+                          <h2 className="font-head text-base font-bold text-brand leading-tight truncate">
                             {item.patientName || item.name || `আইডি: ${item._id.slice(-6)}`}
                           </h2>
                           {item.ambulanceType && (
@@ -677,7 +680,7 @@ export default function Admin() {
                             </span>
                           )}
                           {item.specialty && (
-                            <span className="inline-block mt-0.5 rounded bg-blue-100 px-2 py-0.5 text-[11px] font-bold text-blue-800">
+                            <span className="inline-block mt-0.5 rounded bg-slate-100 px-2 py-0.5 text-[11px] font-bold text-brand-dark">
                               {item.specialty}
                             </span>
                           )}
@@ -707,36 +710,36 @@ export default function Admin() {
                     {/* Details Body */}
                     <div className="mt-3 space-y-1.5 text-xs text-slate-700">
                       {item.mobile && (
-                        <div className="flex items-center justify-between">
-                          <span className="font-semibold text-navy">মোবাইল:</span>
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+                          <span className="font-semibold text-brand">মোবাইল:</span>
                           <a
                             href={`tel:${item.mobile}`}
-                            className="font-bold text-blue hover:underline flex items-center gap-1"
+                            className="min-w-0 break-words font-bold text-brand hover:underline flex items-center gap-1"
                           >
                             <Phone size={11} /> {item.mobile}
                           </a>
                         </div>
                       )}
                       {item.address && (
-                        <div className="flex justify-between">
-                          <span className="font-semibold text-navy">পিকআপ ঠিকানা:</span>
-                          <span className="text-right font-medium">{item.address}</span>
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+                          <span className="font-semibold text-brand">পিকআপ ঠিকানা:</span>
+                          <span className="min-w-0 break-words text-right font-medium">{item.address}</span>
                         </div>
                       )}
                       {item.destination && (
-                        <div className="flex justify-between">
-                          <span className="font-semibold text-navy">গন্তব্য:</span>
-                          <span className="text-right font-bold text-navy">{item.destination}</span>
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+                          <span className="font-semibold text-brand">গন্তব্য:</span>
+                          <span className="min-w-0 break-words text-right font-bold text-brand">{item.destination}</span>
                         </div>
                       )}
                       {item.location && (
-                        <div className="flex items-center justify-between">
-                          <span className="font-semibold text-navy">জিপিএস অবস্থান:</span>
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+                          <span className="font-semibold text-brand">জিপিএস অবস্থান:</span>
                           <a
                             href={item.location}
                             target="_blank"
                             rel="noreferrer"
-                            className="font-bold text-blue hover:underline flex items-center gap-1"
+                            className="min-w-0 break-words font-bold text-brand hover:underline flex items-center gap-1"
                           >
                             <MapPin size={12} className="text-red" /> গুগল ম্যাপে দেখুন <ExternalLink size={10} />
                           </a>
@@ -746,14 +749,14 @@ export default function Admin() {
                       {/* Driver Assigned Section */}
                       {tab === "ambulance" && (item.driverName || item.vehicleRegNo) && (
                         <div className="mt-2 rounded-xl bg-purple-50/70 p-2.5 border border-purple-200/60">
-                          <div className="flex items-center justify-between font-bold text-purple-950">
+                          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 font-bold text-purple-950">
                             <span>বরাদ্দকৃত চালক: {item.driverName}</span>
                             <span className="text-[11px] bg-purple-200/80 px-2 py-0.5 rounded">{item.vehicleRegNo}</span>
                           </div>
                           {item.driverMobile && (
                             <div className="mt-1 flex items-center justify-between">
                               <span className="text-slate-600">চালক মোবাইল: {item.driverMobile}</span>
-                              <a href={`tel:${item.driverMobile}`} className="text-blue font-bold underline flex items-center gap-0.5">
+                              <a href={`tel:${item.driverMobile}`} className="text-brand font-bold underline flex items-center gap-0.5">
                                 <Phone size={10} /> কল
                               </a>
                             </div>
@@ -763,33 +766,33 @@ export default function Admin() {
 
                       {/* Fare and ETA */}
                       {item.estimatedFare != null && (
-                        <div className="flex justify-between font-bold text-navy pt-1">
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 font-bold text-brand pt-1">
                           <span>ভাড়া:</span>
-                          <span className="text-red">৳{item.actualFare || item.estimatedFare} (ETA: {item.eta || "১৫-২০ মিনিট"})</span>
+                          <span className="min-w-0 break-words text-right text-red">৳{item.actualFare || item.estimatedFare} (ETA: {item.eta || "১৫-২০ মিনিট"})</span>
                         </div>
                       )}
 
                       {/* NID & Docs for Partners */}
                       {(item.nidFrontPhoto || item.nidBackPhoto || item.drivingLicensePhoto) && (
                         <div className="pt-2 border-t border-slate-100">
-                          <span className="block font-bold text-navy mb-1.5">যাচাইকরণের কাগজপত্র ও NID:</span>
+                          <span className="block font-bold text-brand mb-1.5">যাচাইকরণের কাগজপত্র ও NID:</span>
                           <div className="flex flex-wrap gap-2">
                             {item.nidFrontPhoto && (
                               <a href={item.nidFrontPhoto} target="_blank" rel="noreferrer" className="group text-center">
-                                <img src={item.nidFrontPhoto} alt="NID Front" className="h-12 w-16 object-cover rounded border" />
-                                <span className="block text-[10px] font-bold text-blue">NID Front</span>
+                                <img src={item.nidFrontPhoto} alt="NID front side" onError={imageFallback("document")} className="h-12 w-16 object-cover rounded border" />
+                                <span className="block text-[10px] font-bold text-brand">NID Front</span>
                               </a>
                             )}
                             {item.nidBackPhoto && (
                               <a href={item.nidBackPhoto} target="_blank" rel="noreferrer" className="group text-center">
-                                <img src={item.nidBackPhoto} alt="NID Back" className="h-12 w-16 object-cover rounded border" />
-                                <span className="block text-[10px] font-bold text-blue">NID Back</span>
+                                <img src={item.nidBackPhoto} alt="NID back side" onError={imageFallback("document")} className="h-12 w-16 object-cover rounded border" />
+                                <span className="block text-[10px] font-bold text-brand">NID Back</span>
                               </a>
                             )}
                             {item.drivingLicensePhoto && (
                               <a href={item.drivingLicensePhoto} target="_blank" rel="noreferrer" className="group text-center">
-                                <img src={item.drivingLicensePhoto} alt="License" className="h-12 w-16 object-cover rounded border" />
-                                <span className="block text-[10px] font-bold text-blue">লাইসেন্স</span>
+                                <img src={item.drivingLicensePhoto} alt="Driving licence" onError={imageFallback("document")} className="h-12 w-16 object-cover rounded border" />
+                                <span className="block text-[10px] font-bold text-brand">লাইসেন্স</span>
                               </a>
                             )}
                           </div>
@@ -814,13 +817,13 @@ export default function Admin() {
                                 eta: item.eta || "১৫-২০ মিনিট",
                               });
                             }}
-                            className="btn btn-navy !min-h-[30px] !px-2.5 !py-1 text-[11px] font-bold"
+                            className="btn btn-primary !min-h-[30px] !px-2.5 !py-1 text-[11px] font-bold"
                           >
                             <Car size={12} /> {item.driverName ? "ড্রাইভার পরিবর্তন" : "ড্রাইভার বরাদ্দ"}
                           </button>
 
                           <select
-                            className="rounded-lg border border-slate-300 bg-white px-2 py-1 text-[11px] font-bold text-navy"
+                            className="rounded-lg border border-slate-300 bg-white px-2 py-1 text-[11px] font-bold text-brand"
                             value={item.trackingStatus || "requested"}
                             onChange={(e) => updateTracking(item._id, e.target.value)}
                           >
@@ -837,7 +840,7 @@ export default function Admin() {
 
                       {tab === "appointments" && (
                         <select
-                          className="rounded-lg border border-slate-300 bg-white px-2 py-1 text-[11px] font-bold text-navy"
+                          className="rounded-lg border border-slate-300 bg-white px-2 py-1 text-[11px] font-bold text-brand"
                           value={item.trackingStatus || "requested"}
                           onChange={(e) => updateTracking(item._id, e.target.value)}
                         >

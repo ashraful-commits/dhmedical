@@ -18,7 +18,7 @@ export default function BottomNav() {
 
   return (
     <nav
-      className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-5 border-t border-slate-200/90 bg-white/95 backdrop-blur-md pb-[env(safe-area-inset-bottom)] md:hidden shadow-[0_-4px_16px_rgba(15,82,186,0.06)]"
+      className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-5 overflow-hidden border-t border-slate-200/90 bg-white/95 backdrop-blur-md pb-[env(safe-area-inset-bottom)] md:hidden shadow-[0_-4px_16px_rgba(14,165,233,0.06)]"
       aria-label="Mobile Navigation"
     >
       {items.map(({ href, label, Icon }) => {
@@ -27,7 +27,7 @@ export default function BottomNav() {
           <Link
             key={href}
             href={href}
-            className={`flex min-h-[58px] flex-col items-center justify-center gap-0.5 text-[11px] font-bold transition-colors select-none ${
+            className={`flex min-h-[58px] flex-col items-center justify-center gap-0.5 px-0.5 text-[10px] leading-[1.1] font-bold transition-colors select-none ${
               isActive
                 ? "text-brand"
                 : "text-slate-600 hover:text-brand"
@@ -38,7 +38,7 @@ export default function BottomNav() {
             }`}>
               <Icon size={20} strokeWidth={isActive ? 2.5 : 2} />
             </div>
-            <span className="whitespace-nowrap">{label}</span>
+            <span className="break-words text-center">{label}</span>
           </Link>
         );
       })}
@@ -46,10 +46,10 @@ export default function BottomNav() {
       {/* Direct Emergency Call Button */}
       <a
         href={SITE.tel}
-        className="flex min-h-[58px] flex-col items-center justify-center gap-0.5 bg-brand text-white text-[11px] font-black transition-all active:brightness-90 select-none shadow-inner"
+        className="flex min-h-[58px] flex-col items-center justify-center gap-0.5 px-0.5 bg-brand text-white text-[10px] leading-[1.1] font-black transition-all active:brightness-90 select-none shadow-inner"
       >
         <Phone size={20} />
-        <span className="whitespace-nowrap">{lang === "bn" ? "জরুরি কল" : "Call 24/7"}</span>
+        <span className="break-words text-center">{lang === "bn" ? "জরুরি কল" : "Call 24/7"}</span>
       </a>
     </nav>
   );

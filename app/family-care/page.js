@@ -68,23 +68,23 @@ export default function FamilyCare() {
         sub="প্রবাসে আপনি, দেশে আপনার পরিবারের পাশে আমরা। প্রবাসীদের মা-বাবা ও সন্তানের সার্বক্ষণিক চিকিৎসা সুরক্ষা ও জরুরি সমন্বয় ব্যবস্থা।"
       />
 
-      <div className="wrap space-y-10 py-8 max-w-4xl">
+      <div className="wrap space-y-10 py-10 sm:py-14 lg:py-16 max-w-4xl">
         {/* Dignified Problem & Solution Split */}
         <div className="grid gap-6 md:grid-cols-2">
           {/* Real Problems */}
-          <section className="card border-rose-200 bg-gradient-to-b from-rose-50/40 to-white p-6">
+          <section className="card border-care-200 bg-gradient-to-b from-care-50/60 to-white p-5 sm:p-6">
             <div className="flex items-center gap-2 mb-3">
-              <span className="grid h-8 w-8 place-items-center rounded-lg bg-rose-100 text-rose-700">
+              <span className="grid h-8 w-8 place-items-center rounded-lg bg-care-100 text-care-deep">
                 <AlertCircle size={18} />
               </span>
-              <h2 className="font-head text-lg font-bold text-navy-dark">
+              <h2 className="font-head text-xl sm:text-2xl font-black text-brand-dark">
                 প্রবাসীদের বাস্তব দুশ্চিন্তাসমূহ
               </h2>
             </div>
             <ul className="space-y-3 text-xs sm:text-sm text-slate-700 leading-relaxed">
               {PROBLEMS.map((t, idx) => (
                 <li key={idx} className="flex items-start gap-2.5">
-                  <span className="grid h-5 w-5 shrink-0 place-items-center rounded-full bg-rose-200 text-[11px] font-bold text-rose-800 mt-0.5">
+                  <span className="grid h-5 w-5 shrink-0 place-items-center rounded-full bg-care-200 text-[11px] font-bold text-care-deep mt-0.5">
                     ✕
                   </span>
                   <span>{t}</span>
@@ -94,12 +94,12 @@ export default function FamilyCare() {
           </section>
 
           {/* D H Solution */}
-          <section className="card border-emerald-200 bg-gradient-to-b from-emerald-50/40 to-white p-6">
+          <section className="card border-emerald-200 bg-gradient-to-b from-emerald-50/40 to-white p-5 sm:p-6">
             <div className="flex items-center gap-2 mb-3">
               <span className="grid h-8 w-8 place-items-center rounded-lg bg-emerald-100 text-emerald-700">
                 <CheckCircle2 size={18} />
               </span>
-              <h2 className="font-head text-lg font-bold text-navy-dark">
+              <h2 className="font-head text-xl sm:text-2xl font-black text-brand-dark">
                 আমাদের নিশ্চিত সমাধান
               </h2>
             </div>
@@ -117,7 +117,7 @@ export default function FamilyCare() {
         {/* Membership vs Insurance Cards */}
         <div className="grid gap-6 md:grid-cols-2" id="insurance">
           {/* Card 1: Family Care Membership */}
-          <section className="card border-2 border-emerald-500/40 p-6 flex flex-col justify-between shadow-card relative overflow-hidden">
+          <section className="card border-2 border-emerald-500/40 p-5 sm:p-6 flex flex-col justify-between shadow-card relative overflow-hidden">
             <div className="absolute top-0 right-0 bg-emerald-700 text-white text-[10px] font-bold px-3 py-1 rounded-bl-xl uppercase tracking-wider">
               সর্বাধিক জনপ্রিয়
             </div>
@@ -128,18 +128,18 @@ export default function FamilyCare() {
                   <Users size={22} />
                 </span>
                 <div>
-                  <h3 className="font-head text-xl font-bold text-navy-dark">
+                  <h3 className="font-head text-xl font-bold text-brand-dark">
                     Family Care Membership
                   </h3>
-                  <p className="text-xs text-slate-500">সার্বক্ষণিক সেবা-সমন্বয় মেম্বারশিপ</p>
+                  <p className="text-sm sm:text-base text-slate-500 leading-relaxed max-w-2xl">সার্বক্ষণিক সেবা-সমন্বয় মেম্বারশিপ</p>
                 </div>
               </div>
 
-              <p className="text-xs text-slate-600 mt-2 mb-4 leading-relaxed">
+              <p className="text-sm sm:text-base text-slate-600 leading-relaxed mt-2 mb-4">
                 দেশে পরিবারের যেকোনো জরুরি শারীরিক সমস্যায় তাৎক্ষণিক সমন্বয়কারী হিসেবে আমাদের টিম পাশে দাঁড়াবে।
               </p>
 
-              <ul className="space-y-2.5 text-xs text-slate-700 border-t border-slate-100 pt-3">
+              <ul className="space-y-2.5 text-xs sm:text-sm text-slate-700 border-t border-slate-100 pt-3">
                 {MEMBERSHIP_BENEFITS.map((t, idx) => (
                   <li key={idx} className="flex items-start gap-2">
                     <CheckCircle2 size={15} className="shrink-0 text-emerald-600 mt-0.5" />
@@ -157,25 +157,25 @@ export default function FamilyCare() {
           </section>
 
           {/* Card 2: Insurance Policy Guidance */}
-          <section className="card border border-purple-200 p-6 flex flex-col justify-between shadow-card bg-gradient-to-b from-purple-50/20 to-white">
+          <section className="card border border-purple-200 p-5 sm:p-6 flex flex-col justify-between shadow-card bg-gradient-to-b from-purple-50/20 to-white">
             <div>
               <div className="flex items-center gap-2 mb-2">
                 <span className="grid h-10 w-10 place-items-center rounded-xl bg-purple-100 text-purple-700">
                   <ShieldCheck size={22} />
                 </span>
                 <div>
-                  <h3 className="font-head text-xl font-bold text-navy-dark">
+                  <h3 className="font-head text-xl font-bold text-brand-dark">
                     Health Insurance Policy
                   </h3>
-                  <p className="text-xs text-slate-500">অনুমোদিত স্বাস্থ্য বীমা সুবিধা</p>
+                  <p className="text-sm sm:text-base text-slate-500 leading-relaxed max-w-2xl">অনুমোদিত স্বাস্থ্য বীমা সুবিধা</p>
                 </div>
               </div>
 
-              <p className="text-xs text-slate-600 mt-2 mb-4 leading-relaxed">
+              <p className="text-sm sm:text-base text-slate-600 leading-relaxed mt-2 mb-4">
                 হাসপাতালে বড় ধরণের চিকিৎসার আর্থিক ঝুঁকি এড়াতে বিশ্বস্ত বীমা পলিসির নির্বাচন ও ক্লেইম পরামর্শ।
               </p>
 
-              <ul className="space-y-2.5 text-xs text-slate-700 border-t border-slate-100 pt-3">
+              <ul className="space-y-2.5 text-xs sm:text-sm text-slate-700 border-t border-slate-100 pt-3">
                 {INSURANCE_BENEFITS.map((t, idx) => (
                   <li key={idx} className="flex items-start gap-2">
                     <CheckCircle2 size={15} className="shrink-0 text-purple-600 mt-0.5" />
@@ -186,7 +186,7 @@ export default function FamilyCare() {
             </div>
 
             <div className="mt-6 pt-3 border-t border-slate-100">
-              <a href="#join" className="btn btn-navy w-full text-xs font-bold">
+              <a href="#join" className="btn btn-primary w-full text-xs font-bold">
                 বীমা তথ্য ও আবেদন সহায়তা চান
               </a>
               <p className="text-[10px] text-slate-400 text-center mt-2">
@@ -199,12 +199,12 @@ export default function FamilyCare() {
         {/* Trust Pillars */}
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
           {TRUST_PILLARS.map(({ Icon, t, d }) => (
-            <div key={t} className="card !p-3.5 text-center flex flex-col items-center justify-center border border-slate-200">
-              <span className="grid h-10 w-10 place-items-center rounded-xl bg-blue-50 text-blue mb-1.5">
+            <div key={t} className="card !p-4 text-center flex flex-col items-center justify-center border border-slate-200">
+              <span className="grid h-10 w-10 place-items-center rounded-xl bg-slate-50 text-brand mb-1.5">
                 <Icon size={20} />
               </span>
-              <b className="text-xs font-bold text-navy-dark block">{t}</b>
-              <span className="text-[10px] text-slate-500 mt-0.5 leading-tight">{d}</span>
+              <b className="text-xs font-bold text-brand-dark block">{t}</b>
+              <span className="text-xs text-slate-500 mt-0.5 leading-tight">{d}</span>
             </div>
           ))}
         </div>
@@ -217,10 +217,10 @@ export default function FamilyCare() {
             </span>
             <div>
               <span className="pill">সদস্যপদ নিবন্ধন</span>
-              <h2 className="text-xl sm:text-2xl font-black text-navy-dark mt-1">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-brand-dark mt-1 mb-3">
                 আজই আপনার পরিবারের জন্য সদস্য হোন
               </h2>
-              <p className="text-xs text-slate-600 mt-0.5">
+              <p className="text-sm sm:text-base text-slate-600 leading-relaxed max-w-2xl mt-1">
                 নিচের ফর্মটি পূরণ করুন — আমাদের প্রবাসী কেয়ার সমন্বয়কারী সরাসরি আপনার নম্বরে যোগাযোগ করবেন।
               </p>
             </div>

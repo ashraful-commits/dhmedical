@@ -74,7 +74,7 @@ export default function DistrictExplorer({ initialQ = "" }) {
               <span className="inline-flex items-center gap-1.5 rounded-full bg-brand text-white px-3 py-1 text-[11px] font-bold">
                 <MapPin size={13} /> নির্বাচিত এলাকা
               </span>
-              <h2 className="mt-2 text-xl sm:text-2xl font-black text-navy">
+              <h2 className="mt-2 text-xl sm:text-2xl font-black text-brand">
                 {selected.district}
                 {selected.upazila ? ` › ${selected.upazila}` : ""}
               </h2>
@@ -92,7 +92,7 @@ export default function DistrictExplorer({ initialQ = "" }) {
               </Link>
               <Link
                 href={`/doctors?q=${encodeURIComponent(selected.district)}`}
-                className="btn btn-navy !min-h-[38px] !px-4 !text-xs flex items-center gap-1.5"
+                className="btn btn-primary !min-h-[38px] !px-4 !text-xs flex items-center gap-1.5"
               >
                 ডাক্তার খুঁজুন <ArrowRight size={14} />
               </Link>
@@ -169,7 +169,7 @@ export default function DistrictExplorer({ initialQ = "" }) {
             >
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <p className="font-black text-navy text-sm">
+                  <p className="font-black text-brand text-sm">
                     {loc.district} › {loc.upazila}
                   </p>
                   <p className="text-[11px] font-semibold text-slate-400 mt-0.5">
@@ -188,7 +188,7 @@ export default function DistrictExplorer({ initialQ = "" }) {
         <section className="space-y-5">
           {DISTRICT_GROUPS.map((group) => (
             <div key={group.division} className="card border border-slate-200 p-5">
-              <h3 className="text-sm font-black text-navy">{group.division}</h3>
+              <h3 className="text-sm font-black text-brand">{group.division}</h3>
               <p className="text-[11px] font-semibold text-slate-400 mt-0.5">{group.districts.length} জেলা</p>
               <div className="mt-3 flex flex-wrap gap-1.5">
                 {group.districts.map((d) => (
@@ -208,10 +208,10 @@ export default function DistrictExplorer({ initialQ = "" }) {
         </section>
       )}
 
-      <section className="flex flex-col sm:flex-row items-center justify-between gap-4 rounded-2xl bg-navy p-5 text-white">
+      <section className="flex flex-col sm:flex-row items-center justify-between gap-4 rounded-2xl bg-brand p-5 text-white">
         <div>
           <p className="font-head text-lg font-black">আপনার এলাকায় দ্রুত মেডিকেল সহায়তা চাই?</p>
-          <p className="text-xs text-blue-100/80 mt-1">২৪ ঘণ্টা হটলাইনে কল করুন বা অনলাইন ফর্ম পূরণ করুন।</p>
+          <p className="text-xs text-slate-100/80 mt-1">২৪ ঘণ্টা হটলাইনে কল করুন বা অনলাইন ফর্ম পূরণ করুন।</p>
         </div>
         <a href={SITE.tel} className="btn btn-gold !min-h-[40px] !px-5 !text-xs font-black flex items-center gap-1.5">
           <Phone size={14} /> {SITE.phone}
