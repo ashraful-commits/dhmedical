@@ -66,6 +66,7 @@ export const translations = {
     concerns_heading: "সাধারণ স্বাস্থ্য সমস্যা অনুযায়ী ডাক্তার নির্বাচন",
     concerns_sub: "আপনার সমস্যা অনুযায়ী উপযুক্ত বিশেষজ্ঞ ডাক্তার খুঁজে নিন",
     concerns_view_all: "সব দেখুন",
+    home_concerns_sub: "আপনার লক্ষণের জন্য যোগ্য বিশেষজ্ঞ খুঁজুন",
     home_available: "উপলব্ধ",
 
     // Available Doctors
@@ -589,6 +590,7 @@ export const translations = {
     concerns_heading: "Find specialist doctors based on your health symptoms",
     concerns_sub: "Find the right specialist doctor based on your health symptoms",
     concerns_view_all: "View All",
+    home_concerns_sub: "Find the right specialist for your symptoms",
     home_available: "available",
 
     doc_heading: "Available Doctors",

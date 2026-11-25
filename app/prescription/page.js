@@ -17,8 +17,8 @@ export default function PrescriptionPage({ searchParams }) {
     <>
       <PageHead
         Icon={FileSpreadsheet}
-        title="প্রেসক্রিপশন থেকে ঔষধের সময়সূচি"
-        sub="ছবি আপলোড করুন অথবা ম্যানুয়ালি লিখুন — ডাক্তার, ঔষধ, কোম্পানি, সময় ও দিনের Excel-স্টাইল টেবিল পেয়ে যাবেন।"
+        title={{ bn: "প্রেসক্রিপশন থেকে ঔষধের সময়সূচি", en: "Medicine Schedule from Prescription" }}
+        sub={{ bn: "ছবি আপলোড করুন অথবা ম্যানুয়ালি লিখুন — ডাক্তার, ঔষধ, কোম্পানি, সময় ও দিনের Excel-স্টাইল টেবিল পেয়ে যাবেন।", en: "Upload an image or type manually — get an Excel-style table of doctor, medicine, company, times and days." }}
       />
       <PrescriptionStudio shareCode={searchParams.share || ""} />
     </>

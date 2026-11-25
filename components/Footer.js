@@ -127,8 +127,8 @@ export default function Footer() {
             <span className="text-[11px] font-bold text-white/80 block mb-2">
               {t("footer_coverage")}
             </span>
-            <div className="flex max-h-36 flex-wrap gap-1 overflow-y-auto">
-              {DISTRICTS.map((d) => (
+            <div className="flex flex-wrap gap-1">
+              {DISTRICTS.slice(0, 18).map((d) => (
                 <Link
                   key={d}
                   href={`/districts?q=${encodeURIComponent(d)}`}

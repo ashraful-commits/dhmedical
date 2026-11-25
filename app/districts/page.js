@@ -17,8 +17,8 @@ export default function DistrictsPage({ searchParams }) {
     <>
       <PageHead
         Icon={MapPin}
-        title="জেলা ও এলাকা খুঁজুন"
-        sub="লিখুন অথবা নিচ থেকে জেলা বেছে নিন — কুমিল্লা, চট্টগ্রাম, ঢাকা বা যেকোনো উপজেলা/গ্রাম খুঁজে পাবেন।"
+        title={{ bn: "জেলা ও এলাকা খুঁজুন", en: "Find Districts & Areas" }}
+        sub={{ bn: "লিখুন অথবা নিচ থেকে জেলা বেছে নিন — কুমিল্লা, চট্টগ্রাম, ঢাকা বা যেকোনো উপজেলা/গ্রাম খুঁজে পাবেন।", en: "Type or choose a district below — find Cumilla, Chattogram, Dhaka or any upazila and village." }}
       />
       <DistrictExplorer initialQ={searchParams.q || ""} />
     </>

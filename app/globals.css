@@ -223,3 +223,12 @@ article[class*="rounded-2xl"][class*="border-slate-200"][class*="bg-white"]:hove
   color: #ffffff !important;
   border-color: transparent !important;
 }
+
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}

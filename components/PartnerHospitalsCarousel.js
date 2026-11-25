@@ -178,14 +178,14 @@ export default function PartnerHospitalsCarousel() {
             <div className="flex items-center gap-1.5 ml-2">
               <button
                 onClick={handlePrev}
-                aria-label="Previous Hospitals"
+                 aria-label={lang === "bn" ? "আগের হাসপাতাল" : "Previous hospitals"}
                 className="grid h-9 w-9 place-items-center rounded-xl border border-slate-200 bg-white text-ink-dark shadow-sm hover:border-brand hover:text-brand transition-colors active:scale-95"
               >
                 <ChevronLeft size={18} />
               </button>
               <button
                 onClick={handleNext}
-                aria-label="Next Hospitals"
+                 aria-label={lang === "bn" ? "পরবর্তী হাসপাতাল" : "Next hospitals"}
                 className="grid h-9 w-9 place-items-center rounded-xl border border-slate-200 bg-white text-ink-dark shadow-sm hover:border-brand hover:text-brand transition-colors active:scale-95"
               >
                 <ChevronRight size={18} />
@@ -267,7 +267,7 @@ export default function PartnerHospitalsCarousel() {
             <button
               key={idx}
               onClick={() => setStartIndex(idx)}
-              aria-label={`Go to slide ${idx + 1}`}
+              aria-label={lang === "bn" ? `${idx + 1} নম্বর স্লাইডে যান` : `Go to slide ${idx + 1}`}
               className={`h-2 rounded-full transition-all ${
                 startIndex === idx
                   ? "w-7 bg-brand"

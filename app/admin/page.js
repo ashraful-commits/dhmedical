@@ -32,31 +32,44 @@ import {
 } from "lucide-react";
 import DynamicForm from "@/components/DynamicForm";
 import { FORMS } from "@/lib/forms";
-import { SPECIALTIES, DISTRICTS, imageFallback } from "@/lib/site";
+import { useLanguage } from "@/context/LanguageContext";
+import { pick, translateText } from "@/lib/i18nData";
+import { spLabel, imageFallback } from "@/lib/site";
+
+const pair = (bn, en) => ({ bn, en });
 
 const TABS = [
-  { id: "ambulance", label: "অ্যাম্বুলেন্স বুকিং", Icon: Ambulance },
-  { id: "appointments", label: "অ্যাপয়েন্টমেন্ট", Icon: CalendarCheck },
-  { id: "partners", label: "পার্টনার ও গাড়ি বহর", Icon: Car },
-  { id: "memberships", label: "ফ্যামিলি কেয়ার", Icon: ShieldCheck },
-  { id: "accounts", label: "হিসাব ও কমিশন", Icon: DollarSign },
-  { id: "doctors", label: "ডাক্তার তালিকা", Icon: Stethoscope },
-  { id: "hospitals", label: "হাসপাতাল তালিকা", Icon: Building2 },
-  { id: "feedback", label: "গ্রাহক মতামত", Icon: MessageSquareHeart },
-  { id: "activity_logs", label: "অ্যাক্টিভিটি লগ", Icon: Activity },
+  { id: "ambulance", label: pair("অ্যাম্বুলেন্স বুকিং", "Ambulance Bookings"), Icon: Ambulance },
+  { id: "appointments", label: pair("অ্যাপয়েন্টমেন্ট", "Appointments"), Icon: CalendarCheck },
+  { id: "partners", label: pair("পার্টনার ও গাড়ি বহর", "Partners & Fleet"), Icon: Car },
+  { id: "memberships", label: pair("ফ্যামিলি কেয়ার", "Family Care"), Icon: ShieldCheck },
+  { id: "accounts", label: pair("হিসাব ও কমিশন", "Accounts & Commission"), Icon: DollarSign },
+  { id: "doctors", label: pair("ডাক্তার তালিকা", "Doctor List"), Icon: Stethoscope },
+  { id: "hospitals", label: pair("হাসপাতাল তালিকা", "Hospital List"), Icon: Building2 },
+  { id: "feedback", label: pair("গ্রাহক মতামত", "Customer Feedback"), Icon: MessageSquareHeart },
+  { id: "activity_logs", label: pair("অ্যাক্টিভিটি লগ", "Activity Logs"), Icon: Activity },
 ];
 
 const TRACKING_LABELS = {
-  requested: { label: "অনুরোধ গৃহীত", cls: "bg-slate-100 text-brand-dark border-slate-300" },
-  confirmed: { label: "বুকিং নিশ্চিত", cls: "bg-amber-100 text-amber-800 border-amber-300" },
-  driver_assigned: { label: "ড্রাইভার বরাদ্দ", cls: "bg-purple-100 text-purple-800 border-purple-300" },
-  on_the_way: { label: "চালক রওনা হয়েছেন", cls: "bg-slate-100 text-brand-dark border-slate-300" },
-  picked_up: { label: "রোগী তোলা হয়েছে", cls: "bg-slate-100 text-brand-dark border-brand" },
-  completed: { label: "সম্পন্ন", cls: "bg-green-100 text-green-800 border-green-300" },
-  cancelled: { label: "বাতিল", cls: "bg-rose-100 text-rose-800 border-rose-300" },
+  requested: { label: pair("অনুরোধ গৃহীত", "Request Received"), cls: "bg-slate-100 text-brand-dark border-slate-300" },
+  confirmed: { label: pair("বুকিং নিশ্চিত", "Booking Confirmed"), cls: "bg-amber-100 text-amber-800 border-amber-300" },
+  driver_assigned: { label: pair("ড্রাইভার বরাদ্দ", "Driver Assigned"), cls: "bg-purple-100 text-purple-800 border-purple-300" },
+  on_the_way: { label: pair("চালক রওনা হয়েছেন", "Driver On The Way"), cls: "bg-slate-100 text-brand-dark border-slate-300" },
+  picked_up: { label: pair("রোগী তোলা হয়েছে", "Patient Picked Up"), cls: "bg-slate-100 text-brand-dark border-brand" },
+  completed: { label: pair("সম্পন্ন", "Completed"), cls: "bg-green-100 text-green-800 border-green-300" },
+  cancelled: { label: pair("বাতিল", "Cancelled"), cls: "bg-rose-100 text-rose-800 border-rose-300" },
 };
 
 export default function Admin() {
+  const { lang } = useLanguage();
+  const loc = (value) => {
+    if (value && typeof value === "object" && !Array.isArray(value)) return pick(value, lang);
+    return typeof value === "string" ? translateText(value, lang) : value;
+  };
+  const dataPair = (item, key, fallback = pair("", "")) => {
+    const f = typeof fallback === "string" ? pair(fallback, fallback) : fallback;
+    return pair(item[key] || f.bn, item[`${key}En`] || item[key] || f.en);
+  };
   const [key, setKey] = useState("");
   const [authed, setAuthed] = useState(false);
   const [tab, setTab] = useState("ambulance");
@@ -65,13 +78,13 @@ export default function Admin() {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [loading, setLoading] = useState(false);
-  const [err, setErr] = useState("");
+  const [err, setErr] = useState(null);
   const [showAddForm, setShowAddForm] = useState(false);
   const [editingItem, setEditingItem] = useState(null);
   const [assigningBooking, setAssigningBooking] = useState(null);
   const [assignForm, setAssignForm] = useState({ driverName: "", driverMobile: "", vehicleRegNo: "", actualFare: "", eta: "১৫-২০ মিনিট" });
   const [seeding, setSeeding] = useState(false);
-  const [seedMsg, setSeedMsg] = useState("");
+  const [seedMsg, setSeedMsg] = useState(null);
 
   const H = { "x-admin-key": key };
 
@@ -86,17 +99,17 @@ export default function Admin() {
         const r = await fetch(url, { headers: { "x-admin-key": k } });
         if (r.status === 401) {
           setAuthed(false);
-          setErr("অননুমোদিত অ্যাক্সেস। সঠিক পাসওয়ার্ড দিয়ে লগইন করুন।");
+          setErr(pair("অননুমোদিত অ্যাক্সেস। সঠিক পাসওয়ার্ড দিয়ে লগইন করুন।", "Unauthorised access. Please log in with the correct password."));
           setLoading(false);
           return;
         }
         const data = await r.json();
         setAuthed(true);
-        setErr("");
+        setErr(null);
         setItems(data.items || []);
         setCounts((prev) => ({ ...prev, [currentTab]: (data.items || []).length }));
       } catch (x) {
-        setErr("ডেটা লোড করতে ব্যর্থ: " + x.message);
+        setErr(pair("ডেটা লোড করতে ব্যর্থ: " + x.message, "Failed to load data: " + x.message));
       }
       setLoading(false);
     },
@@ -120,7 +133,7 @@ export default function Admin() {
   async function handleLogin(e) {
     e.preventDefault();
     setLoading(true);
-    setErr("");
+    setErr(null);
     try {
       const res = await fetch("/api/auth/login", {
         method: "POST",
@@ -128,13 +141,13 @@ export default function Admin() {
         body: JSON.stringify({ key }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "লগইন ব্যর্থ হয়েছে");
+      if (!res.ok) throw new Error(data.error || (lang === "en" ? "Login failed" : "লগইন ব্যর্থ হয়েছে"));
       sessionStorage.setItem("dh-admin-session", data.token);
       setKey(data.token);
       setAuthed(true);
       load(data.token);
     } catch (x) {
-      setErr(x.message);
+      setErr(pair(x.message, x.message));
     }
     setLoading(false);
   }
@@ -148,7 +161,7 @@ export default function Admin() {
       });
       if (r.ok) load(key, tab, search, statusFilter);
     } catch (e) {
-      alert("স্ট্যাটাস আপডেট ব্যর্থ হয়েছে");
+      alert(lang === "en" ? "Failed to update status" : "স্ট্যাটাস আপডেট ব্যর্থ হয়েছে");
     }
   }
 
@@ -176,10 +189,10 @@ export default function Admin() {
         setAssigningBooking(null);
         load(key, tab, search, statusFilter);
       } else {
-        alert("ড্রাইভার বরাদ্দ ব্যর্থ হয়েছে");
+        alert(lang === "en" ? "Driver assignment failed" : "ড্রাইভার বরাদ্দ ব্যর্থ হয়েছে");
       }
     } catch (x) {
-      alert("ত্রুটি: " + x.message);
+      alert((lang === "en" ? "Error: " : "ত্রুটি: ") + x.message);
     }
   }
 
@@ -192,33 +205,33 @@ export default function Admin() {
       });
       if (r.ok) load(key, tab, search, statusFilter);
     } catch (e) {
-      alert("স্ট্যাটাস পরিবর্তন ব্যর্থ হয়েছে");
+      alert(lang === "en" ? "Failed to change status" : "স্ট্যাটাস পরিবর্তন ব্যর্থ হয়েছে");
     }
   }
 
   async function del(id) {
-    if (!confirm("আপনি কি নিশ্চিত এই রেকর্ডটি মুছে ফেলতে চান?")) return;
+    if (!confirm(lang === "en" ? "Are you sure you want to delete this record?" : "আপনি কি নিশ্চিত এই রেকর্ডটি মুছে ফেলতে চান?")) return;
     try {
       const r = await fetch(`/api/${tab}?id=${id}`, { method: "DELETE", headers: H });
       if (r.ok) load(key, tab, search, statusFilter);
     } catch (e) {
-      alert("মুছতে ব্যর্থ হয়েছে");
+      alert(lang === "en" ? "Failed to delete" : "মুছতে ব্যর্থ হয়েছে");
     }
   }
 
   async function handleSeed() {
-    if (!confirm("আপনি কি ডাটাবেজে রিয়েল বাংলাদেশি স্যাম্পল ডেটা লোড করতে চান?")) return;
+    if (!confirm(lang === "en" ? "Load real Bangladesh sample data into the database?" : "আপনি কি ডাটাবেজে রিয়েল বাংলাদেশি স্যাম্পল ডেটা লোড করতে চান?")) return;
     setSeeding(true);
     setSeedMsg("");
     try {
       const r = await fetch("/api/admin/seed", { method: "POST", headers: H });
       const d = await r.json();
-      if (!r.ok) throw new Error(d.error || "ব্যর্থ হয়েছে");
-      setSeedMsg("✓ সফলভাবে ডাটাবেজে সব রিয়েল ডেটা লোড হয়েছে!");
+      if (!r.ok) throw new Error(d.error || (lang === "en" ? "Failed" : "ব্যর্থ হয়েছে"));
+      setSeedMsg(pair("✓ সফলভাবে ডাটাবেজে সব রিয়েল ডেটা লোড হয়েছে!", "✓ All real sample data loaded into the database successfully!"));
       load(key, tab);
-      setTimeout(() => setSeedMsg(""), 4000);
+      setTimeout(() => setSeedMsg(null), 4000);
     } catch (x) {
-      alert("সিড ব্যর্থ: " + x.message);
+      alert((lang === "en" ? "Seed failed: " : "সিড ব্যর্থ: ") + x.message);
     }
     setSeeding(false);
   }
@@ -235,10 +248,10 @@ export default function Admin() {
         setEditingItem(null);
         load(key, tab, search, statusFilter);
       } else {
-        alert("সংরক্ষণ ব্যর্থ হয়েছে");
+        alert(lang === "en" ? "Failed to save" : "সংরক্ষণ ব্যর্থ হয়েছে");
       }
     } catch (x) {
-      alert("ত্রুটি: " + x.message);
+      alert((lang === "en" ? "Error: " : "ত্রুটি: ") + x.message);
     }
   }
 
@@ -261,35 +274,35 @@ export default function Admin() {
               <ShieldCheck size={36} />
             </div>
             <h1 className="mt-3 text-2xl font-black text-brand-dark">D H Medical Support</h1>
-            <p className="text-xs text-slate-500 mt-0.5">সুরক্ষিত অ্যাডমিন কন্ট্রোল প্যানেল</p>
+            <p className="text-xs text-slate-500 mt-0.5">{loc(pair("সুরক্ষিত অ্যাডমিন কন্ট্রোল প্যানেল", "Secure admin control panel"))}</p>
           </div>
 
           <div>
             <label className="mb-1.5 block text-xs font-bold uppercase tracking-wider text-slate-700">
-              অ্যাডমিন সিক্রেট পাসওয়ার্ড
+              {loc(pair("অ্যাডমিন সিক্রেট পাসওয়ার্ড", "Admin secret password"))}
             </label>
             <input
               className="input w-full"
               type="password"
-              placeholder="গোপন পাসওয়ার্ড লিখুন"
+              placeholder={loc(pair("গোপন পাসওয়ার্ড লিখুন", "Enter secret password"))}
               value={key}
               onChange={(e) => setKey(e.target.value)}
               required
             />
             <p className="mt-1 text-[11px] text-slate-400">
-              * সার্ভার-সাইড রেট লিমিটেড ও HMAC সেশন দ্বারা সুরক্ষিত
+              {loc(pair("* সার্ভার-সাইড রেট লিমিটেড ও HMAC সেশন দ্বারা সুরক্ষিত", "* Protected by server-side rate limiting and HMAC sessions"))}
             </p>
           </div>
 
           {err && (
             <div role="alert" className="rounded-xl bg-red-50 border border-red-100 p-3 text-xs font-bold text-red flex items-center gap-2">
               <AlertTriangle size={16} className="shrink-0" />
-              <span>{err}</span>
+              <span>{loc(err)}</span>
             </div>
           )}
 
           <button className="btn btn-primary w-full py-3 text-sm font-bold shadow-md" disabled={loading}>
-            {loading ? "যাচাই করা হচ্ছে…" : "নিরাপদে প্রবেশ করুন"}
+            {loc(loading ? pair("যাচাই করা হচ্ছে…", "Verifying…") : pair("নিরাপদে প্রবেশ করুন", "Sign in securely"))}
           </button>
         </form>
       </div>
@@ -304,38 +317,38 @@ export default function Admin() {
       <div className="mb-6 flex flex-col gap-4 rounded-2xl bg-gradient-to-r from-[#4B93F5] via-brand to-[#0F63CC] p-6 text-white shadow-card sm:flex-row sm:items-center sm:justify-between border border-white/10">
         <div>
           <span className="inline-flex items-center gap-1.5 rounded-full bg-white/20 px-3 py-1 text-xs font-semibold">
-            <ShieldCheck size={14} className="text-gold" /> সেন্ট্রাল অফিস ম্যানেজমেন্ট ড্যাশবোর্ড
+            <ShieldCheck size={14} className="text-gold" /> {loc(pair("সেন্ট্রাল অফিস ম্যানেজমেন্ট ড্যাশবোর্ড", "Central Office Management Dashboard"))}
           </span>
           <h1 className="mt-1 text-2xl font-black sm:text-3xl">D H MEDICAL CENTRAL OPS</h1>
-          <p className="text-xs text-slate-100">রিয়েল-টাইম ডাটাবেজ, ডিসপ্যাচ ও বুকিং অগ্রগতি মনিটরিং</p>
+          <p className="text-xs text-slate-100">{loc(pair("রিয়েল-টাইম ডাটাবেজ, ডিসপ্যাচ ও বুকিং অগ্রগতি মনিটরিং", "Real-time database, dispatch and booking progress monitoring"))}</p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
           <button
             onClick={handleSeed}
             disabled={seeding}
             className="btn btn-gold !min-h-[40px] !px-4 !py-2 text-xs font-bold shadow-md"
-            title="সবগুলো টেবিলে রিয়েল স্যাম্পল ডেটা লোড করুন"
+            title={loc(pair("সবগুলো টেবিলে রিয়েল স্যাম্পল ডেটা লোড করুন", "Load real sample data into all tables"))}
           >
             <RefreshCw size={14} className={seeding ? "animate-spin" : ""} />
-            {seeding ? "লোড হচ্ছে…" : "স্যাম্পল ডেটা সিড করুন"}
+            {loc(seeding ? pair("লোড হচ্ছে…", "Loading…") : pair("স্যাম্পল ডেটা সিড করুন", "Seed sample data"))}
           </button>
           <button
             onClick={logout}
             className="btn bg-white/15 !min-h-[40px] !px-3 !py-2 text-xs font-semibold text-white hover:bg-white/25"
           >
-            <LogOut size={14} /> লগআউট
+            <LogOut size={14} /> {loc(pair("লগআউট", "Logout"))}
           </button>
         </div>
       </div>
 
       {seedMsg && (
         <div className="mb-4 rounded-xl bg-green-500/10 p-3 text-sm font-bold text-green-700">
-          {seedMsg}
+          {loc(seedMsg)}
         </div>
       )}
 
       {/* Tabs Selector with Icons */}
-      <div className="-mx-4 mb-6 flex gap-2 overflow-x-auto px-4 pb-2">
+      <div className="-mx-4 mb-6 flex gap-2 overflow-x-auto no-scrollbar px-4 pb-2">
         {TABS.map((t) => {
           const on = tab === t.id;
           const I = t.Icon;
@@ -354,7 +367,7 @@ export default function Admin() {
                 }`}
             >
               <I size={16} className={on ? "text-gold" : "text-brand"} />
-              {t.label}
+              {loc(t.label)}
               {counts[t.id] != null && (
                 <span className={`rounded-full px-2 py-0.5 text-[10px] ${on ? "bg-white/25 text-white" : "bg-slate-100 text-slate-600"}`}>
                   {counts[t.id]}
@@ -378,7 +391,7 @@ export default function Admin() {
           <input
             type="search"
             className="input !pl-10 !h-11 w-full"
-            placeholder="বুকিং আইডি, রোগীর নাম, মোবাইল, জেলা বা হাসপাতাল দিয়ে খুঁজুন…"
+            placeholder={loc(pair("বুকিং আইডি, রোগীর নাম, মোবাইল, জেলা বা হাসপাতাল দিয়ে খুঁজুন…", "Search by booking ID, patient name, mobile, district or hospital…"))}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
@@ -391,14 +404,14 @@ export default function Admin() {
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
             >
-              <option value="all">সব ট্র্যাকিং স্ট্যাটাস</option>
-              <option value="requested">অনুরোধ গৃহীত (Requested)</option>
-              <option value="confirmed">বুকিং নিশ্চিত (Confirmed)</option>
-              <option value="driver_assigned">ড্রাইভার বরাদ্দ (Driver Assigned)</option>
-              <option value="on_the_way">চালক রওনা (On The Way)</option>
-              <option value="picked_up">রোগী তোলা হয়েছে (Picked Up)</option>
-              <option value="completed">সম্পন্ন (Completed)</option>
-              <option value="cancelled">বাতিল (Cancelled)</option>
+              <option value="all">{loc(pair("সব ট্র্যাকিং স্ট্যাটাস", "All tracking statuses"))}</option>
+              <option value="requested">{loc(pair("অনুরোধ গৃহীত", "Request Received"))}</option>
+              <option value="confirmed">{loc(pair("বুকিং নিশ্চিত", "Booking Confirmed"))}</option>
+              <option value="driver_assigned">{loc(pair("ড্রাইভার বরাদ্দ", "Driver Assigned"))}</option>
+              <option value="on_the_way">{loc(pair("চালক রওনা", "On The Way"))}</option>
+              <option value="picked_up">{loc(pair("রোগী তোলা হয়েছে", "Picked Up"))}</option>
+              <option value="completed">{loc(pair("সম্পন্ন", "Completed"))}</option>
+              <option value="cancelled">{loc(pair("বাতিল", "Cancelled"))}</option>
             </select>
           )}
 
@@ -408,14 +421,14 @@ export default function Admin() {
               className="btn btn-red !h-11 !px-4 text-xs font-bold"
             >
               <Plus size={16} />
-              {showAddForm ? "ফর্ম লুকান" : `নতুন ${tab === "doctors" ? "ডাক্তার" : "হাসপাতাল"} যোগ করুন`}
+              {loc(showAddForm ? pair("ফর্ম লুকান", "Hide form") : pair(`নতুন ${tab === "doctors" ? "ডাক্তার" : "হাসপাতাল"} যোগ করুন`, `Add New ${tab === "doctors" ? "Doctor" : "Hospital"}`))}
             </button>
           )}
 
           <button
             onClick={() => load(key, tab, search, statusFilter)}
             className="btn btn-line !h-11 !px-3"
-            title="রিফ্রেশ"
+            title={loc(pair("রিফ্রেশ", "Refresh"))}
           >
             <RefreshCw size={16} className={loading ? "animate-spin" : ""} />
           </button>
@@ -425,14 +438,14 @@ export default function Admin() {
       {/* Driver Assignment Modal */}
       {assigningBooking && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
-          <div className="max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-2xl bg-white p-6 shadow-2xl">
+          <div className="max-h-[90vh] w-full max-w-lg overflow-y-auto no-scrollbar rounded-2xl bg-white p-6 shadow-2xl">
             <div className="mb-4 flex items-center justify-between border-b pb-3">
               <div>
                 <h3 className="text-lg font-bold text-brand flex items-center gap-2">
-                  <Car className="text-brand" size={20} /> অ্যাম্বুলেন্স ও ড্রাইভার বরাদ্দ করুন
+                  <Car className="text-brand" size={20} /> {loc(pair("অ্যাম্বুলেন্স ও ড্রাইভার বরাদ্দ করুন", "Assign Ambulance & Driver"))}
                 </h3>
                 <span className="text-xs text-slate-500">
-                  বুকিং আইডি: <b className="text-brand">{assigningBooking.bookingId}</b> | রোগী: {assigningBooking.patientName}
+                  {loc(pair("বুকিং আইডি", "Booking ID"))}: <b className="text-brand">{assigningBooking.bookingId}</b> | {loc(pair("রোগী", "Patient"))}: {assigningBooking.patientName}
                 </span>
               </div>
               <button
@@ -445,18 +458,18 @@ export default function Admin() {
 
             <form onSubmit={handleAssignSubmit} className="space-y-3.5 text-xs">
               <div>
-                <label className="block font-bold text-brand mb-1">ড্রাইভার / চালকের নাম</label>
+                <label className="block font-bold text-brand mb-1">{loc(pair("ড্রাইভার / চালকের নাম", "Driver Name"))}</label>
                 <input
                   className="input w-full"
                   required
-                  placeholder="যেমন: মো. আব্দুল জলিল"
+                  placeholder={loc(pair("যেমন: মো. আব্দুল জলিল", "e.g. Md Abdul Jalil"))}
                   value={assignForm.driverName}
                   onChange={(e) => setAssignForm({ ...assignForm, driverName: e.target.value })}
                 />
               </div>
 
               <div>
-                <label className="block font-bold text-brand mb-1">ড্রাইভারের মোবাইল নম্বর</label>
+                <label className="block font-bold text-brand mb-1">{loc(pair("ড্রাইভারের মোবাইল নম্বর", "Driver Mobile Number"))}</label>
                 <input
                   className="input w-full"
                   type="tel"
@@ -468,11 +481,11 @@ export default function Admin() {
               </div>
 
               <div>
-                <label className="block font-bold text-brand mb-1">গাড়ির রেজিস্ট্রেশন নম্বর</label>
+                <label className="block font-bold text-brand mb-1">{loc(pair("গাড়ির রেজিস্ট্রেশন নম্বর", "Vehicle Registration Number"))}</label>
                 <input
                   className="input w-full"
                   required
-                  placeholder="যেমন: ঢাকা মেট্রো-ছ-৭১-৪৫৬৭"
+                  placeholder={loc(pair("যেমন: ঢাকা মেট্রো-ছ-৭১-৪৫৬৭", "e.g. DHAKA METRO-CH-71-4567"))}
                   value={assignForm.vehicleRegNo}
                   onChange={(e) => setAssignForm({ ...assignForm, vehicleRegNo: e.target.value })}
                 />
@@ -480,17 +493,17 @@ export default function Admin() {
 
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 <div className="min-w-0">
-                  <label className="block font-bold text-brand mb-1">ভাড়া (টাকা)</label>
+                  <label className="block font-bold text-brand mb-1">{loc(pair("ভাড়া (টাকা)", "Fare (Tk)"))}</label>
                   <input
                     type="number"
                     className="input w-full min-w-0"
-                    placeholder="যেমন: ৩০০০"
+                    placeholder={loc(pair("যেমন: ৩০০০", "e.g. 3000"))}
                     value={assignForm.actualFare}
                     onChange={(e) => setAssignForm({ ...assignForm, actualFare: e.target.value })}
                   />
                 </div>
                 <div className="min-w-0">
-                  <label className="block font-bold text-brand mb-1">পৌঁছানোর আনুমানিক সময়</label>
+                  <label className="block font-bold text-brand mb-1">{loc(pair("পৌঁছানোর আনুমানিক সময়", "Estimated arrival time"))}</label>
                   <input
                     className="input w-full min-w-0"
                     value={assignForm.eta}
@@ -505,10 +518,10 @@ export default function Admin() {
                   onClick={() => setAssigningBooking(null)}
                   className="btn btn-line !h-9 !px-4"
                 >
-                  বাতিল
+                  {loc(pair("বাতিল", "Cancel"))}
                 </button>
                 <button type="submit" className="btn btn-primary !h-9 !px-6 font-bold">
-                  বরাদ্দ নিশ্চিত করুন
+                  {loc(pair("বরাদ্দ নিশ্চিত করুন", "Confirm Assignment"))}
                 </button>
               </div>
             </form>
@@ -521,7 +534,7 @@ export default function Admin() {
         <div className="mb-8 rounded-2xl border-2 border-dashed border-brand/40 bg-slate-100/20 p-5 shadow-inner">
           <div className="mb-4 flex items-center justify-between">
             <h2 className="text-lg font-bold text-brand">
-              নতুন {tab === "doctors" ? "ডাক্তার" : "হাসপাতাল"} এন্ট্রি করুন
+              {loc(pair(`নতুন ${tab === "doctors" ? "ডাক্তার" : "হাসপাতাল"} এন্ট্রি করুন`, `Add New ${tab === "doctors" ? "Doctor" : "Hospital"} Entry`))}
             </h2>
             <button
               onClick={() => setShowAddForm(false)}
@@ -535,12 +548,12 @@ export default function Admin() {
             type={tab}
             fields={FORMS[tab]}
             headers={H}
-            submit="তালিকায় যোগ করুন"
+            submit={pair("তালিকায় যোগ করুন", "Add to list")}
             onDone={() => {
               setShowAddForm(false);
               load(key, tab);
             }}
-            success="সফলভাবে যোগ করা হয়েছে!"
+            success={pair("সফলভাবে যোগ করা হয়েছে!", "Added successfully!")}
           />
         </div>
       )}
@@ -548,46 +561,46 @@ export default function Admin() {
       {/* Main Content Listing */}
       <div className="space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 text-xs text-slate-500">
-          <span>মোট {items.length} টি রেকর্ড পাওয়া গেছে</span>
-          {loading && <span className="font-semibold text-brand">লোড হচ্ছে…</span>}
+          <span>{loc(pair(`মোট ${items.length} টি রেকর্ড পাওয়া গেছে`, `${items.length} records found`))}</span>
+          {loading && <span className="font-semibold text-brand">{loc(pair("লোড হচ্ছে…", "Loading…"))}</span>}
         </div>
 
         {items.length === 0 && !loading && (
           <div className="card text-center py-12">
-            <p className="text-base font-bold text-brand">কোনো রেকর্ড পাওয়া যায়নি</p>
+            <p className="text-base font-bold text-brand">{loc(pair("কোনো রেকর্ড পাওয়া যায়নি", "No records found"))}</p>
             <p className="mt-1 text-xs text-slate-500">
-              আপনি উপরে &quot;স্যাম্পল ডেটা সিড করুন&quot; বাটনে ক্লিক করে রিয়েল ডেটা লোড করতে পারেন।
+              {loc(pair('আপনি উপরে "স্যাম্পল ডেটা সিড করুন" বাটনে ক্লিক করে রিয়েল ডেটা লোড করতে পারেন।', 'Click the "Seed sample data" button above to load real data.'))}
             </p>
           </div>
         )}
 
         {/* Tabular view for Accounts */}
         {tab === "accounts" && items.length > 0 && (
-          <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-sm">
+          <div className="overflow-x-auto no-scrollbar rounded-2xl border border-slate-200 bg-white shadow-sm">
             <table className="w-full text-left text-xs">
               <thead className="bg-slate-50 text-brand font-bold border-b border-slate-200">
                 <tr>
-                  <th className="p-3">বুকিং আইডি</th>
-                  <th className="p-3">সেবার ধরন</th>
-                  <th className="p-3">রোগীর নাম</th>
-                  <th className="p-3">মোট ভাড়া</th>
-                  <th className="p-3">ড্রাইভার প্রাপ্য (৮০%)</th>
-                  <th className="p-3">অফিস কমিশন (২০%)</th>
-                  <th className="p-3">পেমেন্ট অবস্থা</th>
+                  <th className="p-3">{loc(pair("বুকিং আইডি", "Booking ID"))}</th>
+                  <th className="p-3">{loc(pair("সেবার ধরন", "Service Type"))}</th>
+                  <th className="p-3">{loc(pair("রোগীর নাম", "Patient Name"))}</th>
+                  <th className="p-3">{loc(pair("মোট ভাড়া", "Total Fare"))}</th>
+                  <th className="p-3">{loc(pair("ড্রাইভার প্রাপ্য (৮০%)", "Driver Share (80%)"))}</th>
+                  <th className="p-3">{loc(pair("অফিস কমিশন (২০%)", "Office Commission (20%)"))}</th>
+                  <th className="p-3">{loc(pair("পেমেন্ট অবস্থা", "Payment Status"))}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
                 {items.map((acc) => (
                   <tr key={acc._id} className="hover:bg-slate-50">
                     <td className="p-3 font-bold text-brand">{acc.bookingId || "DH-AMB-001"}</td>
-                    <td className="p-3">{acc.serviceType}</td>
-                    <td className="p-3 font-semibold text-brand">{acc.patientName || "রোগী"}</td>
+                    <td className="p-3">{loc(acc.serviceType)}</td>
+                    <td className="p-3 font-semibold text-brand">{acc.patientName || loc(pair("রোগী", "Patient"))}</td>
                     <td className="p-3 font-black text-brand">৳{acc.totalFare || 0}</td>
                     <td className="p-3 font-bold text-slate-600">৳{acc.partnerShare || 0}</td>
                     <td className="p-3 font-black text-green-700">৳{acc.officeCommission || 0}</td>
                     <td className="p-3">
                       <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${acc.paymentStatus === "paid" ? "bg-green-100 text-green-800" : "bg-amber-100 text-amber-800"}`}>
-                        {acc.paymentStatus === "paid" ? "পরিশোধিত" : "বকেয়া"}
+                        {loc(acc.paymentStatus === "paid" ? pair("পরিশোধিত", "Paid") : pair("বকেয়া", "Due"))}
                       </span>
                     </td>
                   </tr>
@@ -599,27 +612,27 @@ export default function Admin() {
 
         {/* Tabular view for Activity Logs */}
         {tab === "activity_logs" && items.length > 0 && (
-          <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-sm">
+          <div className="overflow-x-auto no-scrollbar rounded-2xl border border-slate-200 bg-white shadow-sm">
             <table className="w-full text-left text-xs">
               <thead className="bg-slate-50 text-brand font-bold border-b border-slate-200">
                 <tr>
-                  <th className="p-3">সময়</th>
-                  <th className="p-3">অ্যাডমিন ইউজার</th>
-                  <th className="p-3">অ্যাকশন</th>
-                  <th className="p-3">টার্গেট</th>
-                  <th className="p-3">বিস্তারিত বিবরণ</th>
+                  <th className="p-3">{loc(pair("সময়", "Time"))}</th>
+                  <th className="p-3">{loc(pair("অ্যাডমিন ইউজার", "Admin User"))}</th>
+                  <th className="p-3">{loc(pair("অ্যাকশন", "Action"))}</th>
+                  <th className="p-3">{loc(pair("টার্গেট", "Target"))}</th>
+                  <th className="p-3">{loc(pair("বিস্তারিত বিবরণ", "Details"))}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
                 {items.map((log) => (
                   <tr key={log._id} className="hover:bg-slate-50">
                     <td className="p-3 text-slate-500 whitespace-nowrap">
-                      {new Date(log.createdAt || Date.now()).toLocaleString("bn-BD")}
+                      {new Date(log.createdAt || Date.now()).toLocaleString(lang === "en" ? "en-GB" : "bn-BD")}
                     </td>
-                    <td className="p-3 font-bold text-brand">{log.adminUser}</td>
-                    <td className="p-3 font-semibold text-brand">{log.action}</td>
-                    <td className="p-3 text-slate-600">{log.targetType}</td>
-                    <td className="p-3 text-slate-600">{log.details || "-"}</td>
+                    <td className="p-3 font-bold text-brand">{loc(log.adminUser)}</td>
+                    <td className="p-3 font-semibold text-brand">{loc(log.action)}</td>
+                    <td className="p-3 text-slate-600">{loc(log.targetType)}</td>
+                    <td className="p-3 text-slate-600">{loc(log.details || "-")}</td>
                   </tr>
                 ))}
               </tbody>
@@ -668,20 +681,20 @@ export default function Admin() {
                         <div className="min-w-0">
                           {item.bookingId && (
                             <span className="block text-xs font-black text-brand tracking-wide">
-                              আইডি: {item.bookingId}
+                              {loc(pair("আইডি", "ID"))}: {item.bookingId}
                             </span>
                           )}
                           <h2 className="font-head text-base font-bold text-brand leading-tight truncate">
-                            {item.patientName || item.name || `আইডি: ${item._id.slice(-6)}`}
+                            {item.patientName || item.name || `${loc(pair("আইডি", "ID"))}: ${item._id.slice(-6)}`}
                           </h2>
                           {item.ambulanceType && (
                             <span className="inline-block mt-0.5 rounded bg-red-100 px-2 py-0.5 text-[11px] font-bold text-red">
-                              ধরন: {item.ambulanceType} ({item.patientCondition || "সাধারণ"})
+                              {loc(pair("ধরন", "Type"))}: {loc(item.ambulanceType)} ({loc(dataPair(item, "patientCondition", pair("সাধারণ", "General")))})
                             </span>
                           )}
                           {item.specialty && (
                             <span className="inline-block mt-0.5 rounded bg-slate-100 px-2 py-0.5 text-[11px] font-bold text-brand-dark">
-                              {item.specialty}
+                              {spLabel(item.specialty, lang)}
                             </span>
                           )}
                         </div>
@@ -690,7 +703,7 @@ export default function Admin() {
                       <div className="flex flex-col items-end gap-1">
                         {item.trackingStatus && (
                           <span className={`rounded-full border px-2.5 py-0.5 text-[11px] font-bold ${meta.cls}`}>
-                            {meta.label}
+                            {loc(meta.label)}
                           </span>
                         )}
                         {typeof item.active === "boolean" && (
@@ -701,7 +714,7 @@ export default function Admin() {
                               : "bg-slate-200 text-slate-600 hover:bg-slate-300"
                               }`}
                           >
-                            {item.active ? "✓ সক্রিয়" : "✗ নিষ্ক্রিয়"}
+                            {loc(item.active ? pair("✓ সক্রিয়", "✓ Active") : pair("✗ নিষ্ক্রিয়", "✗ Inactive"))}
                           </button>
                         )}
                       </div>
@@ -711,7 +724,7 @@ export default function Admin() {
                     <div className="mt-3 space-y-1.5 text-xs text-slate-700">
                       {item.mobile && (
                         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
-                          <span className="font-semibold text-brand">মোবাইল:</span>
+                          <span className="font-semibold text-brand">{loc(pair("মোবাইল", "Mobile"))}:</span>
                           <a
                             href={`tel:${item.mobile}`}
                             className="min-w-0 break-words font-bold text-brand hover:underline flex items-center gap-1"
@@ -722,26 +735,26 @@ export default function Admin() {
                       )}
                       {item.address && (
                         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
-                          <span className="font-semibold text-brand">পিকআপ ঠিকানা:</span>
-                          <span className="min-w-0 break-words text-right font-medium">{item.address}</span>
+                          <span className="font-semibold text-brand">{loc(pair("পিকআপ ঠিকানা", "Pickup Address"))}:</span>
+                          <span className="min-w-0 break-words text-right font-medium">{loc(dataPair(item, "address"))}</span>
                         </div>
                       )}
                       {item.destination && (
                         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
-                          <span className="font-semibold text-brand">গন্তব্য:</span>
-                          <span className="min-w-0 break-words text-right font-bold text-brand">{item.destination}</span>
+                          <span className="font-semibold text-brand">{loc(pair("গন্তব্য", "Destination"))}:</span>
+                          <span className="min-w-0 break-words text-right font-bold text-brand">{loc(dataPair(item, "destination"))}</span>
                         </div>
                       )}
                       {item.location && (
                         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
-                          <span className="font-semibold text-brand">জিপিএস অবস্থান:</span>
+                          <span className="font-semibold text-brand">{loc(pair("জিপিএস অবস্থান", "GPS Location"))}:</span>
                           <a
                             href={item.location}
                             target="_blank"
                             rel="noreferrer"
                             className="min-w-0 break-words font-bold text-brand hover:underline flex items-center gap-1"
                           >
-                            <MapPin size={12} className="text-red" /> গুগল ম্যাপে দেখুন <ExternalLink size={10} />
+                            <MapPin size={12} className="text-red" /> {loc(pair("গুগল ম্যাপে দেখুন", "View on Google Map"))} <ExternalLink size={10} />
                           </a>
                         </div>
                       )}
@@ -750,14 +763,14 @@ export default function Admin() {
                       {tab === "ambulance" && (item.driverName || item.vehicleRegNo) && (
                         <div className="mt-2 rounded-xl bg-purple-50/70 p-2.5 border border-purple-200/60">
                           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 font-bold text-purple-950">
-                            <span>বরাদ্দকৃত চালক: {item.driverName}</span>
+                            <span>{loc(pair("বরাদ্দকৃত চালক", "Assigned Driver"))}: {item.driverName}</span>
                             <span className="text-[11px] bg-purple-200/80 px-2 py-0.5 rounded">{item.vehicleRegNo}</span>
                           </div>
                           {item.driverMobile && (
                             <div className="mt-1 flex items-center justify-between">
-                              <span className="text-slate-600">চালক মোবাইল: {item.driverMobile}</span>
+                              <span className="text-slate-600">{loc(pair("চালক মোবাইল", "Driver Mobile"))}: {item.driverMobile}</span>
                               <a href={`tel:${item.driverMobile}`} className="text-brand font-bold underline flex items-center gap-0.5">
-                                <Phone size={10} /> কল
+                                <Phone size={10} /> {loc(pair("কল", "Call"))}
                               </a>
                             </div>
                           )}
@@ -767,15 +780,15 @@ export default function Admin() {
                       {/* Fare and ETA */}
                       {item.estimatedFare != null && (
                         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 font-bold text-brand pt-1">
-                          <span>ভাড়া:</span>
-                          <span className="min-w-0 break-words text-right text-red">৳{item.actualFare || item.estimatedFare} (ETA: {item.eta || "১৫-২০ মিনিট"})</span>
+                          <span>{loc(pair("ভাড়া", "Fare"))}:</span>
+                          <span className="min-w-0 break-words text-right text-red">৳{item.actualFare || item.estimatedFare} ({loc(pair("ETA", "ETA"))}: {loc(dataPair(item, "eta", pair("১৫-২০ মিনিট", "15-20 minutes")))})</span>
                         </div>
                       )}
 
                       {/* NID & Docs for Partners */}
                       {(item.nidFrontPhoto || item.nidBackPhoto || item.drivingLicensePhoto) && (
                         <div className="pt-2 border-t border-slate-100">
-                          <span className="block font-bold text-brand mb-1.5">যাচাইকরণের কাগজপত্র ও NID:</span>
+                          <span className="block font-bold text-brand mb-1.5">{loc(pair("যাচাইকরণের কাগজপত্র ও NID", "Verification Documents & NID"))}:</span>
                           <div className="flex flex-wrap gap-2">
                             {item.nidFrontPhoto && (
                               <a href={item.nidFrontPhoto} target="_blank" rel="noreferrer" className="group text-center">
@@ -792,7 +805,7 @@ export default function Admin() {
                             {item.drivingLicensePhoto && (
                               <a href={item.drivingLicensePhoto} target="_blank" rel="noreferrer" className="group text-center">
                                 <img src={item.drivingLicensePhoto} alt="Driving licence" onError={imageFallback("document")} className="h-12 w-16 object-cover rounded border" />
-                                <span className="block text-[10px] font-bold text-brand">লাইসেন্স</span>
+                                <span className="block text-[10px] font-bold text-brand">{loc(pair("লাইসেন্স", "Licence"))}</span>
                               </a>
                             )}
                           </div>
@@ -819,7 +832,7 @@ export default function Admin() {
                             }}
                             className="btn btn-primary !min-h-[30px] !px-2.5 !py-1 text-[11px] font-bold"
                           >
-                            <Car size={12} /> {item.driverName ? "ড্রাইভার পরিবর্তন" : "ড্রাইভার বরাদ্দ"}
+                            <Car size={12} /> {loc(item.driverName ? pair("ড্রাইভার পরিবর্তন", "Change Driver") : pair("ড্রাইভার বরাদ্দ", "Assign Driver"))}
                           </button>
 
                           <select
@@ -827,13 +840,13 @@ export default function Admin() {
                             value={item.trackingStatus || "requested"}
                             onChange={(e) => updateTracking(item._id, e.target.value)}
                           >
-                            <option value="requested">অনুরোধ গৃহীত</option>
-                            <option value="confirmed">বুকিং নিশ্চিত</option>
-                            <option value="driver_assigned">ড্রাইভার বরাদ্দ</option>
-                            <option value="on_the_way">চালক রওনা</option>
-                            <option value="picked_up">রোগী তোলা হয়েছে</option>
-                            <option value="completed">সম্পন্ন (Done)</option>
-                            <option value="cancelled">বাতিল</option>
+                            <option value="requested">{loc(pair("অনুরোধ গৃহীত", "Request Received"))}</option>
+                            <option value="confirmed">{loc(pair("বুকিং নিশ্চিত", "Booking Confirmed"))}</option>
+                            <option value="driver_assigned">{loc(pair("ড্রাইভার বরাদ্দ", "Driver Assigned"))}</option>
+                            <option value="on_the_way">{loc(pair("চালক রওনা", "On The Way"))}</option>
+                            <option value="picked_up">{loc(pair("রোগী তোলা হয়েছে", "Picked Up"))}</option>
+                            <option value="completed">{loc(pair("সম্পন্ন", "Completed"))}</option>
+                            <option value="cancelled">{loc(pair("বাতিল", "Cancelled"))}</option>
                           </select>
                         </>
                       )}
@@ -844,10 +857,10 @@ export default function Admin() {
                           value={item.trackingStatus || "requested"}
                           onChange={(e) => updateTracking(item._id, e.target.value)}
                         >
-                          <option value="requested">অনুরোধ গৃহীত</option>
-                          <option value="confirmed">সিরিয়াল নিশ্চিত</option>
-                          <option value="completed">সম্পন্ন (Visited)</option>
-                          <option value="cancelled">বাতিল</option>
+                          <option value="requested">{loc(pair("অনুরোধ গৃহীত", "Request Received"))}</option>
+                          <option value="confirmed">{loc(pair("সিরিয়াল নিশ্চিত", "Serial Confirmed"))}</option>
+                          <option value="completed">{loc(pair("সম্পন্ন", "Completed"))}</option>
+                          <option value="cancelled">{loc(pair("বাতিল", "Cancelled"))}</option>
                         </select>
                       )}
                     </div>
@@ -858,13 +871,13 @@ export default function Admin() {
                           href={`tel:${item.mobile}`}
                           className="btn btn-green !min-h-[30px] !px-3 !py-1 text-xs font-bold"
                         >
-                          <Phone size={12} /> কল
+                          <Phone size={12} /> {loc(pair("কল", "Call"))}
                         </a>
                       )}
                       <button
                         onClick={() => del(item._id)}
                         className="rounded-lg p-1 text-rose-500 hover:bg-rose-50"
-                        title="মুছে ফেলুন"
+                        title={loc(pair("মুছে ফেলুন", "Delete"))}
                       >
                         <Trash2 size={15} />
                       </button>

@@ -13,15 +13,20 @@ import {
 } from "lucide-react";
 import { findDistricts, findLocations, imageFallback } from "@/lib/site";
 import { useLanguage } from "@/context/LanguageContext";
-import { translateFormField, translateText } from "@/lib/i18nData";
+import { pick, translateText } from "@/lib/i18nData";
 
 const PHONE = "(\\+?88)?01[3-9][0-9]{8}";
+
+function localize(value, lang) {
+  if (value && typeof value === "object" && !Array.isArray(value)) return pick(value, lang);
+  return typeof value === "string" ? translateText(value, lang) : value;
+}
 
 function Label({ f }) {
   const { lang } = useLanguage();
   return (
     <span className="mb-1.5 block text-xs font-bold uppercase tracking-wider text-slate-700">
-      {translateText(f.label, lang)}
+      {localize(f.label, lang)}
       {f.required && <span className="text-red font-black"> *</span>}
     </span>
   );
@@ -262,7 +267,7 @@ function DistrictPicker({ f, val, set }) {
       </div>
 
       {showResults && (districts.length > 0 || locations.length > 0) && (
-        <div className="mt-2 max-h-56 overflow-y-auto rounded-xl border border-slate-200 bg-white p-1.5 shadow-sm">
+        <div className="mt-2 max-h-56 overflow-y-auto no-scrollbar rounded-xl border border-slate-200 bg-white p-1.5 shadow-sm">
           {districts.map((d) => (
             <button
               key={`d-${d.name}`}
@@ -327,7 +332,11 @@ export default function DynamicForm({
   const [v, setV] = useState(initial);
   const [st, setSt] = useState({ s: "idle" });
   const set = (k, val) => setV((p) => ({ ...p, [k]: val }));
-  const formFields = fields.map((f) => translateFormField(f, lang));
+  const formFields = fields.map((f) => ({
+    ...f,
+    label: localize(f.label, lang),
+    optionLabels: f.optionLabels || f.options?.map((o) => localize(o, lang)),
+  }));
   const fareByType = {
     ICU: {
       bn: "৳৮,০০০",
@@ -392,7 +401,7 @@ export default function DynamicForm({
       <div className="card text-center py-8" role="status">
         <CheckCircle2 size={48} className="mx-auto text-green" />
         <p className="mt-3 font-head text-2xl font-bold text-brand">{lang === "bn" ? "ধন্যবাদ!" : "Thank you!"}</p>
-        <p className="mt-1 text-base text-slate-600 max-w-md mx-auto">{translateText(success, lang)}</p>
+        <p className="mt-1 text-base text-slate-600 max-w-md mx-auto">{localize(success, lang)}</p>
 
         {st.bookingId && (
           <div className="my-5 p-4 rounded-2xl bg-gradient-to-br from-[#4B93F5] via-brand to-[#0F63CC] text-white shadow-lg max-w-sm mx-auto">
@@ -457,9 +466,9 @@ export default function DynamicForm({
           ctl = (
             <select {...common}>
               <option value="">{lang === "bn" ? "নির্বাচন করুন" : "Select"}</option>
-              {f.options.map((o) => (
+              {f.options.map((o, idx) => (
                 <option key={o} value={o}>
-                  {translateText(o, lang)}
+                  {f.optionLabels?.[idx] ?? localize(o, lang)}
                 </option>
               ))}
             </select>
@@ -467,7 +476,7 @@ export default function DynamicForm({
         } else if (f.type === "checks") {
           ctl = (
             <div className="flex flex-wrap gap-2">
-              {f.options.map((o) => {
+              {f.options.map((o, idx) => {
                 const on = (val || []).includes(o);
                 return (
                   <button
@@ -478,9 +487,9 @@ export default function DynamicForm({
                     onClick={() =>
                       set(f.name, on ? val.filter((x) => x !== o) : [...(val || []), o])
                     }
-                    >
-                      {translateText(o, lang)}
-                    </button>
+                  >
+                    {f.optionLabels?.[idx] ?? localize(o, lang)}
+                  </button>
                   );
                 })}
               </div>
@@ -488,7 +497,7 @@ export default function DynamicForm({
           } else if (f.type === "radio") {
           ctl = (
             <div className="flex flex-wrap gap-2" role="radiogroup">
-              {f.options.map((o) => (
+              {f.options.map((o, idx) => (
                 <button
                   type="button"
                   role="radio"
@@ -497,7 +506,7 @@ export default function DynamicForm({
                   className={`chip ${val === o ? "chip-on" : ""}`}
                   onClick={() => set(f.name, o)}
                 >
-                  {translateText(o, lang)}
+                  {f.optionLabels?.[idx] ?? localize(o, lang)}
                 </button>
               ))}
             </div>
@@ -613,7 +622,7 @@ export default function DynamicForm({
             {lang === "bn" ? "পাঠানো হচ্ছে…" : "Submitting…"}
           </>
         ) : (
-          translateText(submit, lang)
+          localize(submit, lang)
         )}
       </button>
     </form>

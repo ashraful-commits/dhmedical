@@ -1,6 +1,8 @@
 import { Handshake, BadgeCheck, Camera, CreditCard, ShieldCheck, PhoneCall, CheckCircle2 } from "lucide-react";
 import PageHead from "@/components/PageHead";
+import Text from "@/components/translated/Text";
 import DynamicForm from "@/components/DynamicForm";
+import { PARTNER_STEPS, PARTNER_TERMS } from "@/lib/i18nData";
 import { partnerFields } from "@/lib/forms";
 
 import { BASE_URL } from "@/lib/seoHelper";
@@ -14,48 +16,15 @@ export const metadata = {
   },
 };
 
-const STEPS = [
-  {
-    step: "১",
-    Icon: CreditCard,
-    title: "তথ্য ও NID নম্বর দিন",
-    desc: "আপনার নাম, মোবাইল নম্বর, NID নং ও গাড়ির রেজিস্ট্রেশন নম্বর প্রদান করুন।",
-  },
-  {
-    step: "২",
-    Icon: Camera,
-    title: "NID ও লাইসেন্সের ছবি তুলুন",
-    desc: "মোবাইলের ক্যামেরা দিয়ে আপনার NID কার্ডের সামনের ও পেছনের পাতার পরিষ্কার ছবি তুলুন।",
-  },
-  {
-    step: "৩",
-    Icon: ShieldCheck,
-    title: "যাচাই ও অ্যাকাউন্ট চালু",
-    desc: "তথ্য যাচাইয়ের পর আমাদের অ্যাডমিন টিম দ্রুত আপনার পার্টনার অ্যাকাউন্ট সক্রিয় করে নেবে।",
-  },
-  {
-    step: "৪",
-    Icon: PhoneCall,
-    title: "নিয়মিত ট্রিপ পান",
-    desc: "আপনার সার্ভিস এলাকার রোগীদের সঙ্গে সরাসরি যোগাযোগ করে ২৪ ঘণ্টা কাজ করার সুযোগ পাবেন।",
-  },
-];
-
-const TERMS = [
-  "রোগী ও তার পরিবারের সঙ্গে সর্বদা সম্মানজনক ও মানবিক ব্যবহার করতে হবে।",
-  "নির্ধারিত ন্যায্য ভাড়ার বাইরে অতিরিক্ত কোনো অযৌক্তিক টাকা দাবি করা যাবে না।",
-  "জরুরি অবস্থায় দ্রুততম সময়ে রোগীর লোকেশনে পৌঁছানোর সর্বোচ্চ চেষ্টা করতে হবে।",
-  "রোগীর নিরাপত্তা, গোপনীয়তা ও অক্সিজেন/যন্ত্রপাতির কার্যকারিতা নিশ্চিত রাখতে হবে।",
-  "কাগজপত্র (লাইসেন্স, ফিটনেস, রেজিস্ট্রেশন) সঠিক ও হালনাগাদ থাকতে হবে।",
-];
+const STEP_ICONS = [CreditCard, Camera, ShieldCheck, PhoneCall];
 
 export default function Partner() {
   return (
     <>
       <PageHead
         Icon={Handshake}
-        title="অ্যাম্বুলেন্স ড্রাইভার ও মালিকের নিবন্ধন"
-        sub="D H Medical Support পার্টনার নেটওয়ার্কে যুক্ত হয়ে নিয়মিত রোগী পান ও সম্মানিত সেবা দিন।"
+        title={{ bn: "অ্যাম্বুলেন্স ড্রাইভার ও মালিকের নিবন্ধন", en: "Ambulance Driver & Owner Registration" }}
+        sub={{ bn: "D H Medical Support পার্টনার নেটওয়ার্কে যুক্ত হয়ে নিয়মিত রোগী পান ও সম্মানিত সেবা দিন।", en: "Join the D H Medical Support partner network to get regular patients and provide respected service." }}
       />
 
       <div className="wrap max-w-4xl space-y-8 py-10 sm:py-14 lg:py-16">
@@ -63,30 +32,30 @@ export default function Partner() {
         <section aria-labelledby="steps-title" className="rounded-2xl bg-gradient-to-r from-[#4B93F5] via-brand to-[#0F63CC] p-5 sm:p-6 text-white shadow-card border border-white/10">
           <div className="text-center max-w-xl mx-auto mb-6 sm:mb-8">
             <span className="inline-flex items-center gap-1.5 rounded-full bg-white/20 px-3 py-1 text-xs font-bold text-gold">
-              সহজ নিবন্ধন পদ্ধতি
+              <Text k="partner_steps_pill" />
             </span>
             <h2 id="steps-title" className="mt-2 text-2xl sm:text-3xl lg:text-4xl font-black !text-white mb-3">
-              ড্রাইভার ও মালিক যেভাবে যুক্ত হবেন
+              <Text k="partner_steps_title" />
             </h2>
             <p className="mt-2 text-sm sm:text-base text-slate-100 leading-relaxed max-w-2xl">
-              নিচের ৪টি সহজ ধাপ অনুসরণ করে আজই আপনার অ্যাকাউন্ট খুলুন
+              <Text k="partner_steps_sub" />
             </p>
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {STEPS.map((s) => {
-              const I = s.Icon;
+            {PARTNER_STEPS.map((s, idx) => {
+              const I = STEP_ICONS[idx];
               return (
-                <div key={s.step} className="rounded-xl bg-white/10 p-4 border border-white/10 backdrop-blur flex flex-col justify-between">
+                <div key={s.step.bn} className="rounded-xl bg-white/10 p-4 border border-white/10 backdrop-blur flex flex-col justify-between">
                   <div>
                     <div className="flex items-center justify-between mb-3">
                       <span className="grid h-8 w-8 place-items-center rounded-full bg-gold text-brand font-black text-sm">
-                        {s.step}
+                        <Text value={s.step} />
                       </span>
                       <I size={22} className="text-slate-100" />
                     </div>
-                    <h3 className="font-bold text-base text-white">{s.title}</h3>
-                    <p className="mt-1 text-xs sm:text-sm text-slate-100 leading-relaxed">{s.desc}</p>
+                    <h3 className="font-bold text-base text-white"><Text value={s.title} /></h3>
+                    <p className="mt-1 text-xs sm:text-sm text-slate-100 leading-relaxed"><Text value={s.desc} /></p>
                   </div>
                 </div>
               );
@@ -97,13 +66,13 @@ export default function Partner() {
         {/* Terms of Service */}
         <div className="card border-brand/20 p-5 sm:p-6">
           <h2 className="font-head text-2xl sm:text-3xl lg:text-4xl font-black text-brand flex items-center gap-2 mb-3">
-            <CheckCircle2 className="text-green" size={22} /> চুক্তির নিয়ম ও শর্তাবলী
+            <CheckCircle2 className="text-green" size={22} /> <Text k="partner_terms_title" />
           </h2>
           <ul className="mt-3 space-y-2.5 text-sm sm:text-base text-slate-700">
-            {TERMS.map((t) => (
-              <li key={t} className="flex gap-3">
+            {PARTNER_TERMS.map((item) => (
+              <li key={item.bn} className="flex gap-3">
                 <BadgeCheck className="shrink-0 text-brand mt-0.5" size={18} />
-                <span>{t}</span>
+                <span><Text value={item} /></span>
               </li>
             ))}
           </ul>
@@ -112,20 +81,20 @@ export default function Partner() {
         {/* Partner Registration Form */}
         <section aria-labelledby="form-heading">
           <div className="mb-6 sm:mb-8">
-            <span className="pill">নিবন্ধন ফর্ম</span>
+            <span className="pill"><Text k="partner_form_pill" /></span>
             <h2 id="form-heading" className="text-2xl sm:text-3xl lg:text-4xl font-black text-brand mt-1 mb-3">
-              আপনার সঠিক তথ্য ও NID কার্ডের ছবি দিন
+              <Text k="partner_form_title" />
             </h2>
             <p className="text-sm sm:text-base text-slate-600 leading-relaxed max-w-2xl">
-              সবগুলো তথ্য পূরণ করুন। আপনার দেওয়া তথ্য ও ছবি আমাদের সুরক্ষিত সার্ভারে সংরক্ষিত থাকবে।
+              <Text k="partner_form_sub" />
             </p>
           </div>
 
           <DynamicForm
             type="partners"
             fields={partnerFields}
-            submit="পার্টনার অ্যাকাউন্ট নিবন্ধন সম্পন্ন করুন"
-            success="আপনার নিবন্ধন ও NID ছবি সফলভাবে জমা হয়েছে! আমাদের অ্যাডমিন টিম যাচাই করার পর দ্রুত কল করে আপনার অ্যাকাউন্ট সক্রিয় করে দেবে।"
+            submit={{ bn: "পার্টনার অ্যাকাউন্ট নিবন্ধন সম্পন্ন করুন", en: "Complete partner registration" }}
+            success={{ bn: "আপনার নিবন্ধন ও NID ছবি সফলভাবে জমা হয়েছে! আমাদের অ্যাডমিন টিম যাচাই করার পর দ্রুত কল করে আপনার অ্যাকাউন্ট সক্রিয় করে দেবে।", en: "Your registration and NID photos were submitted successfully! Our admin team will verify and call you shortly to activate your account." }}
           />
         </section>
       </div>

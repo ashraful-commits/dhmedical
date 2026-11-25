@@ -1,5 +1,6 @@
 import { CalendarCheck } from "lucide-react";
 import PageHead from "@/components/PageHead";
+import Text from "@/components/translated/Text";
 import DynamicForm from "@/components/DynamicForm";
 import { appointmentFields } from "@/lib/forms";
 import { BASE_URL } from "@/lib/seoHelper";
@@ -25,9 +26,18 @@ export default function Appointment({ searchParams: s }) {
   const initial = { doctorName: s.doctor || "", hospitalName: s.hospital || "", specialty: s.sp || "" };
   return (
     <>
-      <PageHead Icon={CalendarCheck} title="ডাক্তারের অ্যাপয়েন্টমেন্ট" sub="তথ্য দিন, আমরা সিরিয়াল নিশ্চিত করে আপনাকে জানাব।" />
+      <PageHead
+        Icon={CalendarCheck}
+        title={{ bn: "ডাক্তারের অ্যাপয়েন্টমেন্ট", en: "Doctor Appointment" }}
+        sub={{ bn: "তথ্য দিন, আমরা সিরিয়াল নিশ্চিত করে আপনাকে জানাব।", en: "Enter your details and we will confirm your serial and notify you." }}
+      />
       <div className="wrap max-w-3xl py-10 sm:py-14 lg:py-16">
-        <DynamicForm type="appointments" fields={appointmentFields} initial={initial} submit="অ্যাপয়েন্টমেন্ট অনুরোধ পাঠান" />
+        <DynamicForm
+          type="appointments"
+          fields={appointmentFields}
+          initial={initial}
+          submit={{ bn: "অ্যাপয়েন্টমেন্ট অনুরোধ পাঠান", en: "Send appointment request" }}
+        />
       </div>
     </>
   );

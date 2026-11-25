@@ -33,28 +33,21 @@ import { useLanguage } from "@/context/LanguageContext";
 export default function Header() {
   const [open, setOpen] = useState(false);
   const [moreOpen, setMoreOpen] = useState(false);
+  const [partnersOpen, setPartnersOpen] = useState(false);
   const moreRef = useRef(null);
+  const mobileRef = useRef(null);
   const pathname = usePathname();
   const { lang, setLang, t } = useLanguage();
 
-  // Prevent background scroll when mobile menu is open
-  useEffect(() => {
-    if (open) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "unset";
-    }
-    return () => {
-      document.body.style.overflow = "unset";
-    };
-  }, [open]);
-
-  // Close dropdown on outside click
+  // Close dropdowns on outside click
   useEffect(() => {
     function handleClickOutside(e) {
-      if (e.target?.closest?.("[data-more-trigger]")) return;
+      if (e.target?.closest?.("[data-more-trigger], [data-menu-trigger]")) return;
       if (moreRef.current && !moreRef.current.contains(e.target)) {
         setMoreOpen(false);
+      }
+      if (mobileRef.current && !mobileRef.current.contains(e.target)) {
+        setOpen(false);
       }
     }
     document.addEventListener("mousedown", handleClickOutside);
@@ -63,6 +56,7 @@ export default function Header() {
 
   useEffect(() => {
     setMoreOpen(false);
+    setOpen(false);
   }, [pathname]);
 
   return (
@@ -165,7 +159,10 @@ export default function Header() {
         <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0 lg:justify-self-end">
           <div className="relative shrink-0" ref={moreRef}>
             <button
-              onClick={() => setMoreOpen(!moreOpen)}
+              onClick={() => {
+                setMoreOpen(!moreOpen);
+                setOpen(false);
+              }}
               aria-expanded={moreOpen}
               aria-label={t("nav_more")}
               data-more-trigger
@@ -245,7 +242,7 @@ export default function Header() {
               }`}
               title={t("header_view_bn")}
             >
-              বাং
+              {lang === "bn" ? "বাং" : "BN"}
             </button>
             <button
               onClick={() => setLang("en")}
@@ -269,7 +266,11 @@ export default function Header() {
             }`}
             aria-label={t("nav_more")}
             aria-expanded={open}
-            onClick={() => setOpen(!open)}
+            data-menu-trigger
+            onClick={() => {
+              setOpen(!open);
+              setMoreOpen(false);
+            }}
           >
             {open ? <X size={20} /> : <Menu size={20} />}
           </button>
@@ -278,8 +279,12 @@ export default function Header() {
 
       {/* MOBILE DRAWER: COMPLETE LUXURY HEALTHCARE DESIGN */}
       {open && (
-        <div className="fixed inset-x-0 bottom-0 top-[92px] z-[1050] bg-slate-900/40 backdrop-blur-sm lg:hidden animate-fadeIn sm:top-[104px]">
-          <div className="h-full overflow-y-auto bg-white border-t border-slate-100 px-4 py-5 shadow-2xl flex flex-col justify-between max-w-lg mx-auto">
+        <div
+          ref={mobileRef}
+          data-mobile-menu
+          className="fixed right-2 top-[92px] z-[1200] max-h-[calc(100vh-104px)] w-[min(24rem,calc(100vw-1rem))] animate-fadeIn overflow-hidden border border-slate-200 bg-white shadow-2xl lg:hidden sm:right-4 sm:top-[104px] sm:max-h-[calc(100vh-116px)]"
+        >
+          <div className="max-h-[calc(100vh-104px)] overflow-y-auto no-scrollbar border-t-2 border-brand bg-white px-4 py-5 sm:max-h-[calc(100vh-116px)]">
             
             <div className="space-y-4">
               {/* Top Row: Language Toggle + Emergency Hotline Header */}
@@ -295,7 +300,7 @@ export default function Header() {
                       lang === "bn" ? "bg-brand text-white" : "text-slate-600"
                     }`}
                   >
-                    বাংলা
+                    {lang === "bn" ? "বাংলা" : "Bangla"}
                   </button>
                   <button
                     onClick={() => setLang("en")}
@@ -479,9 +484,20 @@ export default function Header() {
 
               {/* 3. Secondary Links Grid */}
               <div className="pt-2">
-                <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block px-1 mb-2">
-                  {lang === "bn" ? "অন্যান্য সেবা ও পার্টনার" : "MORE SERVICES & PARTNERS"}
-                </span>
+                <button
+                  type="button"
+                  data-partners-toggle
+                  onClick={() => setPartnersOpen(!partnersOpen)}
+                  aria-expanded={partnersOpen}
+                  className="mb-2 flex w-full items-center justify-between px-1 text-[11px] font-bold uppercase tracking-wider text-slate-400 transition-colors hover:text-brand"
+                >
+                  <span>{lang === "bn" ? "অন্যান্য সেবা ও পার্টনার" : "MORE SERVICES & PARTNERS"}</span>
+                  <ChevronDown
+                    size={14}
+                    className={`transition-transform duration-200 ${partnersOpen ? "rotate-180" : ""}`}
+                  />
+                </button>
+                {partnersOpen && (
                 <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                   <Link
                     href="/hospitals"
@@ -537,6 +553,7 @@ export default function Header() {
                     <span>{t("nav_admin")}</span>
                   </Link>
                 </div>
+                )}
               </div>
             </div>
 

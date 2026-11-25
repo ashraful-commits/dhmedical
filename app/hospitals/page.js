@@ -1,6 +1,8 @@
 import { Building2, HelpCircle } from "lucide-react";
 import PageHead from "@/components/PageHead";
+import Text from "@/components/translated/Text";
 import Catalog from "@/components/Catalog";
+import { HOSPITAL_FAQS } from "@/lib/i18nData";
 import { BASE_URL, getFaqSchema } from "@/lib/seoHelper";
 
 export const metadata = {
@@ -30,19 +32,8 @@ export const metadata = {
   },
 };
 
-const HOSPITAL_FAQS = [
-  {
-    q: "হাসপাতালে জরুরি বেড বা আইসিইউ (ICU) পাওয়ার উপায় কী?",
-    a: "আমাদের ২৪ ঘণ্টা হটলাইনে (01625-268462) কল করলে আমাদের টিম স্কয়ার, এভারকেয়ার, ল্যাবএইড, ইউনাইটেড সহ শীর্ষ হাসপাতালে তাৎক্ষণিক খালি বেড ও আইসিইউ কনফার্ম করে দেয়।",
-  },
-  {
-    q: "হাসপাতালের ফ্লোর ডিরেক্টরি (কয়তলায় কোন রুম) কীভাবে দেখব?",
-    a: "প্রতিটি হাসপাতালের কার্ডে 'কয়তলায় কোন রুম আছে (ফ্লোর ডিরেক্টরি)' অপশনে ক্লিক করলে নিচতলা থেকে সর্বোচ্চ তলা পর্যন্ত ওটি, ল্যাব, আইসিইউ ও কেবিন রুম নম্বর দেখতে পাবেন।",
-  },
-];
-
 export default function Hospitals({ searchParams }) {
-  const faqSchema = getFaqSchema(HOSPITAL_FAQS);
+  const faqSchema = getFaqSchema(HOSPITAL_FAQS.map((f) => ({ q: f.q.bn, a: f.a.bn })));
 
   return (
     <>
@@ -52,24 +43,24 @@ export default function Hospitals({ searchParams }) {
       />
       <PageHead
         Icon={Building2}
-        title="হাসপাতাল, বেড সংখ্যা ও ফ্লোর ডিরেক্টরি"
-        sub="ভর্তি, কেবিন, ICU ও পরীক্ষা — কয়তলায় কোন রুম আছে ও ফ্রি ম্যাপ ডিরেকশন সহ।"
+        title={{ bn: "হাসপাতাল, বেড সংখ্যা ও ফ্লোর ডিরেক্টরি", en: "Hospitals, Bed Counts & Floor Directory" }}
+        sub={{ bn: "ভর্তি, কেবিন, ICU ও পরীক্ষা — কয়তলায় কোন রুম আছে ও ফ্রি ম্যাপ ডিরেকশন সহ।", en: "Admission, cabins, ICU and tests — with room-by-floor details and free map directions." }}
       />
       <Catalog kind="hospitals" q0={searchParams.q || ""} />
 
       <div className="wrap max-w-4xl pb-10 sm:pb-14 lg:pb-16">
         <section className="card p-5 sm:p-6 border border-slate-200 space-y-4">
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-brand flex items-center gap-2 mb-3">
-            <HelpCircle size={22} className="text-brand" /> সাধারণ জিজ্ঞাসাবলী — হাসপাতাল ও আইসিইউ সেবা
+            <HelpCircle size={22} className="text-brand" /> <Text k="hospitals_faq_title" />
           </h2>
           <div className="space-y-3">
             {HOSPITAL_FAQS.map((faq, i) => (
               <details key={i} className="group rounded-xl border border-slate-200 bg-slate-50/50 p-4 transition-all open:bg-white open:shadow-sm">
                 <summary className="font-bold text-brand cursor-pointer list-none flex items-center justify-between">
-                  <span>{faq.q}</span>
+                  <span><Text value={faq.q} /></span>
                   <span className="text-brand font-black transition-transform group-open:rotate-180">▼</span>
                 </summary>
-                <p className="mt-2 text-sm sm:text-base text-slate-600 leading-relaxed border-t border-slate-100 pt-2">{faq.a}</p>
+                <p className="mt-2 text-sm sm:text-base text-slate-600 leading-relaxed border-t border-slate-100 pt-2"><Text value={faq.a} /></p>
               </details>
             ))}
           </div>

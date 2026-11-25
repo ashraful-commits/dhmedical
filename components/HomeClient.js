@@ -70,6 +70,21 @@ const SPECIALTIES_15 = [
   { name: "Orthopedics", sub: "Bone, Muscle & Joint Care", bn: "হাড়, বাতব্যথা ও জয়েন্ট", query: "Orthopedics", icon: Bone },
 ];
 
+const HOME_REVIEW_EN = [
+  {
+    name: "Md. Nurul Islam (Malaysia expatriate)",
+    service: "Family Care",
+    comment:
+      "Ever since I joined DH Family Care, my worries have reduced a lot. Their team personally handled my father's blood test and report collection.",
+  },
+  {
+    name: "Ruma Afroze",
+    service: "Ambulance",
+    comment:
+      "I contacted them to bring a patient from Comilla to Dhaka. The ambulance driver was highly skilled and careful, and did not charge a single taka beyond the agreed fare.",
+  },
+];
+
 // DocTime Common Health Concerns (Symptom Finder)
 const HEALTH_CONCERNS = [
   { title: "Fever, Cold/Flu, Allergy", bn: "জ্বর, সর্দি, কাশি ও অ্যালার্জি", count: "48 Doctors", query: "Medicine", icon: Thermometer },
@@ -562,7 +577,7 @@ export default function HomeClient({ initialReviews = [] }) {
                 <h4 className="text-lg font-bold leading-snug text-ink-dark transition-colors group-hover:text-brand">
                   {lang === "bn" ? item.bn : item.title}
                 </h4>
-                <p className="mt-1 text-base text-slate-500">{lang === "bn" ? item.title : item.bn}</p>
+                <p className="mt-1 text-base text-slate-500">{t("home_concerns_sub")}</p>
                 <span className="mt-2 inline-flex items-center gap-1 text-base font-bold text-care-deep">
                   <span>{item.count.split(" ")[0]} {t("home_available")}</span>
                   <ChevronRight size={16} />
@@ -663,16 +678,18 @@ export default function HomeClient({ initialReviews = [] }) {
           </h2>
           {initialReviews.length > 0 && (
             <div className="grid gap-7 md:grid-cols-2">
-              {initialReviews.slice(0, 2).map((review, i) => (
+              {initialReviews.slice(0, 2).map((review, i) => {
+                const en = HOME_REVIEW_EN[i] || {};
+                return (
                 <div key={review._id || i} className="border border-slate-200 bg-white p-6 shadow-clean">
                   <Quote size={40} className={i === 0 ? "text-brand" : "text-slate-300"} />
                   <p className="mt-3 text-base sm:text-lg text-slate-600 leading-relaxed line-clamp-5">
-                    {review.comment}
+                    {pick({ bn: review.comment || "", en: en.comment || review.commentEn || review.comment || "" }, lang)}
                   </p>
                   <div className="mt-5 flex items-center justify-between border-t border-slate-100 pt-4">
                     <div>
-                      <p className="text-base font-black text-ink-dark">{review.name}</p>
-                      <p className="text-sm text-slate-500">{review.service}</p>
+                      <p className="text-base font-black text-ink-dark">{pick({ bn: review.name || "", en: en.name || review.name || "" }, lang)}</p>
+                      <p className="text-sm text-slate-500">{pick({ bn: review.service || "", en: en.service || review.service || "" }, lang)}</p>
                     </div>
                     <div className="flex items-center gap-0.5 text-care-deep">
                       {Array.from({ length: review.rating || 5 }).map((_, s) => (
@@ -681,7 +698,8 @@ export default function HomeClient({ initialReviews = [] }) {
                     </div>
                   </div>
                 </div>
-              ))}
+                );
+              })}
             </div>
           )}
 
@@ -786,13 +804,13 @@ export default function HomeClient({ initialReviews = [] }) {
             <div className="grid lg:grid-cols-12">
               <div className="p-6 sm:p-8 lg:col-span-7">
                 <span className="text-sm font-bold text-care-deep uppercase tracking-wider block mb-1">
-                  বাংলাদেশের বীমা গাইড
+                  {pick({ bn: "বাংলাদেশের বীমা গাইড", en: "Insurance Guide for Bangladesh" }, lang)}
                 </span>
                 <h3 className="text-xl sm:text-2xl font-black text-ink-dark">
-                  বীমা পরিকল্পনা কীভাবে কাজ করে?
+                  {pick({ bn: "বীমা পরিকল্পনা কীভাবে কাজ করে?", en: "How do insurance plans work?" }, lang)}
                 </h3>
                 <p className="mt-2 text-sm sm:text-base text-slate-500 leading-relaxed">
-                  সরকারি স্বাস্থ্য বীমা, বেসরকারি হেলথ পলিসি বা জীবন বীমার হেলথ রাইডার — মূল ধাপ একই। নিচের তথ্যগুলো জানলে ক্লেইম ও নবায়ন সহজ হয়।
+                  {pick({ bn: "সরকারি স্বাস্থ্য বীমা, বেসরকারি হেলথ পলিসি বা জীবন বীমার হেলথ রাইডার — মূল ধাপ একই। নিচের তথ্যগুলো জানলে ক্লেইম ও নবায়ন সহজ হয়।", en: "Government health insurance, a private health policy, or a health rider on life insurance — the main steps are the same. Knowing the details below makes claims and renewals easier." }, lang)}
                 </p>
 
                 <div className="mt-5 grid gap-2 sm:grid-cols-2">
@@ -828,17 +846,17 @@ export default function HomeClient({ initialReviews = [] }) {
                     <FileSpreadsheet size={20} />
                   </div>
                   <div>
-                    <h4 className="text-base font-black text-brand">নমুনা বীমা আবেদন ফর্ম</h4>
+                    <h4 className="text-base font-black text-brand">{pick({ bn: "নমুনা বীমা আবেদন ফর্ম", en: "Sample Insurance Request Form" }, lang)}</h4>
                     <p className="mt-1 text-sm text-slate-500">
-                      নতুন পলিসি, ক্লেইম, নবায়ন বা সদস্য যোগ — যেকোনো একটি বেছে নিন।
+                      {pick({ bn: "নতুন পলিসি, ক্লেইম, নবায়ন বা সদস্য যোগ — যেকোনো একটি বেছে নিন।", en: "Choose one: new policy, claim, renewal, or adding a member." }, lang)}
                     </p>
                   </div>
                 </div>
                 <DynamicForm
                   type="insuranceRequests"
                   fields={insuranceFields}
-                  submit="বীমা সহায়তা চাই"
-                  success="আপনার বীমা আবেদন পৌঁছে গেছে। আমাদের কো-অর্ডিনেটর শীঘ্রই ফোন বা WhatsApp-এ যোগাযোগ করবেন।"
+                  submit={{ bn: "বীমা সহায়তা চাই", en: "Request insurance help" }}
+                  success={{ bn: "আপনার বীমা আবেদন পৌঁছে গেছে। আমাদের কো-অর্ডিনেটর শীঘ্রই ফোন বা WhatsApp-এ যোগাযোগ করবেন।", en: "Your insurance request has been received. Our coordinator will contact you by phone or WhatsApp shortly." }}
                 />
               </div>
             </div>
@@ -985,13 +1003,13 @@ export default function HomeClient({ initialReviews = [] }) {
                 <div>
                   <div className="flex items-center justify-between mb-3">
                     <span className="rounded-none bg-care-50 px-2 py-0.5 text-[10.5px] font-bold text-care-deep">
-                      {amb.badge}
+                      {lang === "en" ? amb.badgeEn : amb.badge}
                     </span>
-                    <span className="text-sm font-bold text-slate-500">{amb.eta}</span>
+                    <span className="text-sm font-bold text-slate-500">{lang === "en" ? amb.etaEn : amb.eta}</span>
                   </div>
 
-                  <h3 className="text-base font-bold text-ink-dark">{amb.title}</h3>
-                  <p className="text-sm text-slate-500 mt-1 leading-relaxed">{amb.desc}</p>
+                  <h3 className="text-base font-bold text-ink-dark">{lang === "en" ? amb.titleEn : amb.title}</h3>
+                  <p className="text-sm text-slate-500 mt-1 leading-relaxed">{lang === "en" ? amb.descEn : amb.desc}</p>
                 </div>
 
                 <div className="mt-5 pt-3 border-t border-slate-100 flex items-center justify-between">

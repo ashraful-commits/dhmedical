@@ -1,4 +1,5 @@
 import Ecg from "./Ecg";
+import Text from "./translated/Text";
 
 export default function PageHead({ title, sub, Icon }) {
   return (
@@ -12,11 +13,11 @@ export default function PageHead({ title, sub, Icon }) {
           )}
           <div className="space-y-2 max-w-2xl">
             <h1 className="!text-white text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-tight">
-              {title}
+              <Text value={title} />
             </h1>
             {sub && (
               <p className="text-base sm:text-lg text-white/90 leading-relaxed max-w-2xl">
-                {sub}
+                <Text value={sub} />
               </p>
             )}
           </div>

@@ -320,7 +320,7 @@ export default function PrescriptionStudio({ shareCode = "" }) {
           </div>
         </div>
 
-        <div className="mt-5 overflow-x-auto overscroll-x-contain">
+        <div className="mt-5 overflow-x-auto overscroll-x-contain no-scrollbar">
           <table className="w-full min-w-[560px] border-collapse text-sm sm:min-w-[760px]">
             <thead>
               <tr className="bg-slate-100 text-left text-[11px] uppercase tracking-wider text-slate-500">
@@ -380,7 +380,7 @@ export default function PrescriptionStudio({ shareCode = "" }) {
                 {copied ? <Check size={14} /> : <Copy size={14} />} {copied ? tr("কপি হয়েছে", "Copied") : tr("লিংক কপি", "Copy link")}
               </button>
               <a href={shareUrl} target="_blank" rel="noreferrer" className="btn btn-line !min-h-[38px] !px-3 !text-xs flex items-center gap-1.5">
-                <Link2 size={14} /> লিংক খুলুন
+                <Link2 size={14} /> {tr("লিংক খুলুন", "Open link")}
               </a>
             </div>
           </div>
@@ -389,10 +389,10 @@ export default function PrescriptionStudio({ shareCode = "" }) {
 
       <section className="flex flex-col sm:flex-row items-center justify-between gap-4 rounded-2xl bg-brand p-5 text-white">
         <div>
-          <p className="font-head text-lg font-black">OCR ছাড়াও সাহায্য চাই?</p>
-          <p className="text-xs text-slate-100/80 mt-1">কো-অর্ডিনেটর আপনার প্রেসক্রিপশন পড়ে টেবিল তৈরি করে দিতে পারেন।</p>
+          <p className="font-head text-lg font-black">{tr("OCR ছাড়াও সাহায্য চাই?", "Need help without OCR?")}</p>
+          <p className="text-xs text-slate-100/80 mt-1">{tr("কো-অর্ডিনেটর আপনার প্রেসক্রিপশন পড়ে টেবিল তৈরি করে দিতে পারেন।", "Our coordinator can read your prescription and build the table for you.")}</p>
         </div>
-        <a href={SITE.tel} className="btn btn-gold !min-h-[40px] !px-5 !text-xs font-black">হটলাইন: {SITE.phone}</a>
+        <a href={SITE.tel} className="btn btn-gold !min-h-[40px] !px-5 !text-xs font-black">{tr("হটলাইন", "Hotline")}: {SITE.phone}</a>
       </section>
     </div>
   );
