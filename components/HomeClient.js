@@ -735,7 +735,7 @@ export default function HomeClient({ initialReviews = [] }) {
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {HEALTH_PLANS.map((plan) => (
               <motion.div
-                key={plan.name}
+                key={pick(plan.name, lang)}
                 whileHover={{ y: -6, transition: { duration: 0.25, ease: "easeOut" } }}
                 whileTap={{ scale: 0.99 }}
                 className={`relative rounded-3xl border p-6 sm:p-8 flex flex-col justify-between transition-all ${plan.popular
@@ -750,12 +750,12 @@ export default function HomeClient({ initialReviews = [] }) {
                 )}
 
                 <div>
-                  <h3 className="text-lg font-bold text-ink-dark">{plan.name}</h3>
+                  <h3 className="text-lg font-bold text-ink-dark">{pick(plan.name, lang)}</h3>
                   <div className="mt-2 flex items-baseline gap-1">
                     <span className="text-3xl font-black text-ink-dark">৳{plan.price}</span>
-                    <span className="text-sm text-slate-500">{plan.period}</span>
+                    <span className="text-sm text-slate-500">{pick(plan.period, lang)}</span>
                   </div>
-                  <span className="text-sm font-semibold text-care-deep block mt-1">{plan.target}</span>
+                  <span className="text-sm font-semibold text-care-deep block mt-1">{pick(plan.target, lang)}</span>
 
                   <div className="my-5 border-t border-slate-100" />
 
@@ -763,7 +763,7 @@ export default function HomeClient({ initialReviews = [] }) {
                     {plan.features.map((feat, i) => (
                       <li key={i} className="flex items-start gap-2">
                         <Check size={14} className="text-care-deep shrink-0 mt-1" strokeWidth={2.5} />
-                        <span>{feat}</span>
+                        <span>{pick(feat, lang)}</span>
                       </li>
                     ))}
                   </ul>
@@ -771,7 +771,7 @@ export default function HomeClient({ initialReviews = [] }) {
 
                 <div className="mt-6 pt-4 border-t border-slate-100">
                   <Link
-                    href={`/family-care?plan=${encodeURIComponent(plan.name)}`}
+                    href={`/family-care?plan=${encodeURIComponent(pick(plan.name, lang))}`}
                     className={`w-full text-sm font-bold justify-center ${plan.popular ? "btn-primary" : "btn-primary !bg-brand hover:!bg-brand-dark"
                       }`}
                   >
@@ -797,26 +797,26 @@ export default function HomeClient({ initialReviews = [] }) {
 
                 <div className="mt-5 grid gap-2 sm:grid-cols-2">
                   {INSURANCE_STEPS.map((step) => (
-                    <div key={step.n} className="rounded-2xl border border-slate-200 bg-white p-5">
-                      <span className="text-sm font-black text-brand">{step.n}</span>
-                      <p className="mt-1 text-sm font-bold text-brand">{step.title}</p>
-                      <p className="mt-1 text-sm sm:text-base leading-relaxed text-slate-500">{step.text}</p>
+                    <div key={pick(step.n, lang)} className="rounded-2xl border border-slate-200 bg-white p-5">
+                      <span className="text-sm font-black text-brand">{pick(step.n, lang)}</span>
+                      <p className="mt-1 text-sm font-bold text-brand">{pick(step.title, lang)}</p>
+                      <p className="mt-1 text-sm sm:text-base leading-relaxed text-slate-500">{pick(step.text, lang)}</p>
                     </div>
                   ))}
                 </div>
 
                 <div className="mt-5 space-y-2">
                   {INSURANCE_GUIDE.map((item) => (
-                    <details key={item.title} className="group rounded-2xl border border-slate-200 bg-white p-5 open:shadow-sm">
+                    <details key={pick(item.title, lang)} className="group rounded-2xl border border-slate-200 bg-white p-5 open:shadow-sm">
                       <summary className="flex cursor-pointer list-none items-start justify-between gap-3">
                         <span>
-                          <span className="block text-sm font-black text-brand">{item.title}</span>
-                          <span className="mt-1 block text-sm font-semibold text-brand">{item.type}</span>
+                          <span className="block text-sm font-black text-brand">{pick(item.title, lang)}</span>
+                          <span className="mt-1 block text-sm font-semibold text-brand">{pick(item.type, lang)}</span>
                         </span>
                         <ChevronRight size={16} className="mt-1 shrink-0 text-slate-400 transition-transform group-open:rotate-90" />
                       </summary>
-                      <p className="mt-2 border-t border-slate-100 pt-2 text-sm sm:text-base leading-relaxed text-slate-600">{item.detail}</p>
-                      <p className="mt-2.5 text-sm sm:text-base font-semibold text-emerald-700">{item.note}</p>
+                      <p className="mt-2 border-t border-slate-100 pt-2 text-sm sm:text-base leading-relaxed text-slate-600">{pick(item.detail, lang)}</p>
+                      <p className="mt-2.5 text-sm sm:text-base font-semibold text-emerald-700">{pick(item.note, lang)}</p>
                     </details>
                   ))}
                 </div>
